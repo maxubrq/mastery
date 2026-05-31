@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS 7+ — 90 Ngày Thử Thách</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0d0d0d;
+    --bg2: #141414;
+    --bg3: #1c1c1c;
+    --bg4: #242424;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0ede8;
+    --text2: #9a9590;
+    --text3: #5c5955;
+    --p1: #a89cf5;
+    --p1bg: #1e1a3a;
+    --p1mid: #534AB7;
+    --p2: #5dcaa5;
+    --p2bg: #0e2a22;
+    --p2mid: #1D9E75;
+    --p3: #f0a87b;
+    --p3bg: #2e1a0e;
+    --p3mid: #D85A30;
+    --green: #5dcaa5;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  html { scroll-behavior: smooth; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── LAYOUT ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-brand {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .brand-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .brand-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .brand-sub {
+    font-size: 12px;
+    color: var(--text2);
+    margin-top: 4px;
+  }
+
+  /* Overall progress */
+  .overall-progress {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .op-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .op-text { font-size: 11px; color: var(--text2); font-family: var(--mono); }
+  .op-pct { font-size: 20px; font-weight: 600; color: var(--text); font-family: var(--mono); }
+
+  .op-bar {
+    height: 3px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .op-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--p1mid), var(--p2mid), var(--p3mid));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .op-stats {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .op-stat {
+    flex: 1;
+    text-align: center;
+    background: var(--bg3);
+    border-radius: 6px;
+    padding: 8px 4px;
+  }
+
+  .op-stat-num { font-size: 16px; font-weight: 600; font-family: var(--mono); }
+  .op-stat-lbl { font-size: 10px; color: var(--text3); margin-top: 2px; }
+
+  /* Nav */
+  .sidebar-nav { padding: 16px 0; flex: 1; }
+
+  .nav-phase-group { margin-bottom: 4px; }
+
+  .nav-phase-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 24px;
+    cursor: pointer;
+    transition: background 0.12s;
+    user-select: none;
+  }
+
+  .nav-phase-header:hover { background: var(--bg3); }
+
+  .nav-phase-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .nav-phase-name { font-size: 12px; font-weight: 600; color: var(--text); }
+  .nav-phase-days { font-size: 10px; color: var(--text3); font-family: var(--mono); }
+
+  .nav-phase-pct {
+    margin-left: auto;
+    font-size: 10px;
+    font-family: var(--mono);
+  }
+
+  .nav-weeks { padding-left: 44px; }
+
+  .nav-week-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 24px 5px 0;
+    color: var(--text3);
+    text-decoration: none;
+    font-size: 12px;
+    transition: color 0.12s;
+  }
+
+  .nav-week-link:hover { color: var(--text2); }
+  .nav-week-link.active { color: var(--text); }
+
+  .nav-week-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* Reset btn */
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .reset-btn {
+    width: 100%;
+    padding: 8px;
+    background: transparent;
+    border: 1px solid var(--border2);
+    border-radius: 6px;
+    color: var(--text3);
+    font-size: 11px;
+    font-family: var(--mono);
+    cursor: pointer;
+    transition: all 0.12s;
+    letter-spacing: 0.05em;
+  }
+
+  .reset-btn:hover { border-color: var(--border2); color: var(--text2); background: var(--bg3); }
+
+  /* ── MAIN CONTENT ── */
+  .main { flex: 1; padding: 48px 56px; max-width: 900px; }
+
+  /* Phase section */
+  .phase-section { margin-bottom: 72px; }
+
+  .phase-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .phase-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    padding: 4px 10px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .p1 .phase-number { background: var(--p1bg); color: var(--p1); border: 1px solid rgba(168,156,245,0.2); }
+  .p2 .phase-number { background: var(--p2bg); color: var(--p2); border: 1px solid rgba(93,202,165,0.2); }
+  .p3 .phase-number { background: var(--p3bg); color: var(--p3); border: 1px solid rgba(240,168,123,0.2); }
+
+  .phase-header-content { flex: 1; }
+
+  .phase-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .phase-subtitle {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+
+  .p1 .phase-subtitle { color: var(--p1); }
+  .p2 .phase-subtitle { color: var(--p2); }
+  .p3 .phase-subtitle { color: var(--p3); }
+
+  .phase-desc { font-size: 14px; color: var(--text2); line-height: 1.7; }
+
+  .phase-progress {
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .phase-prog-bar {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .phase-prog-fill { height: 100%; border-radius: 2px; transition: width 0.3s ease; }
+  .p1 .phase-prog-fill { background: var(--p1mid); }
+  .p2 .phase-prog-fill { background: var(--p2mid); }
+  .p3 .phase-prog-fill { background: var(--p3mid); }
+
+  .phase-prog-text { font-size: 11px; font-family: var(--mono); color: var(--text3); white-space: nowrap; }
+
+  /* Skill chips */
+  .skill-targets {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .skill-chip {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    transition: border-color 0.15s;
+  }
+
+  .skill-chip:hover { border-color: var(--border2); }
+
+  .skill-icon { font-size: 18px; margin-bottom: 8px; }
+  .skill-name { font-size: 11px; font-weight: 600; color: var(--text); font-family: var(--mono); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .skill-target-text { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+  /* Section label */
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    margin-top: 32px;
+  }
+
+  /* Week block */
+  .week-block {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+
+  .week-block:hover { border-color: var(--border2); }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--bg2);
+    transition: background 0.12s;
+  }
+
+  .week-header:hover { background: var(--bg3); }
+
+  .week-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    flex-shrink: 0;
+    width: 54px;
+  }
+
+  .week-title-text { font-size: 14px; font-weight: 500; color: var(--text); flex: 1; }
+  .week-theme { font-size: 11px; color: var(--text3); flex-shrink: 0; }
+
+  .week-progress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .week-prog-mini {
+    width: 60px;
+    height: 2px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .week-prog-mini-fill { height: 100%; border-radius: 1px; transition: width 0.2s; }
+  .p1 .week-prog-mini-fill { background: var(--p1mid); }
+  .p2 .week-prog-mini-fill { background: var(--p2mid); }
+  .p3 .week-prog-mini-fill { background: var(--p3mid); }
+
+  .week-count { font-size: 10px; font-family: var(--mono); color: var(--text3); }
+
+  .week-chevron { color: var(--text3); transition: transform 0.2s; font-size: 12px; }
+  .week-block.open .week-chevron { transform: rotate(180deg); }
+
+  .week-body {
+    display: none;
+    padding: 0 18px 18px;
+    background: var(--bg2);
+  }
+
+  .week-block.open .week-body { display: block; }
+
+  /* Daily schedule */
+  .daily-schedule {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .daily-slot-sm {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+  }
+
+  .slot-time-sm { font-size: 10px; font-family: var(--mono); color: var(--text3); }
+  .slot-act-sm { font-size: 12px; color: var(--text2); }
+
+  /* Tasks */
+  .tasks-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .task-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.1s;
+    user-select: none;
+  }
+
+  .task-item:hover { background: var(--bg3); }
+
+  .task-check {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border2);
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .task-item.done .task-check {
+    border-color: var(--green);
+    background: var(--green);
+  }
+
+  .task-check svg { display: none; }
+  .task-item.done .task-check svg { display: block; }
+
+  .task-text {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+    transition: color 0.15s;
+  }
+
+  .task-item.done .task-text {
+    color: var(--text3);
+    text-decoration: line-through;
+    text-decoration-color: var(--text3);
+  }
+
+  .task-category {
+    font-size: 10px;
+    font-family: var(--mono);
+    padding: 2px 6px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  .cat-reading { background: rgba(59,130,246,0.12); color: #7ab3f5; }
+  .cat-listening { background: rgba(168,85,247,0.12); color: #c084fc; }
+  .cat-writing { background: rgba(245,158,11,0.12); color: #fbbf24; }
+  .cat-speaking { background: rgba(16,185,129,0.12); color: #34d399; }
+  .cat-vocab { background: rgba(239,68,68,0.12); color: #f87171; }
+  .cat-all { background: rgba(107,114,128,0.12); color: #9ca3af; }
+  .cat-mock { background: rgba(240,168,123,0.15); color: var(--p3); }
+
+  /* Milestones */
+  .milestones { display: flex; flex-direction: column; }
+
+  .milestone-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .milestone-item:last-child { border-bottom: none; }
+
+  .milestone-day {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    width: 50px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .milestone-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+
+  .milestone-dot-big {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid;
+    flex-shrink: 0;
+  }
+
+  .p1 .milestone-dot-big { border-color: var(--p1mid); }
+  .p2 .milestone-dot-big { border-color: var(--p2mid); }
+  .p3 .milestone-dot-big { border-color: var(--p3mid); }
+
+  .milestone-content { flex: 1; }
+  .milestone-title { font-size: 13px; color: var(--text); margin-bottom: 2px; font-weight: 500; }
+  .milestone-detail { font-size: 12px; color: var(--text2); }
+
+  /* Resources */
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .resource-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .resource-cat {
+    font-size: 10px;
+    font-family: var(--mono);
+    color: var(--text3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .resource-name { font-size: 13px; color: var(--text); font-weight: 500; }
+  .resource-desc { font-size: 11px; color: var(--text2); line-height: 1.5; }
+
+  /* Daily rhythm */
+  .daily-full {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .daily-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+  }
+
+  .dc-time { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-bottom: 4px; }
+  .dc-act { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .dc-note { font-size: 11px; color: var(--text2); }
+
+  /* Divider */
+  .section-divider { height: 1px; background: var(--border); margin: 40px 0; }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: static; }
+    .main { padding: 32px 24px; }
+    .skill-targets { grid-template-columns: repeat(2, 1fr); }
+    .daily-full { grid-template-columns: repeat(2, 1fr); }
+    .resources-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .skill-targets { grid-template-columns: 1fr; }
+    .daily-full { grid-template-columns: 1fr; }
+    .main { padding: 24px 16px; }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--text2);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.2s ease;
+    z-index: 100;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* Highlight done week */
+  .week-block.all-done .week-header { background: rgba(29, 158, 117, 0.05); }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-label">90-day challenge</div>
+      <div class="brand-title">IELTS 7+</div>
+      <div class="brand-sub">Articulate. Precise. Confident.</div>
+    </div>
+
+    <div class="overall-progress">
+      <div class="op-label">
+        <span class="op-text">OVERALL PROGRESS</span>
+        <span class="op-pct" id="overall-pct">0%</span>
+      </div>
+      <div class="op-bar">
+        <div class="op-fill" id="overall-fill" style="width:0%"></div>
+      </div>
+      <div class="op-stats">
+        <div class="op-stat">
+          <div class="op-stat-num" id="stat-done" style="color:var(--green)">0</div>
+          <div class="op-stat-lbl">done</div>
+        </div>
+        <div class="op-stat">
+          <div class="op-stat-num" id="stat-left">0</div>
+          <div class="op-stat-lbl">left</div>
+        </div>
+        <div class="op-stat">
+          <div class="op-stat-num" id="stat-total">0</div>
+          <div class="op-stat-lbl">total</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-phase-group">
+        <div class="nav-phase-header" onclick="scrollToPhase('phase1')">
+          <div class="nav-phase-dot" style="background:var(--p1mid)"></div>
+          <div>
+            <div class="nav-phase-name">Phase 1</div>
+            <div class="nav-phase-days">Ngày 1–30</div>
+          </div>
+          <div class="nav-phase-pct" id="p1-nav-pct" style="color:var(--p1)">0%</div>
+        </div>
+        <div class="nav-weeks" id="p1-nav-weeks">
+          <a class="nav-week-link" href="#week1"><div class="nav-week-dot"></div>Tuần 1 — Diagnostic</a>
+          <a class="nav-week-link" href="#week2"><div class="nav-week-dot"></div>Tuần 2 — Precision</a>
+          <a class="nav-week-link" href="#week3"><div class="nav-week-dot"></div>Tuần 3 — Argument</a>
+          <a class="nav-week-link" href="#week4"><div class="nav-week-dot"></div>Tuần 4 — Integration</a>
+        </div>
+      </div>
+
+      <div class="nav-phase-group">
+        <div class="nav-phase-header" onclick="scrollToPhase('phase2')">
+          <div class="nav-phase-dot" style="background:var(--p2mid)"></div>
+          <div>
+            <div class="nav-phase-name">Phase 2</div>
+            <div class="nav-phase-days">Ngày 31–60</div>
+          </div>
+          <div class="nav-phase-pct" id="p2-nav-pct" style="color:var(--p2)">0%</div>
+        </div>
+        <div class="nav-weeks">
+          <a class="nav-week-link" href="#week5"><div class="nav-week-dot"></div>Tuần 5 — Domain vocab</a>
+          <a class="nav-week-link" href="#week6"><div class="nav-week-dot"></div>Tuần 6 — Writing Band 7</a>
+          <a class="nav-week-link" href="#week7"><div class="nav-week-dot"></div>Tuần 7 — Debate mode</a>
+          <a class="nav-week-link" href="#week8"><div class="nav-week-dot"></div>Tuần 8 — Gap analysis</a>
+        </div>
+      </div>
+
+      <div class="nav-phase-group">
+        <div class="nav-phase-header" onclick="scrollToPhase('phase3')">
+          <div class="nav-phase-dot" style="background:var(--p3mid)"></div>
+          <div>
+            <div class="nav-phase-name">Phase 3</div>
+            <div class="nav-phase-days">Ngày 61–90</div>
+          </div>
+          <div class="nav-phase-pct" id="p3-nav-pct" style="color:var(--p3)">0%</div>
+        </div>
+        <div class="nav-weeks">
+          <a class="nav-week-link" href="#week9"><div class="nav-week-dot"></div>Tuần 9 — Tech interview</a>
+          <a class="nav-week-link" href="#week10"><div class="nav-week-dot"></div>Tuần 10 — Band push</a>
+          <a class="nav-week-link" href="#week11"><div class="nav-week-dot"></div>Tuần 11 — Public voice</a>
+          <a class="nav-week-link" href="#week12"><div class="nav-week-dot"></div>Tuần 12 — Final mock</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="reset-btn" onclick="resetProgress()">↺ reset progress</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ══ PHASE 1 ══ -->
+    <section class="phase-section p1" id="phase1">
+      <div class="phase-header">
+        <span class="phase-number">PHASE 01</span>
+        <div class="phase-header-content">
+          <div class="phase-subtitle">NGÀ 1–30 · STRUCTURAL REWIRE</div>
+          <div class="phase-title">Xây nền từ gốc</div>
+          <div class="phase-desc">Không học IELTS, học <em>tư duy bằng tiếng Anh</em>. Mục tiêu: đọc nhanh, nghe chủ động, và bắt đầu hình thành "inner voice" tiếng Anh cho những chủ đề mình thực sự quan tâm — distributed systems, triết học, chiến lược.</div>
+          <div class="phase-progress">
+            <div class="phase-prog-bar">
+              <div class="phase-prog-fill" id="p1-fill" style="width:0%"></div>
+            </div>
+            <span class="phase-prog-text" id="p1-text">0 / 0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Mục tiêu cuối Phase 1</div>
+      <div class="skill-targets">
+        <div class="skill-chip">
+          <div class="skill-icon">📖</div>
+          <div class="skill-name">READING</div>
+          <div class="skill-target-text">Đọc 1 bài The Economist / Aeon 1500+ từ liên tục, không dừng tra từ</div>
+        </div>
+        <div class="skill-chip">
+          <div class="skill-icon">🎧</div>
+          <div class="skill-name">LISTENING</div>
+          <div class="skill-target-text">Hiểu 80% podcast native speed, không cần subtitle</div>
+        </div>
+        <div class="skill-chip">
+          <div class="skill-icon">✍️</div>
+          <div class="skill-name">WRITING</div>
+          <div class="skill-target-text">Viết 250 từ mạch lạc về bất kỳ chủ đề nào trong 15 phút</div>
+        </div>
+        <div class="skill-chip">
+          <div class="skill-icon">🎙️</div>
+          <div class="skill-name">SPEAKING</div>
+          <div class="skill-target-text">2 phút monologue có structure rõ, không vấp, không dừng dài hơn 2 giây</div>
+        </div>
+      </div>
+
+      <!-- WEEK 1 -->
+      <div class="section-label">Lịch hàng tuần</div>
+
+      <div class="week-block open p1" id="week1">
+        <div class="week-header" onclick="toggleWeek('week1')">
+          <span class="week-label">TUẦN 1</span>
+          <span class="week-title-text">Diagnostic + Input Flooding</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk1-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk1-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Đọc bài dài</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Nghe podcast</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">15'</span><span class="slot-act-sm">Anki vocab</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Viết tự do</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">15'</span><span class="slot-act-sm">Shadowing</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w1t1" onclick="toggleTask('w1t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-mock">MOCK</span>
+              <span class="task-text">Làm 1 bài IELTS mock test đầy đủ (Cambridge 15–19) để xác định điểm xuất phát thực sự — đừng guess, đừng tra</span>
+            </div>
+            <div class="task-item" id="w1t2" onclick="toggleTask('w1t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-reading">READING</span>
+              <span class="task-text">Đọc 1 bài The Economist hoặc Aeon mỗi ngày (7 bài), không tra từ — luyện đoán nghĩa từ context. <em>Gợi ý: chọn bài về AI, governance, hoặc economics</em></span>
+            </div>
+            <div class="task-item" id="w1t3" onclick="toggleTask('w1t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-listening">LISTEN</span>
+              <span class="task-text">Nghe Huberman Lab hoặc Lex Fridman x1.0 speed, chép lại ít nhất 5 câu ấn tượng — cả structure lẫn vocabulary</span>
+            </div>
+            <div class="task-item" id="w1t4" onclick="toggleTask('w1t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Viết tự do 150 từ mỗi tối — bất kỳ chủ đề gì, không sửa, không xóa, không dừng. Mục tiêu là unlock luồng tư duy, không phải accuracy</span>
+            </div>
+            <div class="task-item" id="w1t5" onclick="toggleTask('w1t5')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-vocab">VOCAB</span>
+              <span class="task-text">Setup Anki deck với Academic Word List (AWL) — bắt đầu 15 từ/ngày, ưu tiên từ gặp trong reading thật</span>
+            </div>
+            <div class="task-item" id="w1t6" onclick="toggleTask('w1t6')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Ghi âm bản thân nói 1 phút về 1 chủ đề bất kỳ — nghe lại, note những điểm vấp hoặc vague. Không cần đẹp, cần honest</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 2 -->
+      <div class="week-block p1" id="week2">
+        <div class="week-header" onclick="toggleWeek('week2')">
+          <span class="week-label">TUẦN 2</span>
+          <span class="week-title-text">Sentence-Level Precision</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk2-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk2-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Đọc + note structure</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">15'</span><span class="slot-act-sm">Shadowing</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">15'</span><span class="slot-act-sm">Anki vocab</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Viết + sentence drills</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">10'</span><span class="slot-act-sm">Ghi âm / review</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w2t1" onclick="toggleTask('w2t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Học 5 academic sentence structures mỗi ngày và dùng ngay trong câu thật — "While X may appear...", "The extent to which...", "What distinguishes X from Y is..."</span>
+            </div>
+            <div class="task-item" id="w2t2" onclick="toggleTask('w2t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Shadowing 10 phút/ngày với TED Talks về tech hoặc philosophy — không cần hiểu 100%, chú ý rhythm, intonation, và cách speaker pause</span>
+            </div>
+            <div class="task-item" id="w2t3" onclick="toggleTask('w2t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Ghi âm 1 phút/ngày về 1 chủ đề kỹ thuật mình biết (event sourcing, distributed transactions...) — nghe lại và đếm số lần "um", "uh", vague words</span>
+            </div>
+            <div class="task-item" id="w2t4" onclick="toggleTask('w2t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-vocab">VOCAB</span>
+              <span class="task-text">Tiếp tục Anki 15 từ/ngày — thêm collocation (không chỉ nghĩa): "raise concerns", "a fundamental shift", "exacerbate the problem"</span>
+            </div>
+            <div class="task-item" id="w2t5" onclick="toggleTask('w2t5')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-reading">READING</span>
+              <span class="task-text">Đọc 2 bài từ Increment Magazine hoặc ACM Queue — làm quen cách engineers giỏi viết về technical problems. Note cấu trúc bài</span>
+            </div>
+            <div class="task-item" id="w2t6" onclick="toggleTask('w2t6')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-listening">LISTEN</span>
+              <span class="task-text">Tăng tốc podcast lên x1.25 — nếu vẫn hiểu 75%+, giữ tốc độ này cả tuần</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 3 -->
+      <div class="week-block p1" id="week3">
+        <div class="week-header" onclick="toggleWeek('week3')">
+          <span class="week-label">TUẦN 3</span>
+          <span class="week-title-text">Argument Construction</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk3-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk3-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Opinion piece + outline</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Nghe + extract claims</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">15'</span><span class="slot-act-sm">Anki review</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">25'</span><span class="slot-act-sm">Viết đoạn có stance</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">10'</span><span class="slot-act-sm">IELTS Speaking Part 2</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w3t1" onclick="toggleTask('w3t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-reading">READING</span>
+              <span class="task-text">Đọc 1 opinion piece/ngày (Foreign Affairs, Stratechery, Ribbonfarm), outline lại theo: Claim → Evidence → Counter → Rebuttal. Internalize structure này</span>
+            </div>
+            <div class="task-item" id="w3t2" onclick="toggleTask('w3t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Viết 1 đoạn 200 từ/ngày với take rõ ràng — chủ đề: distributed systems trade-offs, AI security, hoặc gì mình đang đọc. Không viết generic</span>
+            </div>
+            <div class="task-item" id="w3t3" onclick="toggleTask('w3t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Luyện IELTS Speaking Part 2: 1 phút chuẩn bị → 2 phút nói. Dùng PEEL structure (Point, Evidence, Explain, Link). Record và review mỗi ngày</span>
+            </div>
+            <div class="task-item" id="w3t4" onclick="toggleTask('w3t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-listening">LISTEN</span>
+              <span class="task-text">Nghe x1.25, ghi chép key claims của mỗi speaker dưới dạng bullet — không phải transcript, là tóm tắt luận điểm. Thử với EconTalk</span>
+            </div>
+            <div class="task-item" id="w3t5" onclick="toggleTask('w3t5')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Học hedging language: "It could be argued that...", "There is evidence to suggest...", "While this may be true in some contexts..." — dùng vào writing thực tế</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 4 -->
+      <div class="week-block p1" id="week4">
+        <div class="week-header" onclick="toggleWeek('week4')">
+          <span class="week-label">TUẦN 4</span>
+          <span class="week-title-text">Integration + Phase Check</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk4-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk4-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">25'</span><span class="slot-act-sm">IELTS timed section</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Nghe + note</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">30'</span><span class="slot-act-sm">Writing full task</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">15'</span><span class="slot-act-sm">Speaking mock</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w4t1" onclick="toggleTask('w4t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-mock">MOCK</span>
+              <span class="task-text">Làm 1 IELTS Reading timed full section (60 phút, 40 câu) — sau đó phân tích: sai vì skimming kém, inference kém, hay vocabulary kém?</span>
+            </div>
+            <div class="task-item" id="w4t2" onclick="toggleTask('w4t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-mock">MOCK</span>
+              <span class="task-text">Làm 1 IELTS Listening timed full section (30 phút) — phân tích: distractor traps, section 3-4 khó hơn bao nhiêu?</span>
+            </div>
+            <div class="task-item" id="w4t3" onclick="toggleTask('w4t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Viết 1 bài IELTS Task 2 đầy đủ (250 từ, 40 phút) — tự chấm theo 4 tiêu chí: Task Achievement, Coherence, Lexical Resource, Grammatical Range</span>
+            </div>
+            <div class="task-item" id="w4t4" onclick="toggleTask('w4t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Ghi âm full mock Speaking (Part 1 + 2 + 3), nghe lại toàn bộ — nhận xét honest: ở đâu mình stuck, ở đâu sound natural</span>
+            </div>
+            <div class="task-item" id="w4t5" onclick="toggleTask('w4t5')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-vocab">VOCAB</span>
+              <span class="task-text">Review Anki deck — xóa từ chưa active (chưa dùng được trong câu), thêm từ từ bài đọc thật. Target: 200+ từ active cuối Phase 1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Milestones Phase 1</div>
+      <div class="milestones">
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 7</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p1"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Có điểm mock IELTS baseline rõ ràng</div>
+            <div class="milestone-detail">Biết chính xác mình đang ở đâu — không đoán, không ảo tưởng</div>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 14</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p1"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Nói liên tục 1 phút không vấp về 1 chủ đề quen</div>
+            <div class="milestone-detail">Dùng recording để verify — không self-estimate</div>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 21</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p1"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Viết đoạn 200 từ có luận điểm rõ trong 15 phút</div>
+            <div class="milestone-detail">Claim rõ, có evidence, không vague</div>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 30</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p1"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Reading score tăng ít nhất 1 band, Listening comprehension 80%+</div>
+            <div class="milestone-detail">Đây là gate condition để advance sang Phase 2</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Tài nguyên Phase 1</div>
+      <div class="resources-grid">
+        <div class="resource-card">
+          <div class="resource-cat">READING</div>
+          <div class="resource-name">The Economist / Aeon / Foreign Affairs</div>
+          <div class="resource-desc">Long-form, academic vocabulary, strong opinions — cùng genre với IELTS reading passages</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-cat">LISTENING</div>
+          <div class="resource-name">Huberman Lab / Lex Fridman / EconTalk</div>
+          <div class="resource-desc">Native speed, monologue rõ ràng, chủ đề overlap với domain của mình</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-cat">VOCABULARY</div>
+          <div class="resource-name">Anki + Academic Word List (AWL)</div>
+          <div class="resource-desc">570 từ gốc của AWL cover 10% vocabulary trong academic texts — ưu tiên trước</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-cat">IELTS PRACTICE</div>
+          <div class="resource-name">Cambridge IELTS 15–19</div>
+          <div class="resource-desc">Authentic tests, dùng cho timed mock — không đọc questions trước, không cheat</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ══ PHASE 2 ══ -->
+    <section class="phase-section p2" id="phase2">
+      <div class="phase-header">
+        <span class="phase-number">PHASE 02</span>
+        <div class="phase-header-content">
+          <div class="phase-subtitle">NGÀ 31–60 · ARTICULATION ENGINE</div>
+          <div class="phase-title">Nói và viết có quan điểm</div>
+          <div class="phase-desc">Chuyển từ "diễn đạt được" sang "diễn đạt thuyết phục". Mục tiêu: trình bày quan điểm về tech, triết học, kinh tế rõ ràng, có depth, không nghe generic. Đây là phase khó nhất — đừng skip.</div>
+          <div class="phase-progress">
+            <div class="phase-prog-bar">
+              <div class="phase-prog-fill" id="p2-fill" style="width:0%"></div>
+            </div>
+            <span class="phase-prog-text" id="p2-text">0 / 0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Mục tiêu cuối Phase 2</div>
+      <div class="skill-targets">
+        <div class="skill-chip">
+          <div class="skill-icon">📖</div>
+          <div class="skill-name">READING</div>
+          <div class="skill-target-text">Đọc academic paper, extract argument chính trong 10 phút</div>
+        </div>
+        <div class="skill-chip">
+          <div class="skill-icon">🎧</div>
+          <div class="skill-name">LISTENING</div>
+          <div class="skill-target-text">Nghe debate/panel, tóm tắt được luận điểm từng speaker</div>
+        </div>
+        <div class="skill-chip">
+          <div class="skill-icon">✍️</div>
+          <div class="skill-name">WRITING</div>
+          <div class="skill-target-text">Viết 650 từ essay có thesis rõ, dẫn chứng cụ thể, Band 7 style</div>
+        </div>
+        <div class="skill-chip">
+          <div class="skill-icon">🎙️</div>
+          <div class="skill-name">SPEAKING</div>
+          <div class="skill-target-text">5 phút discussion về abstract topic — articulate, không filler, không generic</div>
+        </div>
+      </div>
+
+      <div class="section-label">Lịch hàng tuần</div>
+
+      <!-- WEEK 5 -->
+      <div class="week-block p2" id="week5">
+        <div class="week-header" onclick="toggleWeek('week5')">
+          <span class="week-label">TUẦN 5</span>
+          <span class="week-title-text">Domain Vocabulary Deepening</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk5-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk5-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">25'</span><span class="slot-act-sm">Domain reading</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Nghe debate/panel</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">10'</span><span class="slot-act-sm">Anki review</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">25'</span><span class="slot-act-sm">Viết có stance</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">15'</span><span class="slot-act-sm">Explain to non-expert</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w5t1" onclick="toggleTask('w5t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-reading">READING</span>
+              <span class="task-text">Chọn 3 domain: (1) Tech/AI, (2) Philosophy/Ethics, (3) Economics/Strategy — đọc 2 bài/domain/tuần. Xây "phrase bank" cho mỗi domain</span>
+            </div>
+            <div class="task-item" id="w5t2" onclick="toggleTask('w5t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Luyện "explain to non-expert": giải thích event sourcing, distributed consensus, hoặc zero-trust bằng tiếng Anh đơn giản. Ghi âm, nghe lại</span>
+            </div>
+            <div class="task-item" id="w5t3" onclick="toggleTask('w5t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-listening">LISTEN</span>
+              <span class="task-text">Nghe EconTalk, 80,000 Hours Podcast, hoặc Philosophize This — chú ý cách host structure argument, dùng transition phrases, và handle pushback</span>
+            </div>
+            <div class="task-item" id="w5t4" onclick="toggleTask('w5t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Build "articulation library": 20 cách diễn đạt mình hay dùng trong tiếng Việt → viết bản tiếng Anh natural tương đương. Không dịch word-for-word</span>
+            </div>
+            <div class="task-item" id="w5t5" onclick="toggleTask('w5t5')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-reading">READING</span>
+              <span class="task-text">Đọc 10 IELTS Band 9 model essays — không copy, reverse engineer: thesis ở đâu? Concession ở đâu? Cụ thể hóa general claim như thế nào?</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 6 -->
+      <div class="week-block p2" id="week6">
+        <div class="week-header" onclick="toggleWeek('week6')">
+          <span class="week-label">TUẦN 6</span>
+          <span class="week-title-text">IELTS Writing Band 7 Mechanics</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk6-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk6-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Reading + analysis</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">15'</span><span class="slot-act-sm">Listening</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">40'</span><span class="slot-act-sm">Writing Task 2</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Self-feedback</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w6t1" onclick="toggleTask('w6t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Học sâu 4 tiêu chí chấm IELTS Writing — đọc band descriptors từ IELTS.org, hiểu thực sự "coherence" là gì, "range" là gì. Đừng chỉ thuộc từ</span>
+            </div>
+            <div class="task-item" id="w6t2" onclick="toggleTask('w6t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Viết 3 bài Task 2/tuần (alternate ngày). Sau mỗi bài: tự đọc to (detect awkward phrasing), đếm câu phức, check coherence devices</span>
+            </div>
+            <div class="task-item" id="w6t3" onclick="toggleTask('w6t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Master stance markers và concession: "Although X is true, this argument overlooks...", "One might counter that...", "The crux of the issue lies in..."</span>
+            </div>
+            <div class="task-item" id="w6t4" onclick="toggleTask('w6t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Học Task 1: graph, bar chart, process diagram — template cứng không dùng được ở Band 7, phải describe trend + highlight significant feature</span>
+            </div>
+            <div class="task-item" id="w6t5" onclick="toggleTask('w6t5')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-all">ALL</span>
+              <span class="task-text">Tăng Anki lên 200+ từ active — review mode: dùng được trong câu nói tự nhiên, không chỉ nhận ra khi đọc</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 7 -->
+      <div class="week-block p2" id="week7">
+        <div class="week-header" onclick="toggleWeek('week7')">
+          <span class="week-label">TUẦN 7</span>
+          <span class="week-title-text">Speaking Part 3 — Debate Mode</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk7-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk7-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Đọc domain</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Listening x1.5</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">25'</span><span class="slot-act-sm">Speaking Part 3 drill</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">25'</span><span class="slot-act-sm">Writing / review</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w7t1" onclick="toggleTask('w7t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Luyện IELTS Speaking Part 3 daily — chủ đề abstract: "How is technology changing human relationships?", "Should AI be regulated?" — record, nghe lại</span>
+            </div>
+            <div class="task-item" id="w7t2" onclick="toggleTask('w7t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Master "buy time while thinking" phrases: "Well, that's an interesting question — I'd say...", "It depends on how we define X, but in general...", "Let me think about this for a moment..."</span>
+            </div>
+            <div class="task-item" id="w7t3" onclick="toggleTask('w7t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Mock technical interview: trả lời bằng tiếng Anh về system design decisions, trade-offs, "why did you choose X over Y?". Record 30 phút</span>
+            </div>
+            <div class="task-item" id="w7t4" onclick="toggleTask('w7t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-listening">LISTEN</span>
+              <span class="task-text">Nghe debate format: Intelligence Squared, Conversations with Tyler — note cách handle disagreement lịch sự nhưng firm: "I understand your point, but..."</span>
+            </div>
+            <div class="task-item" id="w7t5" onclick="toggleTask('w7t5')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Viết 1 bài blog-style bằng tiếng Anh về distributed systems hoặc chủ đề domain — có stance, không generic, không tutorial. Draft thô, không cần perfect</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 8 -->
+      <div class="week-block p2" id="week8">
+        <div class="week-header" onclick="toggleWeek('week8')">
+          <span class="week-label">TUẦN 8</span>
+          <span class="week-title-text">Full Mock + Gap Analysis</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk8-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk8-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">45'</span><span class="slot-act-sm">IELTS full mock</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">30'</span><span class="slot-act-sm">Error analysis</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">30'</span><span class="slot-act-sm">Writing + blog</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">15'</span><span class="slot-act-sm">Speaking review</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w8t1" onclick="toggleTask('w8t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-mock">MOCK</span>
+              <span class="task-text">Làm IELTS full mock test timed, nghiêm túc — tất cả 4 skills trong 1 ngày như thi thật. Phân tích lỗi kỹ: reading (skimming? inference? vocab?), listening (distractor?)</span>
+            </div>
+            <div class="task-item" id="w8t2" onclick="toggleTask('w8t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Hoàn thiện bài blog tiếng Anh từ tuần 7 — publish (Substack, Medium, hoặc share với bạn bè) để có feedback thật từ người đọc thật</span>
+            </div>
+            <div class="task-item" id="w8t3" onclick="toggleTask('w8t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-all">REVIEW</span>
+              <span class="task-text">Gap analysis: sau mock test, xếp hạng 4 skills từ yếu nhất đến mạnh nhất. Allocate 60% thời gian Phase 3 cho skill yếu nhất</span>
+            </div>
+            <div class="task-item" id="w8t4" onclick="toggleTask('w8t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-vocab">VOCAB</span>
+              <span class="task-text">Finalize "articulation library": 50 phrases mình tự tin dùng được trong speaking và writing. Đây là vũ khí cốt lõi vào Phase 3</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Milestones Phase 2</div>
+      <div class="milestones">
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 37</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p2"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Viết 1 bài Task 2 tự đánh giá đạt Band 7</div>
+            <div class="milestone-detail">Đối chiếu với band descriptor thật — không self-inflate</div>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 45</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p2"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Trả lời IELTS Speaking Part 3 liên tục 3 phút không filler</div>
+            <div class="milestone-detail">Verify bằng recording — đếm "um", "uh", vague answers</div>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 52</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p2"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Publish hoặc share 1 bài viết tiếng Anh về chủ đề chuyên môn</div>
+            <div class="milestone-detail">Có người thật đọc = feedback loop thật. Đây là irreversible step</div>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 60</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p2"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Mock IELTS overall 6.5+ với cả 4 skills</div>
+            <div class="milestone-detail">Gate condition cho Phase 3. Nếu chưa đạt, ở lại Phase 2 thêm 2 tuần</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Tài nguyên Phase 2</div>
+      <div class="resources-grid">
+        <div class="resource-card">
+          <div class="resource-cat">IELTS WRITING</div>
+          <div class="resource-name">IELTS Liz + Simon Cohort / E2 IELTS</div>
+          <div class="resource-desc">Band descriptor thật + model essays có phân tích — tránh những site cho template cứng</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-cat">DEBATE LISTENING</div>
+          <div class="resource-name">Intelligence Squared / Conversations with Tyler</div>
+          <div class="resource-desc">Academic discussion speed, sophisticated vocabulary, disagreement handled gracefully</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-cat">TECH READING</div>
+          <div class="resource-name">Increment Magazine / Stratechery / Ribbonfarm</div>
+          <div class="resource-desc">Engineers và thinkers viết bài dài có take riêng — model cho technical writing có voice</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-cat">PHILOSOPHY</div>
+          <div class="resource-name">Philosophize This / Stanford Encyclopedia</div>
+          <div class="resource-desc">Vocabulary cho abstract reasoning — useful cho IELTS Speaking Part 3 và writing</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ══ PHASE 3 ══ -->
+    <section class="phase-section p3" id="phase3">
+      <div class="phase-header">
+        <span class="phase-number">PHASE 03</span>
+        <div class="phase-header-content">
+          <div class="phase-subtitle">NGÀ 61–90 · PERFORMANCE MODE</div>
+          <div class="phase-title">Tự tin trong mọi arena</div>
+          <div class="phase-desc">Từ "học tiếng Anh" sang "dùng tiếng Anh như công cụ tư duy". Phỏng vấn kỹ thuật, thuyết trình, viết phân tích — tất cả đều fluent và có bản sắc riêng. Đây là phase tạo ra irreversible shift.</div>
+          <div class="phase-progress">
+            <div class="phase-prog-bar">
+              <div class="phase-prog-fill" id="p3-fill" style="width:0%"></div>
+            </div>
+            <span class="phase-prog-text" id="p3-text">0 / 0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Mục tiêu cuối Phase 3</div>
+      <div class="skill-targets">
+        <div class="skill-chip">
+          <div class="skill-icon">📖</div>
+          <div class="skill-name">READING</div>
+          <div class="skill-target-text">Đọc và phân tích academic text nhanh, IELTS Reading 38+/40</div>
+        </div>
+        <div class="skill-chip">
+          <div class="skill-icon">🎧</div>
+          <div class="skill-name">LISTENING</div>
+          <div class="skill-target-text">Hiểu accent đa dạng (UK, AU, US, Indian), IELTS Listening 36+/40</div>
+        </div>
+        <div class="skill-chip">
+          <div class="skill-icon">✍️</div>
+          <div class="skill-name">WRITING</div>
+          <div class="skill-target-text">Task 1 + Task 2 Band 7, viết technical doc và analysis tự nhiên</div>
+        </div>
+        <div class="skill-chip">
+          <div class="skill-icon">🎙️</div>
+          <div class="skill-name">SPEAKING</div>
+          <div class="skill-target-text">Phỏng vấn kỹ thuật + philosophical discussion — natural, có chiều sâu, có bản sắc</div>
+        </div>
+      </div>
+
+      <div class="section-label">Lịch hàng tuần</div>
+
+      <!-- WEEK 9 -->
+      <div class="week-block p3" id="week9">
+        <div class="week-header" onclick="toggleWeek('week9')">
+          <span class="week-label">TUẦN 9</span>
+          <span class="week-title-text">Technical Interview English</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk9-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk9-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">25'</span><span class="slot-act-sm">Domain reading</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">IELTS section</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">35'</span><span class="slot-act-sm">Mock interview</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Writing / review</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w9t1" onclick="toggleTask('w9t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Luyện giải thích system design decisions: "The trade-off here is X vs Y, and I chose X because...", "In hindsight, I would have approached this differently by..."</span>
+            </div>
+            <div class="task-item" id="w9t2" onclick="toggleTask('w9t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Mock interview 30 phút: behavioral (Tell me about a time you...) + technical (Design a rate limiter). Record, nghe lại — note clarity và confidence</span>
+            </div>
+            <div class="task-item" id="w9t3" onclick="toggleTask('w9t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Học balance giữa confidence và hedging — quá assertive nghe arrogant, quá hedge nghe không có kiến thức. "I'm fairly confident that..." vs "This is definitely..."</span>
+            </div>
+            <div class="task-item" id="w9t4" onclick="toggleTask('w9t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-reading">READING</span>
+              <span class="task-text">Đọc Increment Magazine, ACM Queue, hoặc architecture posts trên high scalability — làm quen cách engineers viết about lessons learned</span>
+            </div>
+            <div class="task-item" id="w9t5" onclick="toggleTask('w9t5')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Viết 1 "lessons learned" post về 1 hệ thống mình đã build hoặc work on — không cần dài, cần honest và specific</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 10 -->
+      <div class="week-block p3" id="week10">
+        <div class="week-header" onclick="toggleWeek('week10')">
+          <span class="week-label">TUẦN 10</span>
+          <span class="week-title-text">IELTS Target Band Push</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk10-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk10-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">30'</span><span class="slot-act-sm">Timed R/L section</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Error analysis</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">35'</span><span class="slot-act-sm">Writing Task 1+2</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">15'</span><span class="slot-act-sm">Speaking drill</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w10t1" onclick="toggleTask('w10t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-reading">READING</span>
+              <span class="task-text">Timed IELTS Reading mỗi ngày — ưu tiên tốc độ và accuracy song song. Kỹ thuật: skim headings 2 phút → scan questions → read targeted. Không đọc toàn văn</span>
+            </div>
+            <div class="task-item" id="w10t2" onclick="toggleTask('w10t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-listening">LISTEN</span>
+              <span class="task-text">IELTS Listening timed daily — focus Section 3-4 (academic, multi-speaker). Học nhận diện distractor: thông tin nghe trước thường bị correct bởi thông tin nghe sau</span>
+            </div>
+            <div class="task-item" id="w10t3" onclick="toggleTask('w10t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">3 bài Task 2/tuần + 2 bài Task 1/tuần — Task 1 cần 20 phút đúng chuẩn: overview sentence rõ ràng + highlight most significant trend/feature</span>
+            </div>
+            <div class="task-item" id="w10t4" onclick="toggleTask('w10t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-all">REVIEW</span>
+              <span class="task-text">Học từ đáp án sai — Cambridge IELTS answer keys giải thích rất rõ. Mỗi câu sai: understand tại sao đáp án đúng đúng, không chỉ ghi nhớ đáp án</span>
+            </div>
+            <div class="task-item" id="w10t5" onclick="toggleTask('w10t5')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-listening">LISTEN</span>
+              <span class="task-text">Exposure đến accent đa dạng: Australian (ABC Radio), British academic (BBC In Our Time), Indian (talks from IIT professors) — IELTS dùng nhiều accent khác nhau</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 11 -->
+      <div class="week-block p3" id="week11">
+        <div class="week-header" onclick="toggleWeek('week11')">
+          <span class="week-label">TUẦN 11</span>
+          <span class="week-title-text">Public Voice — Bản sắc ngôn ngữ</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk11-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk11-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">30'</span><span class="slot-act-sm">IELTS practice</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Listening</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">30'</span><span class="slot-act-sm">Writing / blog</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Talk prep / record</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w11t1" onclick="toggleTask('w11t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Viết 1 bài Substack hoặc blog dài bằng tiếng Anh — có stance, có narrative arc, không generic. Chủ đề: intersection của distributed systems + AI + security mình đang sống trong đó</span>
+            </div>
+            <div class="task-item" id="w11t2" onclick="toggleTask('w11t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Debate với chính mình: record 10 phút tranh luận cả 2 phía của 1 vấn đề technical/ethical. Nghe lại — ai thuyết phục hơn và tại sao?</span>
+            </div>
+            <div class="task-item" id="w11t3" onclick="toggleTask('w11t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Luyện presenting ideas: 5-minute talk về 1 distributed systems concept, không script, chỉ cần outline. Ghi hình hoặc ghi âm. Xem lại critical</span>
+            </div>
+            <div class="task-item" id="w11t4" onclick="toggleTask('w11t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-all">REVIEW</span>
+              <span class="task-text">Đọc lại tất cả những gì mình đã viết trong 90 ngày — nhận ra sự tiến bộ, điều chỉnh voice. Đây là mirror quan trọng</span>
+            </div>
+            <div class="task-item" id="w11t5" onclick="toggleTask('w11t5')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Viết 1-page "English voice statement": mình muốn được nghe như thế nào khi nói và viết tiếng Anh? Cụ thể — chọn 3 writers/speakers mình muốn học phong cách</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WEEK 12 -->
+      <div class="week-block p3" id="week12">
+        <div class="week-header" onclick="toggleWeek('week12')">
+          <span class="week-label">TUẦN 12</span>
+          <span class="week-title-text">Final Mock + Decision</span>
+          <div class="week-progress">
+            <div class="week-prog-mini"><div class="week-prog-mini-fill" id="wk12-fill" style="width:0%"></div></div>
+            <span class="week-count" id="wk12-count">0/0</span>
+          </div>
+          <span class="week-chevron">▾</span>
+        </div>
+        <div class="week-body">
+          <div class="daily-schedule">
+            <div class="daily-slot-sm"><span class="slot-time-sm">180'</span><span class="slot-act-sm">Full IELTS mock</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">45'</span><span class="slot-act-sm">Mock interview</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">30'</span><span class="slot-act-sm">Reflection writing</span></div>
+            <div class="daily-slot-sm"><span class="slot-time-sm">20'</span><span class="slot-act-sm">Register / plan next</span></div>
+          </div>
+          <div class="tasks-list">
+            <div class="task-item" id="w12t1" onclick="toggleTask('w12t1')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-mock">MOCK</span>
+              <span class="task-text">IELTS full mock final — tất cả 4 skills, timed chính xác, điều kiện giống thi thật. Nếu có thể: tìm người chat để mock Speaking Part 3</span>
+            </div>
+            <div class="task-item" id="w12t2" onclick="toggleTask('w12t2')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-speaking">SPEAK</span>
+              <span class="task-text">Mock leadership-level interview bằng tiếng Anh: "Tell me about a system you designed from scratch", "What's your approach to technical debt?", "How do you handle disagreement with stakeholders?"</span>
+            </div>
+            <div class="task-item" id="w12t3" onclick="toggleTask('w12t3')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-writing">WRITING</span>
+              <span class="task-text">Viết 1-page reflection bằng tiếng Anh: "What has changed in the way I think and communicate in English over 90 days?" — honest, specific, không vague</span>
+            </div>
+            <div class="task-item" id="w12t4" onclick="toggleTask('w12t4')">
+              <div class="task-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="task-category cat-mock">DECISION</span>
+              <span class="task-text">Nếu đạt 7.0+ mock: đăng ký thi IELTS thật trong tháng tới. Nếu chưa: identify 1 skill còn gap rõ nhất → lặp lại phase tương ứng 30 ngày nữa, không bắt đầu từ đầu</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Milestones Phase 3</div>
+      <div class="milestones">
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 67</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p3"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Hoàn thành 1 mock technical interview bằng tiếng Anh, không chuẩn bị trước</div>
+            <div class="milestone-detail">Impromptu — không script, không note. Đây là real fluency test</div>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 75</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p3"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">IELTS timed mock: 7.0+ Reading, 7.5+ Listening</div>
+            <div class="milestone-detail">Verify bằng official Cambridge answer keys — không self-grade lỏng tay</div>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 82</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p3"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Publish bài tiếng Anh có voice riêng, không nghe như AI-generated</div>
+            <div class="milestone-detail">Nếu người đọc không biết bạn là người Việt, đó là marker tốt</div>
+          </div>
+        </div>
+        <div class="milestone-item">
+          <div class="milestone-day">Ngày 90</div>
+          <div class="milestone-connector"><div class="milestone-dot-big p3"></div></div>
+          <div class="milestone-content">
+            <div class="milestone-title">Overall Band 7+ mock. Tự tin giao tiếp trong bất kỳ context nào</div>
+            <div class="milestone-detail">Nếu đạt: book exam. Nếu chưa: không thất bại — chỉ cần thêm 30 ngày targeted</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-label">Tài nguyên Phase 3</div>
+      <div class="resources-grid">
+        <div class="resource-card">
+          <div class="resource-cat">INTERVIEW PREP</div>
+          <div class="resource-name">Grokking the System Design Interview + Pramp</div>
+          <div class="resource-desc">System design vocabulary + mock interview practice với người thật</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-cat">ACCENT VARIETY</div>
+          <div class="resource-name">ABC Radio (AU) / BBC In Our Time (UK) / NPR (US)</div>
+          <div class="resource-desc">Exposure đa dạng accent — IELTS Listening dùng nhiều accent khác nhau từ Section 3</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-cat">WRITING PLATFORM</div>
+          <div class="resource-name">Substack / Medium / Dev.to</div>
+          <div class="resource-desc">Platform để publish và nhận feedback thật từ người đọc thật — irreversible public step</div>
+        </div>
+        <div class="resource-card">
+          <div class="resource-cat">IELTS FINAL PUSH</div>
+          <div class="resource-name">Cambridge IELTS 17–19 + IELTS.org Official Prep</div>
+          <div class="resource-desc">Authentic materials nhất — dùng cho final mock tests, không cho practice bình thường</div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const TASKS = {
+  week1: ['w1t1','w1t2','w1t3','w1t4','w1t5','w1t6'],
+  week2: ['w2t1','w2t2','w2t3','w2t4','w2t5','w2t6'],
+  week3: ['w3t1','w3t2','w3t3','w3t4','w3t5'],
+  week4: ['w4t1','w4t2','w4t3','w4t4','w4t5'],
+  week5: ['w5t1','w5t2','w5t3','w5t4','w5t5'],
+  week6: ['w6t1','w6t2','w6t3','w6t4','w6t5'],
+  week7: ['w7t1','w7t2','w7t3','w7t4','w7t5'],
+  week8: ['w8t1','w8t2','w8t3','w8t4'],
+  week9: ['w9t1','w9t2','w9t3','w9t4','w9t5'],
+  week10: ['w10t1','w10t2','w10t3','w10t4','w10t5'],
+  week11: ['w11t1','w11t2','w11t3','w11t4','w11t5'],
+  week12: ['w12t1','w12t2','w12t3','w12t4']
+};
+
+const PHASE_WEEKS = {
+  p1: ['week1','week2','week3','week4'],
+  p2: ['week5','week6','week7','week8'],
+  p3: ['week9','week10','week11','week12']
+};
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem('ielts90_progress') || '{}'); } catch { return {}; }
+}
+
+function saveState(state) {
+  localStorage.setItem('ielts90_progress', JSON.stringify(state));
+}
+
+let state = loadState();
+
+function toggleTask(id) {
+  state[id] = !state[id];
+  saveState(state);
+  renderTask(id);
+  updateAllProgress();
+  if (state[id]) showToast('✓ Task completed');
+}
+
+function renderTask(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (state[id]) el.classList.add('done'); else el.classList.remove('done');
+}
+
+function updateAllProgress() {
+  let totalDone = 0, totalAll = 0;
+
+  for (const [ph, weeks] of Object.entries(PHASE_WEEKS)) {
+    let phDone = 0, phAll = 0;
+    for (const wk of weeks) {
+      const tasks = TASKS[wk] || [];
+      let wkDone = tasks.filter(t => state[t]).length;
+      phDone += wkDone; phAll += tasks.length;
+      const pct = tasks.length ? Math.round(wkDone / tasks.length * 100) : 0;
+      const fillEl = document.getElementById(wk.replace('week','wk') + '-fill');
+      const countEl = document.getElementById(wk.replace('week','wk') + '-count');
+      if (fillEl) fillEl.style.width = pct + '%';
+      if (countEl) countEl.textContent = wkDone + '/' + tasks.length;
+      const wkBlock = document.getElementById(wk);
+      if (wkBlock) {
+        if (wkDone === tasks.length && tasks.length > 0) wkBlock.classList.add('all-done');
+        else wkBlock.classList.remove('all-done');
+      }
+    }
+    totalDone += phDone; totalAll += phAll;
+    const pPct = phAll ? Math.round(phDone / phAll * 100) : 0;
+    const fillEl = document.getElementById(ph + '-fill');
+    const textEl = document.getElementById(ph + '-text');
+    const navPct = document.getElementById(ph + '-nav-pct');
+    if (fillEl) fillEl.style.width = pPct + '%';
+    if (textEl) textEl.textContent = phDone + ' / ' + phAll;
+    if (navPct) navPct.textContent = pPct + '%';
+  }
+
+  const overall = totalAll ? Math.round(totalDone / totalAll * 100) : 0;
+  document.getElementById('overall-pct').textContent = overall + '%';
+  document.getElementById('overall-fill').style.width = overall + '%';
+  document.getElementById('stat-done').textContent = totalDone;
+  document.getElementById('stat-left').textContent = totalAll - totalDone;
+  document.getElementById('stat-total').textContent = totalAll;
+}
+
+function toggleWeek(wkId) {
+  const el = document.getElementById(wkId);
+  el.classList.toggle('open');
+}
+
+function scrollToPhase(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function resetProgress() {
+  if (confirm('Reset toàn bộ progress?')) {
+    state = {};
+    saveState(state);
+    document.querySelectorAll('.task-item').forEach(el => el.classList.remove('done'));
+    updateAllProgress();
+    showToast('Progress đã được reset');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// Init
+for (const tasks of Object.values(TASKS)) {
+  for (const id of tasks) renderTask(id);
+}
+updateAllProgress();
+</script>
+</body>
+</html>
