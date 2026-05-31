@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>90 Ngày Viết — Lộ trình bản sắc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:    #1a1917;
+  --ink2:   #6b6860;
+  --ink3:   #a8a49e;
+  --bg:     #faf9f7;
+  --bg2:    #f3f1ed;
+  --bg3:    #ece9e3;
+  --border: rgba(0,0,0,0.10);
+  --border2:rgba(0,0,0,0.18);
+
+  --teal:        #1D9E75;
+  --teal-mid:    #5DCAA5;
+  --teal-light:  #E1F5EE;
+  --teal-dark:   #0F6E56;
+
+  --purple:      #7F77DD;
+  --purple-mid:  #AFA9EC;
+  --purple-light:#EEEDFE;
+  --purple-dark: #534AB7;
+
+  --coral:       #D85A30;
+  --coral-mid:   #F0997B;
+  --coral-light: #FAECE7;
+  --coral-dark:  #993C1D;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink:    #e8e5df;
+    --ink2:   #9b9790;
+    --ink3:   #5e5c57;
+    --bg:     #141412;
+    --bg2:    #1c1b18;
+    --bg3:    #242320;
+    --border: rgba(255,255,255,0.09);
+    --border2:rgba(255,255,255,0.16);
+
+    --teal-light:  #04342C;
+    --teal-dark:   #9FE1CB;
+    --purple-light:#26215C;
+    --purple-dark: #CECBF6;
+    --coral-light: #4A1B0C;
+    --coral-dark:  #F5C4B3;
+  }
+}
+
+html { font-size: 16px; }
+
+body {
+  font-family: 'DM Mono', monospace;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: auto 1fr;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  grid-row: 1 / 3;
+  background: var(--bg2);
+  border-right: 0.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 1.75rem 1.5rem 1.25rem;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.logo {
+  font-family: 'Instrument Serif', serif;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.logo-sub {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink3);
+}
+
+/* Progress ring */
+.progress-section {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ring-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.ring-wrap svg { transform: rotate(-90deg); }
+
+.ring-bg { fill: none; stroke: var(--border2); stroke-width: 3; }
+.ring-fill { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+
+.ring-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.progress-text { flex: 1; }
+.progress-label { font-size: 11px; color: var(--ink2); margin-bottom: 2px; }
+.progress-days { font-size: 13px; font-weight: 500; color: var(--ink); }
+
+/* Tabs */
+.tab-bar {
+  display: flex;
+  border-bottom: 0.5px solid var(--border);
+  flex-shrink: 0;
+}
+
+.tab-btn {
+  flex: 1;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  background: none;
+  border: none;
+  padding: 10px 0;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+.tab-btn:hover { color: var(--ink2); }
+.tab-btn.active { color: var(--ink); border-bottom-color: var(--teal); }
+
+.tab-panel { display: none; flex: 1; overflow-y: auto; }
+.tab-panel.active { display: flex; flex-direction: column; }
+
+/* Day grid */
+.day-grid-wrap {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.25rem 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+.phase-group { margin-bottom: 1.25rem; }
+
+.phase-group-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 8px;
+  padding-left: 2px;
+}
+
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 4px;
+}
+
+.day-dot {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: var(--bg3);
+  border: 0.5px solid var(--border);
+  cursor: pointer;
+  transition: all 0.12s;
+  position: relative;
+}
+
+.day-dot:hover { border-color: var(--border2); transform: scale(1.15); }
+.day-dot.active { border-width: 1.5px; transform: scale(1.15); }
+.day-dot.done-1 { background: var(--teal-light); border-color: var(--teal-mid); }
+.day-dot.done-2 { background: var(--purple-light); border-color: var(--purple-mid); }
+.day-dot.done-3 { background: var(--coral-light); border-color: var(--coral-mid); }
+.day-dot.active.phase-1 { border-color: var(--teal); box-shadow: 0 0 0 2px var(--teal-light); }
+.day-dot.active.phase-2 { border-color: var(--purple); box-shadow: 0 0 0 2px var(--purple-light); }
+.day-dot.active.phase-3 { border-color: var(--coral); box-shadow: 0 0 0 2px var(--coral-light); }
+
+/* Resources panel */
+.res-panel {
+  padding: 1rem 1.25rem 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+.res-section { margin-bottom: 1.5rem; }
+
+.res-section-header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.res-section-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.res-section-title {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  font-weight: 500;
+}
+
+.res-phase-tag {
+  margin-left: auto;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+.res-phase-tag.t1 { background: var(--teal-light); color: var(--teal-dark); }
+.res-phase-tag.t2 { background: var(--purple-light); color: var(--purple-dark); }
+.res-phase-tag.t3 { background: var(--coral-light); color: var(--coral-dark); }
+.res-phase-tag.all { background: var(--bg3); color: var(--ink2); }
+
+.res-item {
+  padding: 9px 11px;
+  border: 0.5px solid var(--border);
+  border-radius: 7px;
+  margin-bottom: 6px;
+  cursor: default;
+  transition: border-color 0.12s;
+}
+.res-item:hover { border-color: var(--border2); }
+
+.res-item-top {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+
+.res-item-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.res-item-author {
+  font-size: 10px;
+  color: var(--ink3);
+  white-space: nowrap;
+}
+
+.res-item-desc {
+  font-size: 11px;
+  color: var(--ink2);
+  line-height: 1.55;
+}
+
+.res-why {
+  font-size: 10px;
+  color: var(--teal-dark);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ── MAIN ── */
+.main {
+  padding: 2.5rem 3rem 4rem;
+  max-width: 680px;
+}
+
+/* Top bar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.day-number {
+  font-family: 'Instrument Serif', serif;
+  font-size: 56px;
+  line-height: 1;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+
+.day-of { font-size: 13px; color: var(--ink3); }
+
+.phase-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.badge-1 { background: var(--teal-light); color: var(--teal-dark); }
+.badge-2 { background: var(--purple-light); color: var(--purple-dark); }
+.badge-3 { background: var(--coral-light); color: var(--coral-dark); }
+
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; }
+.badge-1 .badge-dot { background: var(--teal); }
+.badge-2 .badge-dot { background: var(--purple); }
+.badge-3 .badge-dot { background: var(--coral); }
+
+.week-name {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 1.5rem;
+}
+
+/* Prompt card */
+.prompt-card {
+  background: var(--bg2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem 2rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.prompt-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  border-radius: 3px 0 0 3px;
+}
+.phase-1 .prompt-card::before { background: var(--teal); }
+.phase-2 .prompt-card::before { background: var(--purple); }
+.phase-3 .prompt-card::before { background: var(--coral); }
+
+.prompt-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 12px;
+}
+
+.prompt-text {
+  font-family: 'Instrument Serif', serif;
+  font-size: 22px;
+  line-height: 1.45;
+  color: var(--ink);
+  margin-bottom: 0;
+}
+
+.hint-card {
+  background: transparent;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.hint-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 6px;
+}
+
+.hint-text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink2);
+  font-style: italic;
+}
+
+/* Done checkbox */
+.done-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 1rem 1.25rem;
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 1.25rem;
+  user-select: none;
+}
+
+.done-row:hover { background: var(--bg2); border-color: var(--border2); }
+
+.done-row.checked { background: var(--teal-light); border-color: var(--teal-mid); }
+.done-row.checked.ph2 { background: var(--purple-light); border-color: var(--purple-mid); }
+.done-row.checked.ph3 { background: var(--coral-light); border-color: var(--coral-mid); }
+
+.checkbox {
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  border: 1.5px solid var(--border2);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  background: var(--bg);
+}
+
+.done-row.checked .checkbox {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+.done-row.checked.ph2 .checkbox { background: var(--purple); border-color: var(--purple); }
+.done-row.checked.ph3 .checkbox { background: var(--coral); border-color: var(--coral); }
+
+.checkbox svg { opacity: 0; transition: opacity 0.15s; }
+.done-row.checked .checkbox svg { opacity: 1; }
+
+.done-label {
+  font-size: 13px;
+  color: var(--ink2);
+}
+.done-row.checked .done-label { color: var(--teal-dark); font-weight: 500; }
+.done-row.checked.ph2 .done-label { color: var(--purple-dark); }
+.done-row.checked.ph3 .done-label { color: var(--coral-dark); }
+
+/* Note area */
+.note-wrap {
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.note-label {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  margin-bottom: 8px;
+}
+
+textarea {
+  width: 100%;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  min-height: 88px;
+}
+
+textarea::placeholder { color: var(--ink3); }
+
+/* Nav */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--ink2);
+  background: none;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.12s;
+  letter-spacing: 0.03em;
+}
+
+.nav-btn:hover:not(:disabled) { background: var(--bg2); color: var(--ink); }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+.nav-track {
+  flex: 1;
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.nav-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.35s ease;
+}
+.phase-1 .nav-fill { background: var(--teal); }
+.phase-2 .nav-fill { background: var(--purple); }
+.phase-3 .nav-fill { background: var(--coral); }
+
+.nav-label {
+  font-size: 11px;
+  color: var(--ink3);
+  white-space: nowrap;
+}
+
+/* Jump */
+.jump-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.jump-label { font-size: 11px; color: var(--ink3); }
+
+input[type=number] {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  width: 56px;
+  padding: 5px 8px;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  color: var(--ink);
+  text-align: center;
+  outline: none;
+}
+
+input[type=number]:focus { border-color: var(--teal); }
+
+.jump-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  padding: 5px 12px;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--ink2);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+.jump-btn:hover { background: var(--bg2); color: var(--ink); }
+
+/* Responsive */
+@media (max-width: 700px) {
+  body { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
+  .sidebar { grid-row: 1; height: auto; position: static; }
+  .day-grid-wrap { max-height: 160px; }
+  .main { padding: 1.5rem 1.25rem 3rem; max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="logo">90 Ngày Viết</div>
+    <div class="logo-sub">Lộ trình bản sắc</div>
+  </div>
+
+  <div class="progress-section">
+    <div class="ring-wrap">
+      <svg width="52" height="52" viewBox="0 0 52 52">
+        <circle class="ring-bg" cx="26" cy="26" r="21"/>
+        <circle class="ring-fill" id="ringFill" cx="26" cy="26" r="21"
+          stroke-dasharray="132" stroke-dashoffset="132"/>
+      </svg>
+      <div class="ring-num" id="ringNum">0%</div>
+    </div>
+    <div class="progress-text">
+      <div class="progress-label">Đã hoàn thành</div>
+      <div class="progress-days" id="progressDays">0 / 90 ngày</div>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" id="tabDays" onclick="switchTab('days')">Ngày</button>
+    <button class="tab-btn" id="tabRes" onclick="switchTab('res')">Tài nguyên</button>
+  </div>
+
+  <!-- Tab: Days -->
+  <div class="tab-panel active" id="panelDays">
+    <div class="day-grid-wrap">
+      <div class="phase-group">
+        <div class="phase-group-label" style="color:var(--teal-dark)">Tháng 1 — Khai thác</div>
+        <div class="day-grid" id="grid1"></div>
+      </div>
+      <div class="phase-group">
+        <div class="phase-group-label" style="color:var(--purple-dark)">Tháng 2 — Đối thoại</div>
+        <div class="day-grid" id="grid2"></div>
+      </div>
+      <div class="phase-group">
+        <div class="phase-group-label" style="color:var(--coral-dark)">Tháng 3 — Kết tinh</div>
+        <div class="day-grid" id="grid3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab: Resources -->
+  <div class="tab-panel" id="panelRes">
+    <div class="res-panel">
+
+      <!-- SÁCH -->
+      <div class="res-section">
+        <div class="res-section-header">
+          <span class="res-section-icon">📚</span>
+          <span class="res-section-title">Sách</span>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Several Short Sentences About Writing</span>
+            <span class="res-item-author">— Verlyn Klinkenborg</span>
+          </div>
+          <div class="res-item-desc">Cuốn sách về viết ngắn gọn và có chủ ý nhất mình từng đọc. Không phải grammar book.</div>
+          <div class="res-why">→ Đọc tháng 1, khi đang tập viết thô</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Bird by Bird</span>
+            <span class="res-item-author">— Anne Lamott</span>
+          </div>
+          <div class="res-item-desc">Chương "Shitty First Drafts" một mình đã đủ justify cả cuốn. Về việc viết thô không phải là viết dở.</div>
+          <div class="res-why">→ Đọc tuần 1-2 khi cảm giác bài viết chưa hay</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">The Pragmatic Programmer</span>
+            <span class="res-item-author">— Hunt & Thomas</span>
+          </div>
+          <div class="res-item-desc">Không phải sách kỹ thuật thuần. Là sách về cách một software engineer nghĩ — rất nhiều chất liệu để viết về.</div>
+          <div class="res-why">→ Tháng 1-2, chọn một chapter làm chất liệu phản hồi</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Meditations</span>
+            <span class="res-item-author">— Marcus Aurelius</span>
+          </div>
+          <div class="res-item-desc">Viết để mình đọc, không phải để publish. Stoicism ở dạng thô nhất. Đọc từng đoạn nhỏ, không đọc liền.</div>
+          <div class="res-why">→ Nguồn tốt nhất cho tuần 3 (Triết học vào tech)</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Thinking, Fast and Slow</span>
+            <span class="res-item-author">— Daniel Kahneman</span>
+          </div>
+          <div class="res-item-desc">Giải thích tại sao con người tin những thứ họ chưa suy nghĩ. Trực tiếp liên quan đến lens của mình.</div>
+          <div class="res-why">→ Tháng 2, tuần 8 (Kết nối chéo)</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Surely You're Joking, Mr. Feynman!</span>
+            <span class="res-item-author">— Richard Feynman</span>
+          </div>
+          <div class="res-item-desc">Mẫu mực của tech + hài hước + triết học mà không cố. Đọc để ngấm nhịp, không phải để học kỹ thuật viết.</div>
+          <div class="res-why">→ Đọc bất kỳ lúc nào cần cảm hứng giọng văn</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">A Philosophy of Software Design</span>
+            <span class="res-item-author">— John Ousterhout</span>
+          </div>
+          <div class="res-item-desc">Mỗi chapter là một luận điểm mạnh về thiết kế. Phản đối bất kỳ chapter nào cũng là một bài viết tốt.</div>
+          <div class="res-why">→ Tháng 2, nguồn để argue back</div>
+        </div>
+      </div>
+
+      <!-- BLOG / NGƯỜI VIẾT -->
+      <div class="res-section">
+        <div class="res-section-header">
+          <span class="res-section-icon">✍️</span>
+          <span class="res-section-title">Người viết nên đọc</span>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Paul Graham — paulgraham.com</span>
+          </div>
+          <div class="res-item-desc">Founder Hacker News. Tech + thinking + essay. Rất opinionated, rất rõ ràng. Bài "Beating the Averages" và "Hackers and Painters" để bắt đầu.</div>
+          <div class="res-why">→ Mẫu của lập luận trực tiếp, không e dè</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Joel on Software — joelonsoftware.com</span>
+          </div>
+          <div class="res-item-desc">Joel Spolsky. Viết về software management và engineering bằng giọng hài hước nhẹ, rất dễ đọc. Bài "The Joel Test" kinh điển.</div>
+          <div class="res-why">→ Mẫu của tech humor tự nhiên</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Dan Luu — danluu.com</span>
+          </div>
+          <div class="res-item-desc">Data-driven, không ngại đi ngược consensus. Kiểu viết "mình có số liệu, mình không cần phải lịch sự." Rất phù hợp với lens của mình.</div>
+          <div class="res-why">→ Học cách argue bằng bằng chứng, không bằng cảm tính</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Liz Fong-Jones / charity.wtf</span>
+          </div>
+          <div class="res-item-desc">Observability và engineering culture. Không ngại controversial. Viết về con người trong tech nhiều hơn kỹ thuật.</div>
+          <div class="res-why">→ Tháng 2, tuần về quan sát con người</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Hillel Wayne — hillelwayne.com</span>
+          </div>
+          <div class="res-item-desc">Debunk myths trong software engineering bằng cách đọc paper gốc. "Things I Learnt..." là series hay nhất.</div>
+          <div class="res-why">→ Mẫu của "nghi ngờ best practice"</div>
+        </div>
+      </div>
+
+      <!-- PODCAST -->
+      <div class="res-section">
+        <div class="res-section-header">
+          <span class="res-section-icon">🎙️</span>
+          <span class="res-section-title">Podcast</span>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Software Engineering Radio</span>
+          </div>
+          <div class="res-item-desc">Phỏng vấn kỹ sâu với engineers thực chiến. Tốt cho chất liệu viết hơn là học kỹ thuật.</div>
+          <div class="res-why">→ Nghe để tìm quan điểm mình muốn phản bác</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Lex Fridman Podcast</span>
+          </div>
+          <div class="res-item-desc">Dài, triết học, tech, AI, con người. Không cần nghe hết. Chọn guest mình biết ít để ra khỏi echo chamber.</div>
+          <div class="res-why">→ Tháng 2-3, chọn 2-3 tập làm chất liệu</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Hardcore History — Dan Carlin</span>
+          </div>
+          <div class="res-item-desc">Không liên quan đến tech. Nhưng Dan Carlin là mẫu mực của storytelling dài và giữ được sự chú ý. Nghe để học nhịp.</div>
+          <div class="res-why">→ Học cách dẫn dắt người đọc qua một ý dài</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Philosophize This!</span>
+          </div>
+          <div class="res-item-desc">Triết học giải thích đơn giản, không mất chiều sâu. Stoicism, Buddhist philosophy, cognitive psychology đều có.</div>
+          <div class="res-why">→ Tuần 3, tuần 8 — kết nối triết học với công việc</div>
+        </div>
+
+        <div class="res-item">
+          <div class="res-item-top">
+            <span class="res-item-title">Changelog / Go Time / JS Party</span>
+          </div>
+          <div class="res-item-desc">Developer-focused, bàn về culture và community nhiều hơn syntax. Giọng thoải mái, không academia.</div>
+          <div class="res-why">→ Tham khảo giọng văn tech không quá formal</div>
+        </div>
+      </div>
+
+      <!-- GHI CHÚ -->
+      <div class="res-section">
+        <div class="res-section-header">
+          <span class="res-section-icon">💡</span>
+          <span class="res-section-title">Cách dùng tài nguyên này</span>
+        </div>
+        <div class="res-item">
+          <div class="res-item-desc" style="line-height:1.7">
+            Không cần đọc hết. Mỗi tháng chọn 1 sách + 1 blog + 1 podcast. Đọc/nghe không phải để học, mà để tìm thứ mình muốn cãi lại hoặc muốn bổ sung. Phản ứng đó là chất liệu viết tốt nhất.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main" id="mainArea">
+  <div class="topbar">
+    <div>
+      <div class="day-number" id="dayNum">1</div>
+      <div class="day-of">/ 90 ngày</div>
+    </div>
+    <div id="phaseBadge" class="phase-badge badge-1">
+      <span class="badge-dot"></span>
+      <span id="phaseLabel">Tháng 1 — Khai thác</span>
+    </div>
+  </div>
+
+  <div class="week-name" id="weekName">Tuần 1 — Phản ứng thật</div>
+
+  <div class="prompt-card" id="promptCard">
+    <div class="prompt-label">Prompt hôm nay</div>
+    <div class="prompt-text" id="promptText"></div>
+  </div>
+
+  <div class="hint-card">
+    <div class="hint-label">Gợi ý</div>
+    <div class="hint-text" id="hintText"></div>
+  </div>
+
+  <div class="done-row" id="doneRow" onclick="toggleDone()">
+    <div class="checkbox" id="checkbox">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <polyline points="2,6 5,9 10,3" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="done-label" id="doneLabel">Đánh dấu đã viết hôm nay</span>
+  </div>
+
+  <div class="note-wrap">
+    <div class="note-label">Ghi chú nhanh</div>
+    <textarea id="noteArea" placeholder="Câu nào hay nhất mình viết hôm nay..." oninput="saveNote()"></textarea>
+  </div>
+
+  <div class="nav">
+    <button class="nav-btn" id="prevBtn" onclick="go(-1)">← trước</button>
+    <div class="nav-track"><div class="nav-fill" id="navFill" style="width:1%"></div></div>
+    <span class="nav-label" id="navLabel">1 / 90</span>
+    <button class="nav-btn" id="nextBtn" onclick="go(1)">tiếp →</button>
+  </div>
+
+  <div class="jump-row">
+    <span class="jump-label">Nhảy tới ngày</span>
+    <input type="number" id="jumpInput" min="1" max="90" value="1" onkeydown="if(event.key==='Enter')jumpTo()">
+    <button class="jump-btn" onclick="jumpTo()">Đến</button>
+  </div>
+</main>
+
+<script>
+const DAYS = [
+  // THÁNG 1: KHAI THÁC
+  {p:"Có một thứ trong công việc tuần này khiến mình bực. Đó là gì, và tại sao nó bực?",h:"Viết thô. Không cần giải thích. Chỉ cần phản ứng thật đầu tiên."},
+  {p:"Microservice, agile, 'clean code'... chọn một buzzword mình hay nghe nhất. Nó thực sự có nghĩa gì, hay chỉ là từ đẹp?",h:"Không cần đúng. Cần thật."},
+  {p:"Có một câu mình hay nghe (trong tech, ngoài đời) mà nghe xong là muốn cãi lại. Đó là câu gì?",h:"Viết câu đó ra. Rồi viết tại sao nó sai, hoặc ít nhất là phức tạp hơn người ta nghĩ."},
+  {p:"Mô tả một ngày làm việc bình thường của mình, nhưng viết nó như thể đang giải thích cho một người không biết gì về tech.",h:"Không dùng jargon. Nếu phải dùng, giải thích ngay bên dưới."},
+  {p:"Điều gì khiến mình thực sự thích công việc hiện tại? Không phải câu trả lời để phỏng vấn, câu trả lời thật.",h:"Nếu không tìm được gì, viết cái đó ra cũng được."},
+  {p:"Điều gì trong ngành software mà mình nghĩ đa số người đang làm sai?",h:"Quan điểm thật của mình, không phải quan điểm 'an toàn'."},
+  {p:"Tuần này mình học được gì? Không nhất thiết phải là kỹ thuật, có thể là về người, về bản thân.",h:"Một quan sát nhỏ cũng được. Không cần phải sâu sắc."},
+  {p:"Mô tả một người đồng nghiệp (không cần tên) theo cách khiến người đọc hiểu ngay họ là ai.",h:"Một chi tiết cụ thể hay hơn mười tính từ chung chung."},
+  {p:"Có một loại người trong môi trường tech mà mình thấy đặc biệt... đặc biệt. Mô tả họ.",h:"Có thể hài hước, có thể cảm thông, nhưng phải thật."},
+  {p:"Một cuộc họp mình tham gia gần đây. Điều gì thực sự đang xảy ra trong phòng đó, bên dưới những gì được nói?",h:"Subtext, động lực, ai đang muốn gì."},
+  {p:"Tại sao người giỏi kỹ thuật thường khó giao tiếp? Hay nhận định đó sai?",h:"Mình nghĩ gì, không phải internet nghĩ gì."},
+  {p:"Có một quyết định kỹ thuật nào trong dự án hiện tại mà mình nghĩ là sai? Tại sao nó vẫn tồn tại?",h:"Thường là vì con người, không phải vì kỹ thuật."},
+  {p:"'Senior engineer' thực sự khác 'junior' ở chỗ nào? Không phải câu trả lời textbook.",h:"Từ quan sát thực tế của mình."},
+  {p:"Nhìn lại mình cách đây 2-3 năm làm việc. Điều gì mình hiểu bây giờ mà hồi đó không hiểu?",h:"Một quan sát cụ thể, không phải danh sách bài học."},
+  {p:"Stoicism nói 'kiểm soát những gì có thể kiểm soát'. Trong công việc, mình thực sự kiểm soát được gì?",h:"Cụ thể, không trừu tượng."},
+  {p:"Code review là gì, thực chất? Về mặt kỹ thuật một cách. Về mặt con người một cách khác.",h:"Hai góc nhìn, không nhất thiết phải hòa giải chúng."},
+  {p:"'Technical debt' nghe như khái niệm kỹ thuật, nhưng thực ra là về gì?",h:"Có thể là về sợ hãi, về giao tiếp, về quyền lực, về thời gian."},
+  {p:"Mình có một hệ thống niềm tin về cách viết code 'tốt'. Những niềm tin đó đến từ đâu?",h:"Ai dạy mình? Mình có thực sự kiểm chứng chúng chưa?"},
+  {p:"Phật giáo nói về vô thường. Code cũng vô thường. Điều đó có nghĩa gì với cách mình làm việc?",h:"Không cần triết học sâu. Một quan sát thực tế cũng đủ."},
+  {p:"Có một quyết định mình đã đưa ra trong công việc mà giờ nhìn lại thấy khác. Điều gì đã thay đổi?",h:"Thông tin mới? Góc nhìn mới? Hay chỉ là thời gian?"},
+  {p:"'Best practice' trong software. Ai quyết định cái gì là best? Dựa trên gì?",h:"Nghi ngờ lành mạnh, không phải chủ nghĩa hư vô."},
+  {p:"Đọc lại những gì mình viết tuần 1. Mình hay để ý đến loại vấn đề nào?",h:"Người, quy trình, hay kỹ thuật? Cái gì xuất hiện nhiều nhất?"},
+  {p:"Có một thứ mình giải thích đi giải thích lại cho đồng nghiệp hoặc bạn bè. Đó là gì?",h:"Thứ mình hay giải thích thường là thứ mình hiểu sâu nhất, hoặc quan tâm nhất."},
+  {p:"Viết lại prompt ngày 3 (câu mình muốn cãi lại) nhưng lần này viết đứng về phía câu đó.",h:"Không phải để đồng ý, mà để hiểu tại sao người ta tin vào nó."},
+  {p:"Có một thứ trong cuộc sống ngoài tech mà mình thấy nó giải thích rất rõ một thứ trong tech.",h:"Bất kỳ thứ gì. Nấu ăn, thể thao, âm nhạc, gia đình."},
+  {p:"Mình thấy buồn cười nhất khi nào trong công việc?",h:"Hài hước thật thường đến từ sự phi lý mà người ta quen mặt đến mức không còn thấy nữa."},
+  {p:"Nếu phải giải thích công việc của mình cho bà nội, mình nói gì?",h:"Giải thích đơn giản thường lộ ra mình hiểu đến đâu."},
+  {p:"Tuần này mình phát hiện ra mình hay viết về chủ đề gì? Mình nghĩ tại sao?",h:"Không cần đúng. Chỉ cần quan sát."},
+  {p:"Có một người (thật hoặc trong sách) mà cách họ nghĩ về thế giới khiến mình tâm đắc. Họ nghĩ theo kiểu gì?",h:"Không phải họ nghĩ gì, mà là cách họ tiếp cận vấn đề."},
+  {p:"Nhìn lại 30 ngày qua. Đoạn nào mình viết mà đọc lại thấy 'cái này nghe như mình'?",h:"Đó là bản sắc mầm. Ghi nhớ cảm giác đó."},
+
+  // THÁNG 2: ĐỐI THOẠI
+  {p:"Tìm một bài viết về tech mình đọc gần đây. Một câu trong đó mình đồng ý mạnh nhất là câu nào?",h:"Viết câu đó ra. Rồi viết tại sao mình đồng ý, bằng ví dụ của chính mình."},
+  {p:"Cùng bài viết đó. Một câu mình không đồng ý hoặc thấy thiếu là câu nào?",h:"Phản biện cụ thể, không phải 'tôi thấy bài này không đúng'."},
+  {p:"Có một quan điểm mình giữ lâu về software/tech. Hôm nay thử argue ngược lại nó.",h:"Không phải để thay đổi quan điểm. Để hiểu nó từ bên trong."},
+  {p:"Viết cùng một quan sát kỹ thuật bằng tiếng Việt. Rồi viết lại bằng tiếng Anh. Cái gì khác?",h:"Không phải dịch. Viết lại từ đầu bằng ngôn ngữ kia. Rhythm thay đổi thế nào?"},
+  {p:"Tìm một câu quote về engineering hoặc software mình thấy hay. Tại sao nó hay, cụ thể?",h:"'Hay' chưa đủ. Hay vì nó đúng với điều gì cụ thể mình từng gặp?"},
+  {p:"Có một cuốn sách hoặc bài viết thay đổi cách mình nghĩ về tech. Thay đổi điều gì cụ thể?",h:"Trước và sau. Cụ thể nhất có thể."},
+  {p:"Viết một đoạn tiếng Anh về chủ đề kỹ thuật mình biết rõ. Đọc lại, giọng văn nghe như ai?",h:"Giống documentation? Giống blog? Hay giống đang nói chuyện? Cái nào thoải mái nhất?"},
+  {p:"Tìm một người viết về tech mà mình thấy cộng hưởng. Họ viết khác mình ở điểm nào?",h:"Không phải 'họ viết tốt hơn'. Họ viết *khác* thế nào?"},
+  {p:"Tìm một người viết về tech mà mình thấy không thuyết phục. Cụ thể, vì sao?",h:"'Không thích' chưa đủ. Cái gì trong cách họ lập luận không ổn?"},
+  {p:"Lấy một đoạn viết của người mình admire. Viết lại đoạn đó theo giọng của mình.",h:"Không copy. Cùng ý tưởng, khác hoàn toàn cách diễn đạt."},
+  {p:"Có một chủ đề mình biết rõ nhưng chưa ai (mình biết) viết đúng về nó. Đó là chủ đề gì?",h:"Góc mà mình nghĩ bị bỏ sót. Đó thường là chỗ có bản sắc."},
+  {p:"Viết một đoạn về distributed systems (hoặc chủ đề kỹ thuật bất kỳ) không dùng một từ kỹ thuật nào.",h:"Nếu không thể giải thích không có jargon, mình chưa hiểu đủ sâu."},
+  {p:"Có một thứ trong triết học hoặc tâm lý học mình đọc gần đây áp dụng được vào công việc. Áp dụng thế nào?",h:"Cụ thể. Không phải 'stoicism dạy mình bình tĩnh hơn'."},
+  {p:"Viết tiếng Anh về 'đứa trẻ ngoan không có kẹo'. Cùng quan điểm, ngôn ngữ khác.",h:"Ý tưởng có giữ được sức mạnh không? Hay nó mất gì đó khi chuyển ngữ?"},
+  {p:"Mô tả một anti-pattern trong tech như thể đang viết cho tạp chí khoa học nghiêm túc.",h:"Sự hài hước đến từ khoảng cách giữa hình thức và nội dung."},
+  {p:"Viết một bản 'user manual' cho một đồng nghiệp điển hình.",h:"Hài hước không có nghĩa là chế nhạo. Quan sát tinh tế mới buồn cười lâu dài."},
+  {p:"Giải thích tại sao họp standup tồn tại. Nghiêm túc nhất có thể. Rồi đọc lại xem nó nghe thế nào.",h:"Thứ nghe hài hước nhất thường là thứ được giải thích nghiêm túc nhất."},
+  {p:"Có một thứ trong cuộc sống mình nghiêm túc mà người khác thấy không cần thiết. Viết về nó.",h:"Bảo vệ quan điểm của mình mà không cần ai đồng ý."},
+  {p:"Viết một đoạn về 'technical debt' nhưng thay bằng ẩn dụ hoàn toàn không liên quan đến tech.",h:"Nợ thật, nợ cảm xúc, nợ ký ức... cái nào phù hợp nhất?"},
+  {p:"Điều gì trong ngành tech mình thấy hơi phi lý nhưng không ai nói ra?",h:"Quan sát này thường là vàng."},
+  {p:"Viết cùng một quan sát: một lần nghiêm túc, một lần không nghiêm túc. So sánh hai phiên bản.",h:"Cái nào truyền ý tốt hơn? Cái nào nghe như mình hơn?"},
+  {p:"Stoicism và software architecture có gì giống nhau không?",h:"Đừng cố tìm điểm giống. Viết xem mình tự nhiên thấy gì."},
+  {p:"Tâm lý học về cognitive bias áp dụng vào code review thế nào?",h:"Một bias cụ thể, một ví dụ cụ thể."},
+  {p:"Có một bộ phim, album nhạc, hoặc cuốn sách mà cấu trúc của nó giống cách mình nghĩ về system design.",h:"Không cần logic rõ ràng. Cảm giác giống thường là tín hiệu thật."},
+  {p:"Nếu viết code như nấu ăn, mình đang nấu món gì? Và theo công thức hay ứng tấu?",h:"Ẩn dụ tốt nhất là ẩn dụ mình tự nghĩ ra, không phải tìm trên mạng."},
+  {p:"Có điều gì mình nghĩ rất lâu mà vẫn chưa có kết luận? Viết quá trình đang suy nghĩ đó.",h:"Không cần đến đâu. Quá trình suy nghĩ mở cũng là một bài viết."},
+  {p:"Tuần này mình đọc gì và phản ứng mạnh nhất với cái gì?",h:"Đồng ý hay phản đối đều được. Quan trọng là phản ứng thật."},
+  {p:"Nhìn lại 30 ngày viết, phong cách mình đang hướng về kiểu gì?",h:"Không phải mình muốn viết kiểu gì. Mình đang tự nhiên viết kiểu gì."},
+  {p:"Viết một đoạn ngắn về bất kỳ thứ gì bằng tiếng Anh, cố tình không dịch trong đầu.",h:"Bắt đầu bằng tiếng Anh, không phải dịch từ tiếng Việt sang."},
+  {p:"Tháng 2, tuần cuối. Điều gì mình viết tốt hơn so với tháng 1? Cụ thể.",h:"Không phải 'tôi tiến bộ hơn'. Cụ thể: câu mở, kết luận, giọng văn?"},
+
+  // THÁNG 3: KẾT TINH
+  {p:"Chọn một quan sát từ tháng 1-2 mình thấy có gì đó thật. Viết mở bài cho nó.",h:"Chỉ mở bài. 3-5 câu. Không cần phần thân bài hôm nay."},
+  {p:"Tiếp tục bài hôm qua. Viết phần thân: một luận điểm chính, một ví dụ cụ thể.",h:"Không cần hoàn hảo. Cần đủ thật để người đọc gật đầu."},
+  {p:"Tiếp tục. Viết kết bài. Không tóm tắt. Kết bằng một quan sát mở, không phải bài học.",h:"Kết bài tốt khiến người đọc tiếp tục suy nghĩ, không phải dừng lại."},
+  {p:"Đọc lại bài vừa viết xong. Câu nào nghe không như mình? Viết lại câu đó.",h:"Một câu thôi. Chỉnh từng câu, không chỉnh toàn bài một lúc."},
+  {p:"Bài đầu tiên, tiếng Anh. Lấy cùng ý tưởng, viết lại từ đầu không dịch.",h:"Rhythm tiếng Anh khác. Câu thường dài hơn. Luận điểm thường trực tiếp hơn."},
+  {p:"So sánh bản tiếng Việt và tiếng Anh. Cái nào truyền ý tốt hơn? Tại sao?",h:"Không có đáp án đúng. Đây là lúc mình hiểu ngôn ngữ nào phù hợp loại ý tưởng nào."},
+  {p:"Viết mở bài cho bài thứ hai. Chủ đề khác hoàn toàn với bài một.",h:"Thử một kiểu mở khác: không phải ký ức, mà là quan sát hiện tại."},
+  {p:"Phần thân bài thứ hai. Lần này thử kết nối tech với một khái niệm ngoài tech.",h:"Không giải thích kết nối. Để người đọc tự thấy."},
+  {p:"Kết bài thứ hai. Thử kết bằng một câu hỏi thay vì một nhận định.",h:"Câu hỏi tốt là câu hỏi mình không biết câu trả lời."},
+  {p:"Đọc lại hai bài. Giọng văn có nhất quán không? Chỗ nào nghe khác, chỉnh lại.",h:"Nhất quán không có nghĩa là đơn điệu. Nhịp thay đổi nhưng giọng phải cùng một người."},
+  {p:"Tìm một người để đọc một trong hai bài. Họ hiểu không?",h:"Phản hồi không quan trọng bằng việc quan sát họ đọc. Họ dừng lại ở đâu?"},
+  {p:"Chỗ người đọc dừng lại hôm qua, viết lại đoạn đó.",h:"Chỗ người đọc bị mất là chỗ mình đang viết cho mình, không phải cho họ."},
+  {p:"Viết mở bài bài thứ ba. Lần này bắt đầu bằng một câu đối thoại.",h:"'Không được run chân khi ăn, nghèo đó.' Mình đã làm được rồi. Làm lại với chủ đề khác."},
+  {p:"Bài thứ ba, phần thân. Thử dùng hài hước một chỗ, không phải toàn bài.",h:"Hài hước như gia vị. Một chỗ đúng lúc mạnh hơn cả bài cố funny."},
+  {p:"Kết bài thứ ba. Thử kết bằng hình ảnh, không phải nhận định.",h:"Người đọc nhớ hình ảnh lâu hơn luận điểm."},
+  {p:"Mở bài thứ tư. Chủ đề: một thứ mình chưa có kết luận. Viết quá trình nghĩ.",h:"Thinking post không cần đến đâu. Người đọc được mời vào giữa chừng."},
+  {p:"Bài thứ tư, tiếp tục. Đặt tên cho tension chưa được giải quyết thay vì giải quyết nó.",h:"'Mình chưa biết' là kết luận hợp lệ nếu nó thật."},
+  {p:"Đọc lại bốn bài. Cái nào mình thấy là của mình nhất? Tại sao?",h:"Điều khiến bài đó của mình: góc nhìn, giọng, hay chủ đề?"},
+  {p:"Cái bài mình thấy ít của mình nhất, chỉnh một thứ thôi để nó nghe thật hơn.",h:"Thường là câu mở hoặc câu kết. Những câu đó dễ trở nên generic nhất."},
+  {p:"Viết tiêu đề cho cả bốn bài. Tiêu đề tốt không mô tả bài, nó mời người đọc vào.",h:"Tiêu đề tệ: 'Microservice và Monolithic'. Tốt hơn: 'Tại sao bạn không cần microservice'."},
+  {p:"Chọn một bài để viết bản tiếng Anh hoàn chỉnh. Bắt đầu hôm nay.",h:"Chọn bài mà mình nghĩ ý tưởng đủ mạnh để đứng trong cả hai ngôn ngữ."},
+  {p:"Tiếp tục bản tiếng Anh. Tập trung vào phần mình thấy khó dịch nhất.",h:"Chỗ khó dịch thường là chỗ có bản sắc nhất."},
+  {p:"Bản tiếng Anh xong. So sánh hai bản. Viết một đoạn về sự khác biệt.",h:"Không phải 'bản nào tốt hơn'. Bản nào phù hợp hơn với loại người đọc nào?"},
+  {p:"Mở bài thứ năm. Thử mở bằng một thứ mình quan sát hôm nay, không phải ký ức.",h:"Hiện tại và cụ thể thường mạnh hơn quá khứ và trừu tượng."},
+  {p:"Bài thứ năm, phần thân. Lần này đừng giải thích quá nhiều. Tin người đọc.",h:"Người viết tốt giải thích ít hơn họ nghĩ cần thiết."},
+  {p:"Kết bài thứ năm. Kết ngắn hơn bạn nghĩ cần thiết.",h:"Dừng khi ý đã được nói. Câu tiếp theo thường là câu thừa."},
+  {p:"Viết draft bài thứ sáu trong một lần ngồi không dừng lại. Không chỉnh trong khi viết.",h:"Lần này quy trình là mục tiêu, không phải chất lượng."},
+  {p:"Đọc lại cả sáu bài theo thứ tự. Mình thấy mình đang viết về gì, thực chất?",h:"Thường không phải chủ đề bề mặt. Thường là một câu hỏi sâu hơn mình đang tìm câu trả lời."},
+  {p:"Câu hỏi sâu hơn đó là gì? Viết nó ra thành một câu.",h:"Đây là nền tảng của giọng viết mình đang xây."},
+  {p:"Ngày 89. Viết một đoạn cho người mình cách đây 90 ngày, người vừa đặt câu hỏi này.",h:"Không cần advice. Nói thật về hành trình."},
+  {p:"Ngày 90. Đọc lại đoạn đầu tiên mình viết. Và đoạn cuối cùng. Khoảng cách đó là bản sắc đang hình thành.",h:"Không cần kết luận hôm nay. Chỉ cần nhìn."}
+];
+
+const WEEKS = [
+  "Tuần 1 — Phản ứng thật",
+  "Tuần 2 — Quan sát con người",
+  "Tuần 3 — Triết học vào tech",
+  "Tuần 4 — Tìm pattern",
+  "Tuần 5 — Đọc và phản hồi",
+  "Tuần 6 — Gương phản chiếu",
+  "Tuần 7 — Hài hước như công cụ",
+  "Tuần 8 — Kết nối chéo",
+  "Tuần 9 — Bài viết đầu tiên",
+  "Tuần 10 — Bài viết thứ hai",
+  "Tuần 11 — Bài viết thứ ba và tư",
+  "Tuần 12 — Hoàn thiện"
+];
+
+const PHASES = [
+  {label:"Tháng 1 — Khai thác", badge:"badge-1", phCls:"phase-1", ringColor:"#1D9E75", donePhCls:""},
+  {label:"Tháng 2 — Đối thoại", badge:"badge-2", phCls:"phase-2", ringColor:"#7F77DD", donePhCls:"ph2"},
+  {label:"Tháng 3 — Kết tinh",  badge:"badge-3", phCls:"phase-3", ringColor:"#D85A30", donePhCls:"ph3"}
+];
+
+const STORAGE_KEY = '90days_writer_v1';
+let current = 0;
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch { return {}; }
+}
+
+function saveState(s) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+}
+
+let state = loadState();
+
+function getPhase(d) { return d < 30 ? 0 : d < 60 ? 1 : 2; }
+
+function buildGrids() {
+  const grids = [document.getElementById('grid1'), document.getElementById('grid2'), document.getElementById('grid3')];
+  grids.forEach(g => g.innerHTML = '');
+  for (let i = 0; i < 90; i++) {
+    const ph = getPhase(i);
+    const dot = document.createElement('div');
+    dot.className = 'day-dot';
+    dot.dataset.day = i;
+    dot.title = `Ngày ${i+1}`;
+    dot.onclick = () => { current = i; render(); };
+    grids[ph].appendChild(dot);
+  }
+}
+
+function updateGridDots() {
+  document.querySelectorAll('.day-dot').forEach(dot => {
+    const i = parseInt(dot.dataset.day);
+    const ph = getPhase(i);
+    dot.className = 'day-dot';
+    if (state['done_' + i]) dot.classList.add('done-' + (ph + 1));
+    if (i === current) dot.classList.add('active', 'phase-' + (ph + 1));
+  });
+  // scroll active dot into view
+  const active = document.querySelector('.day-dot.active');
+  if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function updateRing() {
+  const done = Object.keys(state).filter(k => k.startsWith('done_') && state[k]).length;
+  const pct = Math.round(done / 90 * 100);
+  const circ = 2 * Math.PI * 21;
+  const fill = document.getElementById('ringFill');
+  const ph = getPhase(current);
+  fill.style.strokeDashoffset = circ - (circ * done / 90);
+  fill.style.stroke = PHASES[ph].ringColor;
+  document.getElementById('ringNum').textContent = pct + '%';
+  document.getElementById('progressDays').textContent = done + ' / 90 ngày';
+}
+
+function render() {
+  const d = DAYS[current];
+  const ph = getPhase(current);
+  const P = PHASES[ph];
+  const wk = Math.floor(current / 7);
+
+  document.getElementById('dayNum').textContent = current + 1;
+  document.getElementById('promptText').textContent = d.p;
+  document.getElementById('hintText').textContent = d.h;
+  document.getElementById('weekName').textContent = WEEKS[wk];
+
+  const badge = document.getElementById('phaseBadge');
+  badge.className = 'phase-badge ' + P.badge;
+  document.getElementById('phaseLabel').textContent = P.label;
+
+  document.getElementById('mainArea').className = 'main ' + P.phCls;
+  document.getElementById('promptCard').className = 'prompt-card ' + P.phCls;
+
+  document.getElementById('navFill').style.width = ((current + 1) / 90 * 100) + '%';
+  document.getElementById('navLabel').textContent = (current + 1) + ' / 90';
+
+  document.getElementById('prevBtn').disabled = current === 0;
+  document.getElementById('nextBtn').disabled = current === 89;
+  document.getElementById('jumpInput').value = current + 1;
+
+  const done = !!state['done_' + current];
+  const row = document.getElementById('doneRow');
+  row.className = 'done-row' + (done ? ' checked ' + P.donePhCls : '');
+  document.getElementById('doneLabel').textContent = done ? '✓ Đã viết hôm nay' : 'Đánh dấu đã viết hôm nay';
+
+  document.getElementById('noteArea').value = state['note_' + current] || '';
+
+  updateGridDots();
+  updateRing();
+}
+
+function toggleDone() {
+  state['done_' + current] = !state['done_' + current];
+  saveState(state);
+  render();
+}
+
+function saveNote() {
+  state['note_' + current] = document.getElementById('noteArea').value;
+  saveState(state);
+}
+
+function go(dir) {
+  current = Math.max(0, Math.min(89, current + dir));
+  render();
+}
+
+function jumpTo() {
+  const v = parseInt(document.getElementById('jumpInput').value);
+  if (v >= 1 && v <= 90) { current = v - 1; render(); }
+}
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (document.activeElement.tagName === 'TEXTAREA' ||
+      document.activeElement.tagName === 'INPUT') return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+  if (e.key === ' ') { e.preventDefault(); toggleDone(); }
+});
+
+function switchTab(tab) {
+  document.getElementById('tabDays').className = 'tab-btn' + (tab === 'days' ? ' active' : '');
+  document.getElementById('tabRes').className  = 'tab-btn' + (tab === 'res'  ? ' active' : '');
+  document.getElementById('panelDays').className = 'tab-panel' + (tab === 'days' ? ' active' : '');
+  document.getElementById('panelRes').className  = 'tab-panel' + (tab === 'res'  ? ' active' : '');
+}
+
+buildGrids();
+render();
+</script>
+</body>
+</html>
