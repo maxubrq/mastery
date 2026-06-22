@@ -1,0 +1,2268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>90-Day English Roadmap — Software Engineer</title>
+<style>
+  :root {
+    --bg: #0e0f11;
+    --surface: #16181c;
+    --surface2: #1e2128;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8eaf0;
+    --text2: #8b909e;
+    --text3: #5a5f70;
+    --accent: #6c8fff;
+    --accent2: #3d5fcc;
+    --green: #3ecf8e;
+    --green2: #1a6e4a;
+    --amber: #f5a623;
+    --amber2: #7a520f;
+    --red: #e05252;
+    --purple: #a78bfa;
+    --teal: #2dd4bf;
+    --m1: #6c8fff;
+    --m2: #a78bfa;
+    --m3: #2dd4bf;
+    --font: 'SF Pro Display', 'Inter', system-ui, sans-serif;
+    --mono: 'SF Mono', 'Fira Code', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* LAYOUT */
+  .app { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .main { flex: 1; padding: 40px 48px; max-width: 900px; }
+
+  /* SIDEBAR */
+  .logo {
+    padding: 0 20px 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .logo-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text3);
+    margin-bottom: 4px;
+  }
+  .logo-sub { font-size: 18px; font-weight: 700; color: var(--text); }
+
+  .progress-ring-wrap {
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px 20px;
+    gap: 16px;
+  }
+  .ring-svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--surface2); stroke-width: 5; }
+  .ring-fg { fill: none; stroke: var(--green); stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+  .ring-label { text-anchor: middle; dominant-baseline: middle; transform: rotate(90deg); transform-origin: center; }
+  .ring-pct { font-size: 18px; font-weight: 700; fill: var(--text); }
+  .ring-done { font-size: 10px; fill: var(--text3); }
+  .progress-stats { font-size: 13px; color: var(--text2); }
+  .progress-stats strong { color: var(--green); }
+
+  .nav-section { padding: 0 12px; margin-bottom: 4px; }
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 8px 8px 4px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 14px;
+    color: var(--text2);
+    border: none; background: none; width: 100%; text-align: left;
+  }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active { background: rgba(108,143,255,0.12); color: var(--accent); }
+  .nav-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    border: 1.5px solid currentColor; background: transparent;
+  }
+  .nav-item.active .nav-dot { background: var(--accent); }
+  .nav-item .nav-progress { margin-left: auto; font-size: 11px; color: var(--text3); }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 16px 20px 0;
+    border-top: 1px solid var(--border);
+  }
+  .reset-btn {
+    font-size: 12px; color: var(--text3); background: none; border: none;
+    cursor: pointer; padding: 4px 0;
+  }
+  .reset-btn:hover { color: var(--red); }
+
+  /* MAIN CONTENT */
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* OVERVIEW */
+  .page-header { margin-bottom: 36px; }
+  .page-title { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+  .page-sub { font-size: 15px; color: var(--text2); }
+
+  .phase-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    margin-bottom: 40px;
+  }
+  .phase-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .phase-card-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
+  .phase-card-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .phase-card-desc { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .phase-card-bar { height: 3px; border-radius: 2px; margin-bottom: 12px; }
+
+  .m1-color { color: var(--m1); }
+  .m2-color { color: var(--m2); }
+  .m3-color { color: var(--m3); }
+  .m1-bar { background: var(--m1); }
+  .m2-bar { background: var(--m2); }
+  .m3-bar { background: var(--m3); }
+
+  /* DAILY ROADMAP */
+  .week-header {
+    display: flex; align-items: center; gap: 12px;
+    margin: 32px 0 16px;
+  }
+  .week-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text3);
+    white-space: nowrap;
+  }
+  .week-line { flex: 1; height: 1px; background: var(--border); }
+
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .day-card.done { border-color: var(--green2); background: rgba(62,207,142,0.04); }
+  .day-card:hover { border-color: var(--border2); }
+
+  .day-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .day-checkbox {
+    width: 20px; height: 20px; border-radius: 6px;
+    border: 1.5px solid var(--border2);
+    background: transparent; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.2s;
+  }
+  .day-card.done .day-checkbox {
+    background: var(--green); border-color: var(--green);
+  }
+  .day-checkbox svg { display: none; }
+  .day-card.done .day-checkbox svg { display: block; }
+
+  .day-num { font-size: 12px; font-weight: 600; color: var(--text3); min-width: 40px; }
+  .day-title { font-size: 14px; font-weight: 500; flex: 1; }
+  .day-card.done .day-title { color: var(--text2); text-decoration: line-through; text-decoration-color: var(--text3); }
+  .day-tag {
+    font-size: 11px; padding: 3px 10px; border-radius: 20px;
+    font-weight: 500;
+  }
+  .tag-input { background: rgba(108,143,255,0.15); color: var(--m1); }
+  .tag-output { background: rgba(167,139,250,0.15); color: var(--m2); }
+  .tag-pressure { background: rgba(45,212,191,0.15); color: var(--m3); }
+  .tag-review { background: rgba(245,166,35,0.15); color: var(--amber); }
+
+  .day-expand { color: var(--text3); font-size: 12px; margin-left: 4px; transition: transform 0.2s; }
+  .day-card.open .day-expand { transform: rotate(180deg); }
+
+  .day-body {
+    display: none;
+    padding: 0 18px 18px;
+    border-top: 1px solid var(--border);
+  }
+  .day-card.open .day-body { display: block; }
+
+  .task-block { margin-top: 14px; }
+  .task-block-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text3); margin-bottom: 8px;
+  }
+  .task-item {
+    display: flex; gap: 10px; margin-bottom: 6px;
+    font-size: 13px; color: var(--text2); line-height: 1.5;
+  }
+  .task-bullet { color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+
+  .resource-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 5px 10px;
+    font-size: 12px; color: var(--text2);
+    text-decoration: none; margin: 4px 4px 4px 0;
+    transition: border-color 0.15s, color 0.15s;
+    cursor: pointer;
+  }
+  .resource-chip:hover { border-color: var(--accent); color: var(--accent); }
+  .resource-chip .chip-icon { font-size: 14px; }
+
+  .prompt-box {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px; padding: 12px 14px;
+    font-size: 13px; color: var(--text2);
+    font-family: var(--mono);
+    margin-top: 8px; line-height: 1.6;
+    white-space: pre-wrap;
+  }
+  .copy-btn {
+    font-size: 11px; color: var(--text3); background: none; border: none;
+    cursor: pointer; padding: 2px 8px; border-radius: 4px;
+    transition: color 0.15s; float: right; margin-top: -4px;
+  }
+  .copy-btn:hover { color: var(--accent); }
+
+  /* SENTENCES */
+  .sentence-filters {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .filter-btn {
+    font-size: 12px; padding: 6px 14px; border-radius: 20px;
+    border: 1px solid var(--border); background: none;
+    color: var(--text2); cursor: pointer; transition: all 0.15s;
+  }
+  .filter-btn:hover { border-color: var(--border2); color: var(--text); }
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+  .sentence-grid {
+    display: grid; grid-template-columns: 1fr; gap: 8px;
+  }
+  .sentence-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .sentence-num {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text3); margin-bottom: 6px;
+  }
+  .sentence-en { font-size: 14px; color: var(--text); margin-bottom: 4px; font-weight: 500; }
+  .sentence-vi { font-size: 13px; color: var(--text2); margin-bottom: 8px; }
+  .sentence-example { font-size: 12px; color: var(--accent); font-style: italic; }
+  .sentence-tag {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 20px; margin-top: 6px;
+  }
+
+  /* RESOURCES */
+  .resource-section { margin-bottom: 36px; }
+  .resource-section-title {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--text3); margin-bottom: 16px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--border);
+  }
+  .resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .resource-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+    text-decoration: none; display: block; transition: border-color 0.15s;
+  }
+  .resource-card:hover { border-color: var(--accent); }
+  .resource-card-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .resource-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .resource-card-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .resource-card-desc { font-size: 12px; color: var(--text2); line-height: 1.4; }
+  .resource-card-phase {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; margin-top: 8px;
+  }
+
+  /* MISC */
+  .section-title {
+    font-size: 20px; font-weight: 700; margin-bottom: 20px;
+  }
+  .streak-bar {
+    display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 24px;
+  }
+  .streak-day {
+    width: 20px; height: 20px; border-radius: 4px;
+    background: var(--surface2);
+  }
+  .streak-day.done { background: var(--green); }
+  .streak-day.today { box-shadow: 0 0 0 2px var(--accent); }
+
+  .today-banner {
+    background: linear-gradient(135deg, rgba(108,143,255,0.12), rgba(167,139,250,0.08));
+    border: 1px solid rgba(108,143,255,0.25);
+    border-radius: 12px; padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+  .today-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .today-title { font-size: 16px; font-weight: 600; }
+  .today-sub { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 2px; }
+
+  @media (max-width: 900px) {
+    .sidebar { width: 220px; min-width: 220px; }
+    .main { padding: 24px; }
+    .phase-cards { grid-template-columns: 1fr; }
+    .resource-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .app { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; position: static; }
+    .main { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="logo">
+    <div class="logo-title">90-Day Plan</div>
+    <div class="logo-sub">English for SWE</div>
+  </div>
+
+  <div class="progress-ring-wrap">
+    <svg class="ring-svg" width="64" height="64" viewBox="0 0 64 64">
+      <circle class="ring-bg" cx="32" cy="32" r="27"/>
+      <circle class="ring-fg" id="ring-progress" cx="32" cy="32" r="27" stroke-dasharray="169.6" stroke-dashoffset="169.6"/>
+      <text class="ring-label" x="32" y="29">
+        <tspan class="ring-pct" x="32" dy="0" id="ring-pct-text">0%</tspan>
+      </text>
+      <text class="ring-label" x="32" y="29">
+        <tspan class="ring-done" x="32" dy="16" id="ring-done-text">0/90</tspan>
+      </text>
+    </svg>
+    <div class="progress-stats">
+      <div><strong id="stat-done">0</strong> days done</div>
+      <div id="stat-left" style="margin-top:2px">90 remaining</div>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-label">Navigate</div>
+    <button class="nav-item active" onclick="showTab('overview')">
+      <span class="nav-dot"></span> Overview
+    </button>
+    <button class="nav-item" onclick="showTab('month1')">
+      <span class="nav-dot" style="border-color:var(--m1)"></span>
+      Month 1 — Input
+      <span class="nav-progress" id="nav-m1">0/30</span>
+    </button>
+    <button class="nav-item" onclick="showTab('month2')">
+      <span class="nav-dot" style="border-color:var(--m2)"></span>
+      Month 2 — Output
+      <span class="nav-progress" id="nav-m2">0/30</span>
+    </button>
+    <button class="nav-item" onclick="showTab('month3')">
+      <span class="nav-dot" style="border-color:var(--m3)"></span>
+      Month 3 — Pressure
+      <span class="nav-progress" id="nav-m3">0/30</span>
+    </button>
+  </div>
+
+  <div class="nav-section" style="margin-top:8px">
+    <div class="nav-section-label">Reference</div>
+    <button class="nav-item" onclick="showTab('sentences')">
+      <span class="nav-dot"></span> 100 Structures
+    </button>
+    <button class="nav-item" onclick="showTab('resources')">
+      <span class="nav-dot"></span> Resources
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <button class="reset-btn" onclick="resetProgress()">↺ Reset all progress</button>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- OVERVIEW -->
+  <div class="tab-content active" id="tab-overview">
+    <div class="page-header">
+      <div class="page-title">90-Day English Roadmap</div>
+      <div class="page-sub">Dành cho Software Engineer. 1 giờ/ngày. Tập trung vào speaking & listening cho interview và workplace.</div>
+    </div>
+
+    <div class="streak-bar" id="streak-bar"></div>
+
+    <div class="phase-cards">
+      <div class="phase-card">
+        <div class="phase-card-bar m1-bar"></div>
+        <div class="phase-card-label m1-color">Month 1 · Days 1–30</div>
+        <div class="phase-card-title">Build the Mental Model</div>
+        <div class="phase-card-desc">Input chất lượng cao + modeling. Nghe cách engineer articulate nói. Build framework trong đầu.</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-card-bar m2-bar"></div>
+        <div class="phase-card-label m2-color">Month 2 · Days 31–60</div>
+        <div class="phase-card-title">Build Fluency Under Structure</div>
+        <div class="phase-card-desc">Shadowing + mock Q&A. Pattern đã có, giờ tăng tốc độ và giảm lag khi nói.</div>
+      </div>
+      <div class="phase-card">
+        <div class="phase-card-bar m3-bar"></div>
+        <div class="phase-card-label m3-color">Month 3 · Days 61–90</div>
+        <div class="phase-card-title">Pressure Testing</div>
+        <div class="phase-card-desc">Mock interview + real feedback. Perform dưới áp lực thật, không chỉ trong phòng một mình.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Hướng dẫn sử dụng</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px">⚡ Mỗi ngày</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">Mở Month tương ứng → tìm ngày hôm nay → làm đúng theo task → check ✓ khi xong</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px">📌 Sentence Structures</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">100 cấu trúc được nhóm theo tình huống. Mỗi ngày học 1–2 nhóm, không học tất cả một lúc.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px">🎙️ Record bản thân</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">Dùng Voice Memos (iOS) hoặc bất kỳ app nào. Nghe lại sau 24h — tai nghe được nhiều hơn ngay lúc đó.</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px">🤖 AI Practice Partner</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6">Dùng Claude/ChatGPT làm interviewer. Paste prompt có sẵn trong từng ngày. Free, không cần lịch hẹn.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Daily Time Budget (60 phút)</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:32px">
+      <div style="display:flex;gap:0;border-radius:8px;overflow:hidden;margin-bottom:16px">
+        <div style="flex:30;background:var(--m1);height:12px"></div>
+        <div style="flex:35;background:var(--m2);height:12px"></div>
+        <div style="flex:30;background:var(--m3);height:12px"></div>
+        <div style="flex:5;background:var(--amber);height:12px"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px">
+        <div style="display:flex;gap:8px;align-items:center"><span style="width:10px;height:10px;border-radius:2px;background:var(--m1);flex-shrink:0"></span><span style="color:var(--text2)">Input (nghe/đọc) — <strong style="color:var(--text)">30 phút</strong></span></div>
+        <div style="display:flex;gap:8px;align-items:center"><span style="width:10px;height:10px;border-radius:2px;background:var(--m2);flex-shrink:0"></span><span style="color:var(--text2)">Output (nói/viết) — <strong style="color:var(--text)">20 phút</strong></span></div>
+        <div style="display:flex;gap:8px;align-items:center"><span style="width:10px;height:10px;border-radius:2px;background:var(--m3);flex-shrink:0"></span><span style="color:var(--text2)">Practice structured — <strong style="color:var(--text)">5 phút</strong></span></div>
+        <div style="display:flex;gap:8px;align-items:center"><span style="width:10px;height:10px;border-radius:2px;background:var(--amber);flex-shrink:0"></span><span style="color:var(--text2)">Review & reflect — <strong style="color:var(--text)">5 phút</strong></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONTH 1 -->
+  <div class="tab-content" id="tab-month1">
+    <div class="page-header">
+      <div class="page-title" style="color:var(--m1)">Month 1 — Build the Mental Model</div>
+      <div class="page-sub">Input chất lượng cao + modeling. Mục tiêu: có framework trong đầu để verbalize technical thinking.</div>
+    </div>
+    <div id="days-month1"></div>
+  </div>
+
+  <!-- MONTH 2 -->
+  <div class="tab-content" id="tab-month2">
+    <div class="page-header">
+      <div class="page-title" style="color:var(--m2)">Month 2 — Build Fluency Under Structure</div>
+      <div class="page-sub">Shadowing + mock Q&A. Pattern đã có, giờ tăng tốc độ và giảm lag.</div>
+    </div>
+    <div id="days-month2"></div>
+  </div>
+
+  <!-- MONTH 3 -->
+  <div class="tab-content" id="tab-month3">
+    <div class="page-header">
+      <div class="page-title" style="color:var(--m3)">Month 3 — Pressure Testing</div>
+      <div class="page-sub">Mock interview với người thật và AI. Perform dưới áp lực, không chỉ trong phòng một mình.</div>
+    </div>
+    <div id="days-month3"></div>
+  </div>
+
+  <!-- SENTENCES -->
+  <div class="tab-content" id="tab-sentences">
+    <div class="page-header">
+      <div class="page-title">100 Sentence Structures</div>
+      <div class="page-sub">Nhóm theo tình huống. Học theo nhóm, không học tất cả một lúc.</div>
+    </div>
+    <div class="sentence-filters" id="sentence-filters"></div>
+    <div class="sentence-grid" id="sentence-grid"></div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div class="tab-content" id="tab-resources">
+    <div class="page-header">
+      <div class="page-title">Resources</div>
+      <div class="page-sub">Tất cả tools và content cần thiết, được phân loại theo mục đích.</div>
+    </div>
+    <div id="resources-content"></div>
+  </div>
+
+</main>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+
+const MONTH1_DAYS = [
+  // WEEK 1
+  {
+    week: "Week 1 — Orientation & Listening Foundation",
+    days: [
+      {
+        n: 1, title: "Orientation Day: Setup your system",
+        tag: "input",
+        input: [
+          "Model hôm nay: <strong>ByteByteGo (Alex Xu)</strong> — voice-over chậm, rõ, dễ nhất để bắt đầu",
+          "Nghe 1 video ~15–20 phút: 'Design a URL Shortener' trên ByteByteGo YouTube",
+          "Mục tiêu: không cần hiểu 100%, chú ý CÁCH họ nói, không phải content"
+        ],
+        output: [
+          "Viết ra 5 phrase bạn nghe được và thấy hay (không cần dịch)",
+          "Ví dụ: 'At a high level...', 'The bottleneck here is...'"
+        ],
+        prompt: "You are a system design interviewer. Ask me: 'Design a URL shortener.' After I respond, give me feedback on clarity and structure only, not technical correctness.",
+        resources: ["ByteByteGo YouTube channel", "Voice Memos app (record yourself)"]
+      },
+      {
+        n: 2, title: "Listening: Interview rhythm & pacing",
+        tag: "input",
+        input: [
+          "Model hôm nay: <strong>The Changelog (Jerod Santo)</strong> — conversational, có transcript đầy đủ trên website",
+          "Nghe 1 episode bất kỳ ~30–45 phút trên changelog.com (đọc transcript song song lần đầu)",
+          "Chú ý: khi nào host nói 'let me think...', 'good question', 'so to summarize...' — đây là thinking fillers"
+        ],
+        output: [
+          "Viết lại 3 đoạn host nói (không cần chính xác, ghi đại ý)",
+          "Record bản thân đọc lại 3 đoạn đó"
+        ],
+        resources: ["changelog.com (có transcript)", "Otter.ai (free transcript)"]
+      },
+      {
+        n: 3, title: "Input: Clarifying questions mastery",
+        tag: "input",
+        input: [
+          "Đọc: Gergely Orosz 'The System Design Interview' (free blog posts)",
+          "Nghe: Software Engineering Daily podcast — 1 episode về distributed systems"
+        ],
+        output: [
+          "Luyện nói 5 câu clarifying questions từ Sentence Structures nhóm #1 (Clarify)",
+          "Record và nghe lại — chú ý speed, không cần perfect accent"
+        ],
+        prompt: "I'm going to practice clarifying questions. Give me a vague system design problem (e.g. 'Design a social media app'). I'll ask clarifying questions, and you tell me if they cover the right scope.",
+        resources: ["Gergely Orosz blog", "Software Engineering Daily"]
+      },
+      {
+        n: 4, title: "Shadowing: First session",
+        tag: "input",
+        input: [
+          "Model hôm nay: <strong>Hussein Nasser</strong> — technical, pace vừa, giải thích backend/networking rất rõ",
+          "Chọn 1 video trên YouTube channel 'Hussein Nasser' (chủ đề backend/database/networking bất kỳ)",
+          "Xem 15 phút đầu, dừng mỗi 2–3 câu, repeat lại ngay lập tức (shadowing)"
+        ],
+        output: [
+          "Shadowing 10 phút: bắt chước rhythm, pause, linking words — không cần nghĩa",
+          "Viết 3 điều bạn thấy khó khi shadowing"
+        ],
+        resources: ["Hussein Nasser YouTube", "Technique: Pause-Repeat-Continue"]
+      },
+      {
+        n: 5, title: "Speaking: First monologue",
+        tag: "output",
+        input: [
+          "Đọc: 'What is a load balancer' — bài viết ngắn trên ByteByteGo blog (free)",
+          "Nghe phần giải thích trong video ByteByteGo trên YouTube"
+        ],
+        output: [
+          "Record bản thân giải thích load balancer trong 3 phút (không đọc script)",
+          "Dùng structure: What it is → Why we need it → How it works → Trade-offs",
+          "Nghe lại và note: tốc độ ổn chưa? pause đúng chỗ chưa? câu có hoàn chỉnh không?"
+        ],
+        prompt: "I just explained what a load balancer is. Here's my explanation: [paste your script or key points]. Please give me feedback on: 1) Clarity of explanation, 2) Structure, 3) Any confusing parts.",
+        resources: ["ByteByteGo blog (free)", "ByteByteGo YouTube"]
+      },
+      {
+        n: 6, title: "Workplace: Email & async communication",
+        tag: "output",
+        input: [
+          "Đọc: 'How to write clearly' — Paul Graham (paulgraham.com/writing44.html)",
+          "Chú ý: short sentences, active voice, specific nouns"
+        ],
+        output: [
+          "Viết 1 email giả định: báo cáo technical incident với manager",
+          "Template: What happened → Impact → Root cause → Fix → Prevention",
+          "Dùng Sentence Structures nhóm #8 (Workplace)"
+        ],
+        prompt: "Review this incident report email I wrote and suggest improvements for clarity and professionalism: [paste your email]",
+        resources: ["Paul Graham essays (free)", "Hemingway App (hemingwayapp.com)"]
+      },
+      {
+        n: 7, title: "Review Week 1",
+        tag: "review",
+        input: [
+          "Nghe lại tất cả recordings từ tuần này",
+          "Chú ý: bạn có tiến bộ gì từ Day 1 đến Day 6?"
+        ],
+        output: [
+          "Viết 3 câu: What went well / What was hard / One thing to focus next week",
+          "Ôn lại 10 sentences từ nhóm Clarify và High-level"
+        ],
+        resources: []
+      }
+    ]
+  },
+  // WEEK 2
+  {
+    week: "Week 2 — Framework Building",
+    days: [
+      {
+        n: 8, title: "System Design Framework: The 4-step pattern",
+        tag: "input",
+        input: [
+          "Học thuộc framework: Clarify → High-level → Deep-dive → Trade-offs",
+          "Xem: Alex Xu 'System Design Interview' walkthrough (YouTube, bất kỳ video nào)"
+        ],
+        output: [
+          "Apply framework vào topic quen: giải thích cách một REST API hoạt động theo 4 bước",
+          "Record 5 phút — không cần đủ ý, cần đủ structure"
+        ],
+        prompt: "Act as a senior engineer. I'll explain how REST APIs work using this structure: Clarify → High-level → Deep-dive → Trade-offs. After I'm done, tell me which step was weakest.",
+        resources: ["Alex Xu YouTube", "'System Design Interview' book by Alex Xu"]
+      },
+      {
+        n: 9, title: "Listening: Technical podcast deep dive",
+        tag: "input",
+        input: [
+          "Nghe: Changelog podcast (changelog.com) — 1 episode về distributed systems hoặc databases",
+          "Dùng transcript (có trên website) — đọc khi nghe lần đầu, nghe không transcript lần 2"
+        ],
+        output: [
+          "Tóm tắt episode bằng tiếng Anh, 5 câu, không nhìn notes",
+          "Record bản thân đọc summary"
+        ],
+        resources: ["Changelog.com (có transcript)", "Pocket Casts hoặc Spotify"]
+      },
+      {
+        n: 10, title: "Trade-offs: How to articulate pros & cons",
+        tag: "output",
+        input: [
+          "Đọc: 'CAP Theorem explained' — bất kỳ bài nào trên Martin Fowler blog (martinfowler.com)",
+        ],
+        output: [
+          "Luyện nói trade-offs của SQL vs NoSQL trong 3 phút",
+          "Bắt buộc dùng: 'The trade-off here is...', 'This works well when... but breaks down when...'",
+          "Từ Sentence Structures nhóm #3 (Trade-offs)"
+        ],
+        prompt: "I'll explain the trade-offs between SQL and NoSQL databases. Ask me follow-up questions to challenge my reasoning, like a real interviewer would.",
+        resources: ["Martin Fowler blog (free)", "Use-the-index-luke.com"]
+      },
+      {
+        n: 11, title: "Shadowing: Increase complexity",
+        tag: "input",
+        input: [
+          "Model hôm nay: <strong>Gergely Orosz</strong> — The Pragmatic Engineer Podcast, structure cực tốt, pace vừa",
+          "Shadowing 20 phút: 1 episode bất kỳ trên The Pragmatic Engineer Podcast",
+          "Tập trung vào: cách họ transition giữa các section ('Now let's talk about...', 'Moving on to...')"
+        ],
+        output: [
+          "List ra 10 transition phrases bạn nghe được",
+          "Record bản thân nói 10 phrases đó với context giả định"
+        ],
+        resources: ["The Pragmatic Engineer Podcast", "Nhóm Transition trong Sentence Structures"]
+      },
+      {
+        n: 12, title: "Behavioral: STAR method intro",
+        tag: "output",
+        input: [
+          "Model storytelling hôm nay: <strong>Jim Rohn</strong> — nghe 1 đoạn 10 phút bất kỳ trên YouTube",
+          "Chú ý: ông không hét, nói chậm, dùng pause dài trước điểm quan trọng — đây là kỹ thuật tạo trọng lượng cho câu chuyện",
+          "Đọc: STAR method guide — Levels.fyi blog hoặc bất kỳ career site nào. Situation → Task → Action → Result"
+        ],
+        output: [
+          "Viết 1 STAR story ngắn: một lần bạn debug một bug khó",
+          "Record 3 phút — thử thêm 1 pause có chủ đích trước câu Result, giống cách Rohn nhấn câu quan trọng",
+          "Bắt buộc dùng quá khứ đơn (was, found, fixed, resulted in)"
+        ],
+        prompt: "Ask me a behavioral interview question about a time I solved a difficult technical problem. After I answer, evaluate my STAR structure: did I include Situation, Task, Action, and Result clearly? Also tell me if my delivery had any natural pauses for emphasis, or if it sounded rushed.",
+        resources: ["Jim Rohn YouTube", "Levels.fyi Behavioral Guide", "Nhóm Behavioral trong Sentence Structures"]
+      },
+      {
+        n: 13, title: "Workplace: Meeting & standup language",
+        tag: "output",
+        input: [
+          "Nghe: 1 episode Soft Skills Engineering podcast (softskills.audio)",
+          "Chú ý: cách engineer nói về blockers, updates, và tradeoffs trong team context"
+        ],
+        output: [
+          "Viết script standup 2 phút: Yesterday / Today / Blockers",
+          "Record và aim for: không vấp, không 'uhm' quá nhiều",
+          "Dùng Sentence Structures nhóm #9 (Standup & Meetings)"
+        ],
+        resources: ["Soft Skills Engineering podcast", "Daily standup template"]
+      },
+      {
+        n: 14, title: "Review Week 2 + Mini mock",
+        tag: "review",
+        input: [
+          "Nghe lại 2 recordings bạn thấy tệ nhất tuần này"
+        ],
+        output: [
+          "Mini mock: record 8 phút giải thích bất kỳ system nào bạn hiểu rõ",
+          "Dùng đủ 4-step framework",
+          "Self-grade: Clarity (1-5) / Structure (1-5) / Fluency (1-5)"
+        ],
+        prompt: "You're my interview coach. I'll do a mini system design presentation (about 8 minutes). Please listen and then give me a score from 1-5 on: Clarity, Structure, and Fluency. Here's what I covered: [paste your notes]",
+        resources: []
+      }
+    ]
+  },
+  // WEEK 3
+  {
+    week: "Week 3 — Deep Dive & Workplace English",
+    days: [
+      {
+        n: 15, title: "Deep Dive practice: Database scaling",
+        tag: "output",
+        input: [
+          "Đọc: 'Database Sharding' — ByteByteGo blog",
+          "Chú ý các technical terms và cách dùng chúng trong câu"
+        ],
+        output: [
+          "Record giải thích database sharding cho một junior engineer (5 phút)",
+          "Challenge: giải thích đơn giản, không dùng jargon, rồi mới dùng technical terms"
+        ],
+        prompt: "Pretend you're a junior engineer who knows basic databases but nothing about sharding. Ask me questions as I explain sharding to you. Point out when my explanation is unclear.",
+        resources: ["ByteByteGo blog", "Simple English Wikipedia"]
+      },
+      {
+        n: 16, title: "Presentation: Structuring technical talks",
+        tag: "output",
+        input: [
+          "Xem: 1 tech talk ngắn (15–20 phút) trên InfoQ hoặc GOTO conferences YouTube",
+          "Chú ý: cách speaker mở bài, cách dùng signposting ('First... then... finally...')"
+        ],
+        output: [
+          "Outline một tech talk 5 phút về bất kỳ topic bạn biết rõ",
+          "Record phần mở bài (2 phút): Hook + Agenda + Why it matters"
+        ],
+        resources: ["GOTO Conferences YouTube", "InfoQ.com talks (free)"]
+      },
+      {
+        n: 17, title: "Listening: Engineer interviews & podcasts",
+        tag: "input",
+        input: [
+          "Model hôm nay: <strong>Lex Fridman Podcast</strong> — pace chậm, pause dài, rất dễ shadowing dù episode dài",
+          "Nghe 1 đoạn 30 phút bất kỳ (không cần nghe hết episode 2-4 giờ — chỉ cần 1 đoạn bạn thấy hứng thú)",
+          "Chú ý: cách engineer answer open-ended questions, cách họ think out loud"
+        ],
+        output: [
+          "Think out loud 5 phút về 1 technical topic: record và chú ý xem bạn có 'thinking phrases' không",
+          "'Let me think about this...', 'So the question is really...', 'One way to look at this is...'"
+        ],
+        resources: ["Lex Fridman Podcast", "Nhóm Thinking Out Loud trong Sentence Structures"]
+      },
+      {
+        n: 18, title: "Workplace: Giving & receiving code review feedback",
+        tag: "output",
+        input: [
+          "Đọc: 'How to do a code review' — Google Engineering Practices (free, Google search it)"
+        ],
+        output: [
+          "Viết 3 code review comments theo style: Observation → Concern → Suggestion",
+          "Record bản thân đọc comments như thể đang present trong PR meeting"
+        ],
+        prompt: "I'll write some code review comments. Tell me if they sound constructive, clear, and professional — or if they might come across as harsh or vague.",
+        resources: ["Google Engineering Practices (GitHub)", "Conventional Comments (conventionalcomments.org)"]
+      },
+      {
+        n: 19, title: "Speed training: Reduce thinking gap",
+        tag: "output",
+        input: [
+          "Warm-up: 5 phút shadowing bất kỳ technical video ngắn nào"
+        ],
+        output: [
+          "Exercise: AI hỏi 5 câu technical ngắn, trả lời ngay không chuẩn bị > 5 giây mỗi câu",
+          "Mục tiêu: không silence kéo dài — dùng fillers đúng cách nếu cần think"
+        ],
+        prompt: "Ask me 5 quick technical questions one by one. I'll answer each within 10 seconds. After all 5, tell me which answers were clear and which were too vague or halting. Questions should be about: APIs, databases, caching, networking, and system design basics.",
+        resources: ["Nhóm Quick Response trong Sentence Structures"]
+      },
+      {
+        n: 20, title: "Mock presentation: 10 minutes",
+        tag: "output",
+        input: [
+          "Chuẩn bị outline (không script) cho 10-minute presentation về 1 system bạn đã build"
+        ],
+        output: [
+          "Record toàn bộ 10 phút",
+          "Sau khi record: rate yourself — Confidence / Clarity / Technical depth (each 1-5)"
+        ],
+        prompt: "I'll give a 10-minute technical presentation about [your topic]. Please evaluate: 1) Opening hook strength, 2) Structure clarity, 3) Technical depth, 4) Closing. Here's my outline: [paste outline]",
+        resources: []
+      },
+      {
+        n: 21, title: "Review Week 3 + Compare with Week 1",
+        tag: "review",
+        input: [
+          "Nghe lại recording từ Day 5 (first monologue) và so sánh với recording từ Day 20"
+        ],
+        output: [
+          "Viết cụ thể: bạn improve gì về speed / structure / vocabulary?",
+          "Identify 1 weakness cần focus tuần tới"
+        ],
+        resources: []
+      }
+    ]
+  },
+  // WEEK 4
+  {
+    week: "Week 4 — Consolidation & System Design Deep",
+    days: [
+      {
+        n: 22, title: "Full system design walkthrough: Design Twitter",
+        tag: "output",
+        input: [
+          "Xem: 'Design Twitter system design' video (30 phút) — bất kỳ channel nào",
+          "Không nghe để học technical — nghe để note language patterns"
+        ],
+        output: [
+          "Record bản thân design Twitter từ đầu (không xem lại video), 15 phút",
+          "Dùng đủ 4-step framework"
+        ],
+        prompt: "You're a senior engineer interviewer at a tech company. Interview me for a software engineer role. Start with: 'Design Twitter's core feed system. You have 15 minutes.' Interrupt me occasionally with questions like a real interviewer.",
+        resources: ["Donne Martin System Design Primer (GitHub)", "ByteByteGo"]
+      },
+      {
+        n: 23, title: "Listening: Non-native English engineers",
+        tag: "input",
+        input: [
+          "Tìm và nghe interviews với engineers người Ấn Độ, Trung Quốc, hoặc non-native English trên YouTube",
+          "Mục tiêu: nhận ra rằng accent không quan trọng bằng clarity và structure"
+        ],
+        output: [
+          "Note: họ dùng pause và structure như thế nào để compensate cho accent",
+          "Record 3 phút với chủ đề tự chọn — focus vào structure, không lo accent"
+        ],
+        resources: ["Engineering interviews on YouTube", "Toastmasters Vietnam (online)"]
+      },
+      {
+        n: 24, title: "Behavioral: Leadership & conflict stories",
+        tag: "output",
+        input: [
+          "Model storytelling hôm nay: <strong>Simon Sinek</strong> — nghe 1 talk ngắn (10-15 phút) trên YouTube về leadership",
+          "Chú ý: cách ông dùng pause trước khi đưa ra điểm chính, và cách ông kể chuyện thật để dẫn vào ý tưởng trừu tượng",
+          "Đọc: Amazon Leadership Principles (jobs.amazon.com — search 'leadership principles')",
+          "Chọn 3 principles liên quan nhất đến bạn"
+        ],
+        output: [
+          "Viết + record 2 STAR stories: 1 về disagreement với teammate, 1 về ownership",
+          "Thử áp dụng 1 kỹ thuật của Sinek: mở đầu bằng 1 câu ngắn tạo tension, rồi mới kể chi tiết",
+          "Aim: mỗi story dưới 2.5 phút"
+        ],
+        prompt: "I'll practice two behavioral interview answers about leadership and ownership. After each one, tell me: Is the STAR structure clear? Did the Result section have measurable impact? Did the opening line create enough tension to make me want to keep listening? Was it under 3 minutes?",
+        resources: ["Simon Sinek YouTube", "Amazon Leadership Principles", "Grokking the Behavioral Interview (free parts on Educative)"]
+      },
+      {
+        n: 25, title: "Technical explanation: For non-technical audience",
+        tag: "output",
+        input: [
+          "Concept: Giải thích microservices cho PM (non-technical)",
+          "Dùng analogy, không dùng jargon"
+        ],
+        output: [
+          "Record 5 phút — giải thích như thể người nghe không biết gì về backend",
+          "Sau record: nghe lại — có lúc nào bạn assume knowledge không cần thiết không?"
+        ],
+        prompt: "You're a product manager who knows nothing about backend systems. I'll explain microservices to you. Ask me questions when something's unclear, and tell me when I'm using too much jargon.",
+        resources: ["Nhóm Explaining Complex Things trong Sentence Structures"]
+      },
+      {
+        n: 26, title: "Workplace: Async writing — Slack & docs",
+        tag: "output",
+        input: [
+          "Đọc: Basecamp's 'The Guide to Internal Communication' (free PDF, search online)",
+          "Chú ý: cách viết Slack messages ngắn gọn, rõ ràng, không ambiguous"
+        ],
+        output: [
+          "Viết 5 Slack messages giả định: update, question, blocker, announcement, feedback",
+          "Rule: mỗi message tối đa 3 sentences"
+        ],
+        resources: ["Basecamp: Shape Up & Internal Comms guides", "Nhóm Workplace Writing trong Sentence Structures"]
+      },
+      {
+        n: 27, title: "Shadowing Marathon: 20 minutes",
+        tag: "input",
+        input: [
+          "Chọn 1 trong 4 model bạn đã thử (ByteByteGo / Hussein Nasser / Gergely Orosz / Lex Fridman) — người bạn thấy dễ bắt chước nhất",
+          "Shadowing liên tục 20 phút — không dừng để dịch"
+        ],
+        output: [
+          "Sau shadowing: record 5 phút về bất kỳ topic — xem rhythm có thay đổi không",
+          "So sánh với recording Day 4"
+        ],
+        resources: []
+      },
+      {
+        n: 28, title: "Full mock interview + self-assessment",
+        tag: "output",
+        input: [
+          "Chuẩn bị: không chuẩn bị gì cả — đây là surprise mock"
+        ],
+        output: [
+          "Record full 30-phút mock: 15 phút system design + 10 phút behavioral + 5 phút Q&A",
+          "Score yourself: Technical clarity / Language fluency / Structure / Confidence (1-5 each)"
+        ],
+        prompt: "Conduct a full 30-minute software engineer interview with me. Start with a system design question (design a ride-sharing app like Grab), then ask 2 behavioral questions, then let me ask you questions about the company. Be a realistic but fair interviewer.",
+        resources: []
+      },
+      {
+        n: 29, title: "Gap analysis: What to fix in Month 2",
+        tag: "review",
+        input: [
+          "Nghe lại full mock từ Day 28"
+        ],
+        output: [
+          "List cụ thể: 3 language patterns bạn thiếu, 2 structure issues, 1 confidence issue",
+          "Đây là input cho Month 2 focus"
+        ],
+        resources: []
+      },
+      {
+        n: 30, title: "Month 1 Celebration + Month 2 Planning",
+        tag: "review",
+        input: [
+          "Nghe lại recording từ Day 1 và Day 28 — so sánh"
+        ],
+        output: [
+          "Viết: 3 điều bạn tự hào nhất sau 30 ngày",
+          "Set 3 specific goals cho Month 2 dựa trên weaknesses bạn đã identify"
+        ],
+        resources: []
+      }
+    ]
+  }
+];
+
+const MONTH2_DAYS = [
+  {
+    week: "Week 5 — Shadowing Intensive",
+    days: [
+      {
+        n: 31, title: "Shadowing Sprint: Accent & Rhythm",
+        tag: "input",
+        input: [
+          "Tiếp tục luân phiên: tuần lẻ → technical (Hussein Nasser / Gergely Orosz), tuần chẵn → conversational (The Changelog / Lex Fridman)",
+          "Chọn 1 video/episode có transcript hoặc subtitle (15–20 phút)",
+          "Shadowing technique: Play 5 giây → Pause → Repeat exactly → Continue"
+        ],
+        output: [
+          "Shadowing 20 phút liên tục",
+          "Record bản thân sau shadowing: nói về weekend plans (2 phút) — xem rhythm thay đổi không"
+        ],
+        resources: ["Nhóm Rhythm Phrases trong Sentence Structures"]
+      },
+      {
+        n: 32, title: "Mock Q&A: No preparation",
+        tag: "output",
+        input: [
+          "Warm-up: 5 phút shadowing"
+        ],
+        output: [
+          "10 câu hỏi kỹ thuật ngẫu nhiên — AI hỏi, bạn trả lời ngay, không chuẩn bị",
+          "Mục tiêu: reduce lag từ think → speak xuống dưới 3 giây"
+        ],
+        prompt: "Ask me 10 technical questions at random, one at a time. Questions about software engineering concepts, system design, and architecture. Don't give me time to prepare — ask the next question 30 seconds after I finish answering. After all 10, tell me which answers were strongest and which were weakest.",
+        resources: []
+      },
+      {
+        n: 33, title: "Workplace: Presenting proposals to team",
+        tag: "output",
+        input: [
+          "Scenario: bạn muốn propose migrate từ monolith sang microservices",
+          "Đọc: 'How to write an RFC' — bất kỳ engineering blog (Shopify, Stripe, Notion engineering blogs)"
+        ],
+        output: [
+          "Record 7 phút proposal: Problem → Solution → Trade-offs → Ask for feedback",
+          "Dùng Sentence Structures nhóm Presenting & Proposing"
+        ],
+        prompt: "You're my team lead. I'll pitch a technical proposal to migrate our monolith to microservices. Ask challenging questions like: 'What's the estimated downtime?', 'How do we handle the data migration?', 'What's our rollback plan?'",
+        resources: ["Stripe Engineering Blog", "Notion Engineering Blog"]
+      },
+      {
+        n: 34, title: "Speed reading: Technical docs aloud",
+        tag: "input",
+        input: [
+          "Chọn 1 official documentation page (AWS, Kubernetes, or any tool you use)",
+          "Đọc to, không đọc thầm — 20 phút"
+        ],
+        output: [
+          "Sau đọc: tóm tắt bằng miệng 5 câu không nhìn docs",
+          "Chú ý: technical terms bạn không biết cách pronounce — note lại và tra cứu"
+        ],
+        resources: ["AWS Documentation", "Kubernetes.io docs"]
+      },
+      {
+        n: 35, title: "Behavioral: Failure & learning stories",
+        tag: "output",
+        input: [
+          "Model storytelling hôm nay: chọn lại <strong>Jim Rohn</strong> hoặc <strong>Simon Sinek</strong> — người bạn thấy dễ bắt chước hơn",
+          "Nghe 10 phút, chú ý cách họ nói về thất bại/khó khăn cá nhân mà không bị bi quan — chuyển nó thành insight",
+          "Đọc: 'Tell me about a time you failed' — tips trên Glassdoor hoặc Indeed"
+        ],
+        output: [
+          "Viết + Record 2 failure stories theo STAR",
+          "Key: Result phải include what you LEARNED, not just what happened",
+          "Thử kết bài bằng 1 câu insight ngắn, có trọng lượng — giống cách Rohn/Sinek kết một câu chuyện",
+          "Aim: genuine, specific, không quá dài (dưới 3 phút mỗi story)"
+        ],
+        prompt: "Ask me 'Tell me about a time you failed.' After my answer, ask follow-up probing questions like: 'What would you do differently?' and 'How did you apply that lesson later?' Also tell me if my closing line landed with any weight, or if the story just trailed off. Be a tough but fair interviewer.",
+        resources: ["Jim Rohn YouTube", "Simon Sinek YouTube"]
+      },
+      {
+        n: 36, title: "Simulated meeting: Sprint planning",
+        tag: "output",
+        input: [
+          "Scenario: bạn là tech lead, cần present sprint planning cho team 5 người"
+        ],
+        output: [
+          "Record 10 phút simulated sprint planning: Goals → Tasks → Dependencies → Risks",
+          "Dùng plural pronouns (we, our, us) — tập nói trong context của team"
+        ],
+        prompt: "You're three different team members (developer, designer, and QA) in a sprint planning meeting. I'm the tech lead presenting the sprint. Ask questions, raise concerns, and push back when appropriate. The sprint is about building a new authentication system.",
+        resources: ["Nhóm Team Communication trong Sentence Structures"]
+      },
+      {
+        n: 37, title: "Review Week 5 + Speed benchmark",
+        tag: "review",
+        input: [
+          "Nghe lại recordings từ tuần này"
+        ],
+        output: [
+          "Benchmark: record 3 phút explain bất kỳ system design concept — đo số words/phút",
+          "Target: 120–150 words/minute là natural pace",
+          "Tính: đếm số words trong script, chia cho số phút"
+        ],
+        resources: []
+      }
+    ]
+  },
+  {
+    week: "Week 6 — Structure Under Pressure",
+    days: [
+      {
+        n: 38, title: "System Design: Design a chat system",
+        tag: "output",
+        input: [
+          "Xem 10 phút: 'Design WhatsApp/Slack' video — bất kỳ channel nào",
+          "Chú ý: scalability language, real-time messaging concepts"
+        ],
+        output: [
+          "Record 15 phút full walkthrough design chat system từ đầu",
+          "Không nhìn notes — chỉ nhìn blank paper nếu cần vẽ sơ đồ"
+        ],
+        prompt: "Interview me for a senior software engineer position. The system design question is: 'Design a real-time chat system like Slack. Support 10 million daily active users.' You have 15 minutes. Ask clarifying questions when needed, and push back if I skip important components.",
+        resources: ["System Design Primer — GitHub", "High Scalability blog"]
+      },
+      {
+        n: 39, title: "Listening: Negotiation & difficult conversations",
+        tag: "input",
+        input: [
+          "Nghe: Manager Tools podcast — 1 episode về giving feedback hoặc difficult conversations",
+          "Note: vocabulary và phrases dùng trong professional conflict"
+        ],
+        output: [
+          "Role-play: record bản thân trong tình huống bạn cần disagree với manager về tech decision",
+          "Dùng Sentence Structures nhóm Disagreeing Professionally"
+        ],
+        resources: ["Manager Tools podcast", "Nhóm Professional Disagreement trong Sentence Structures"]
+      },
+      {
+        n: 40, title: "Presentation: Architecture Decision Records",
+        tag: "output",
+        input: [
+          "Đọc: ADR template — adr.github.io hoặc tìm 'architecture decision record template'"
+        ],
+        output: [
+          "Viết + present 1 ADR cho 1 technical decision bạn đã làm trong quá khứ",
+          "Record 8 phút: Context → Decision → Consequences",
+          "Practice presenting it như thể đang onboard một engineer mới"
+        ],
+        prompt: "I'm presenting an Architecture Decision Record to you, a new senior engineer joining our team. Please ask questions to understand the decision better, and challenge my reasoning where appropriate.",
+        resources: ["adr.github.io", "Thoughtworks ADR examples"]
+      },
+      {
+        n: 41, title: "Fillers & thinking phrases: Deliberate practice",
+        tag: "output",
+        input: [
+          "Study: 5 professional thinking fillers: 'That's a great question...', 'Let me think through this...', 'So if I understand correctly...', 'One way to frame this is...', 'The key consideration here is...'"
+        ],
+        output: [
+          "Record 5 phút answering surprise questions — force yourself to use thinking fillers",
+          "Rule: không được silent quá 3 giây — phải nói gì đó ngay"
+        ],
+        prompt: "Ask me 5 complex open-ended questions about software architecture. After each question, wait no more than 3 seconds for me to start speaking. If I go silent, say 'take your time' once, then continue. Questions should have no single right answer.",
+        resources: ["Nhóm Thinking Aloud trong Sentence Structures"]
+      },
+      {
+        n: 42, title: "Workplace: Onboarding documentation",
+        tag: "output",
+        input: [
+          "Scenario: viết onboarding guide cho engineer mới join team của bạn"
+        ],
+        output: [
+          "Viết 400-word onboarding doc bằng tiếng Anh — clear, friendly, structured",
+          "Dùng: numbered lists, headers, action items rõ ràng"
+        ],
+        prompt: "Review this onboarding documentation I wrote for new engineers. Tell me: Is it clear? Is anything ambiguous? Does it assume too much prior knowledge? Here it is: [paste your doc]",
+        resources: []
+      },
+      {
+        n: 43, title: "Peer practice simulation",
+        tag: "output",
+        input: [
+          "Tìm: 1 người (bạn bè, colleague, hoặc online community) để mock interview 30 phút",
+          "Nếu không tìm được: dùng AI với roleplay instructions đầy đủ"
+        ],
+        output: [
+          "Record full session nếu có thể",
+          "After session: viết 3 điều bạn sẽ làm khác lần sau"
+        ],
+        prompt: "Let's do a full 30-minute peer mock interview. You play the interviewer, I'll be the candidate. Start with small talk for 2 minutes, then a system design question (design Uber), then 2 behavioral questions. Give me realistic feedback at the end — don't be overly nice.",
+        resources: ["Pramp.com (free peer interviews)", "interviewing.io (free practice)"]
+      },
+      {
+        n: 44, title: "Review Week 6 + Recording comparison",
+        tag: "review",
+        input: [
+          "Nghe lại Day 31 recording và Day 43 recording — so sánh"
+        ],
+        output: [
+          "Note: speed thay đổi thế nào? Fillers giảm chưa? Structure rõ hơn chưa?",
+          "Identify 1 specific improvement cho tuần tới"
+        ],
+        resources: []
+      }
+    ]
+  },
+  {
+    week: "Week 7 — Workplace Deep & Behavioral Mastery",
+    days: [
+      {
+        n: 45, title: "Email: Difficult messages",
+        tag: "output",
+        input: [
+          "Scenario: viết email thông báo delay project cho stakeholders"
+        ],
+        output: [
+          "Viết 3 versions: Brief / Detailed / Apologetic — chọn 1 version tốt nhất",
+          "Record bản thân đọc email như thể present trong meeting"
+        ],
+        prompt: "Review three versions of my delay notification email. Tell me which is most professional and effective for a stakeholder audience, and why: [paste your three versions]",
+        resources: ["Nhóm Delivering Bad News trong Sentence Structures"]
+      },
+      {
+        n: 46, title: "System Design: Databases & caching deep",
+        tag: "output",
+        input: [
+          "Xem: 'How Redis works' video (10 phút) + 'Database indexing explained' (10 phút)"
+        ],
+        output: [
+          "Record: explain khi nào dùng Redis vs database caching (8 phút)",
+          "Bắt buộc include trade-offs và specific use cases"
+        ],
+        prompt: "As a hiring manager, I'm asking: 'Walk me through when you would choose Redis caching over database-level caching, and vice versa. Give me real examples.' Push back on vague answers.",
+        resources: []
+      },
+      {
+        n: 47, title: "Communication style: Direct vs diplomatic",
+        tag: "output",
+        input: [
+          "Đọc: 'Radical Candor' summary (search YouTube for Kim Scott talks)"
+        ],
+        output: [
+          "Write + record: same message in 2 styles — direct và diplomatic",
+          "Example message: 'This code needs significant changes before it's mergeable'",
+          "Identify: khi nào dùng style nào trong workplace"
+        ],
+        prompt: "Give me feedback on my two communication styles (direct vs diplomatic) for delivering code review feedback. Which is more appropriate for different situations: senior colleague, junior engineer, or cross-team communication?",
+        resources: ["Radical Candor by Kim Scott", "Nhóm Feedback Delivery trong Sentence Structures"]
+      },
+      {
+        n: 48, title: "Interview: Questions to ask the interviewer",
+        tag: "output",
+        input: [
+          "Đọc: 'Questions to ask in a tech interview' — Glassdoor, Levels.fyi, hoặc blog tech"
+        ],
+        output: [
+          "Prepare 10 strong questions để hỏi interviewer",
+          "Record bản thân asking 5 questions — chú ý tone: curious, not demanding",
+          "Dùng Sentence Structures nhóm Questions to Ask"
+        ],
+        resources: ["Levels.fyi interview guides", "Nhóm Questions for Interviewer trong Sentence Structures"]
+      },
+      {
+        n: 49, title: "Listening: Engineering podcasts sprint",
+        tag: "input",
+        input: [
+          "Nghe 2 podcast episodes trong ngày: Software Engineering Daily + 1 bất kỳ",
+          "Mỗi episode: chọn 3 phrases/expressions bạn muốn adopt"
+        ],
+        output: [
+          "Record 5 phút dùng 6 phrases mới đó trong context tự nhiên"
+        ],
+        resources: ["Software Engineering Daily", "Acquired FM", "Indie Hackers"]
+      },
+      {
+        n: 50, title: "Midpoint mock: Full 45-minute interview",
+        tag: "output",
+        input: [
+          "Đây là mock quan trọng nhất đến giờ — cố gắng có người thật nếu được"
+        ],
+        output: [
+          "Record full 45-phút mock interview: System design (20 phút) + Behavioral (15 phút) + Q&A (10 phút)",
+          "Rate yourself across 5 dimensions sau khi xong"
+        ],
+        prompt: "Conduct a full 45-minute senior software engineer interview. Start with 'Tell me about yourself' (3 min), then a system design question: 'Design a notification service that handles 100M+ users.' Then 3 behavioral questions about leadership, conflict, and failure. Give detailed feedback at the end.",
+        resources: []
+      },
+      {
+        n: 51, title: "Midpoint review: Compare Day 1 vs Day 50",
+        tag: "review",
+        input: [
+          "Nghe lại recording từ Day 1 và Day 50 — viết so sánh chi tiết"
+        ],
+        output: [
+          "Viết: What's dramatically better / What's still weak / What to prioritize in Month 3",
+          "Adjust Month 3 plan dựa trên gaps bạn identify"
+        ],
+        resources: []
+      }
+    ]
+  },
+  {
+    week: "Week 8 — Pressure & Speed",
+    days: [
+      {
+        n: 52, title: "Speed mock: 10 questions in 20 minutes",
+        tag: "output",
+        input: [
+          "Không chuẩn bị gì — đây là tốc độ training"
+        ],
+        output: [
+          "10 technical questions, mỗi câu tối đa 2 phút",
+          "Mục tiêu: clarity trong 30 giây đầu — không warm up"
+        ],
+        prompt: "Ask me 10 technical questions rapidly. Each question is about a different topic: API design, database, caching, security, scalability, microservices, testing, DevOps, system monitoring, and incident response. I have 2 minutes per question. Start immediately.",
+        resources: []
+      },
+      {
+        n: 53, title: "Interruption handling: Real interview conditions",
+        tag: "output",
+        input: [
+          "Prepare: practice handling interruptions gracefully"
+        ],
+        output: [
+          "Simulated interview với AI ưu tiên ngắt bạn thường xuyên",
+          "Luyện: 'Let me finish this thought...', 'Great question — let me address that after I cover X'",
+          "Record và xem bạn có bị lose track không"
+        ],
+        prompt: "Conduct a system design interview, but interrupt me frequently with questions and sub-questions while I'm explaining. Don't let me finish long explanations without asking follow-ups. This simulates a high-pressure interview environment. Question: Design a search autocomplete system.",
+        resources: ["Nhóm Handling Interruptions trong Sentence Structures"]
+      },
+      {
+        n: 54, title: "Workplace: Performance review self-assessment",
+        tag: "output",
+        input: [
+          "Đọc: 'How to write a self-evaluation' — bất kỳ HR blog chuyên nghiệp"
+        ],
+        output: [
+          "Viết self-assessment 300 words bằng tiếng Anh: Achievements / Areas for growth / Goals",
+          "Record bản thân presenting it như trong 1:1 với manager"
+        ],
+        resources: []
+      },
+      {
+        n: 55, title: "Technical writing: Blog post draft",
+        tag: "output",
+        input: [
+          "Topic: viết technical blog post về 1 problem bạn đã solve"
+        ],
+        output: [
+          "Viết 500-word draft: Hook → Problem → Solution → Key learnings",
+          "Không cần publish — mục đích là technical writing fluency"
+        ],
+        prompt: "Review my technical blog post draft for clarity, technical accuracy, and readability. Give me specific suggestions for improvement: [paste your draft]",
+        resources: ["dev.to (community technical blog)", "Medium Engineering"]
+      },
+      {
+        n: 56, title: "System Design: API design & REST",
+        tag: "output",
+        input: [
+          "Xem: 'REST API best practices' video (15 phút) — bất kỳ channel nào"
+        ],
+        output: [
+          "Record: design REST API cho e-commerce platform (10 phút)",
+          "Cover: endpoints, authentication, error handling, versioning, rate limiting"
+        ],
+        prompt: "I'll design a REST API for an e-commerce platform. Challenge me on: endpoint naming conventions, authentication strategy, how I handle errors, and how I'd version the API.",
+        resources: []
+      },
+      {
+        n: 57, title: "Peer mock #2: Different domain",
+        tag: "output",
+        input: [
+          "Tìm người mock hoặc dùng AI: focus vào domain bạn weak nhất"
+        ],
+        output: [
+          "30-minute mock với focus area: behavioral questions specifically",
+          "Sau mock: get written feedback từ person hoặc AI"
+        ],
+        prompt: "You're a behavioral interviewer at a FAANG company. Focus exclusively on behavioral questions for 30 minutes. Use STAR method probing — ask follow-ups for each answer: 'What was your specific contribution?', 'What was the outcome in numbers?', 'What would you do differently?' Be rigorous.",
+        resources: ["Pramp.com", "Nhóm Behavioral trong Sentence Structures"]
+      },
+      {
+        n: 58, title: "Consolidation: Build your personal story",
+        tag: "output",
+        input: [
+          "Đây là 'Tell me about yourself' — 2 phút — phiên bản tốt nhất của bạn"
+        ],
+        output: [
+          "Viết script, memorize rough outline (không word-for-word), record 5 lần",
+          "Chọn recording tốt nhất — đây là baseline của bạn"
+        ],
+        prompt: "I'll tell you about myself as I would in an interview. Please give me feedback on: Does it tell a compelling story? Is the progression logical? Does it connect to why I want this role? Is it under 2.5 minutes?",
+        resources: []
+      },
+      {
+        n: 59, title: "Error analysis: Common mistakes review",
+        tag: "review",
+        input: [
+          "Nghe lại 3 recordings từ tháng 2 — identify recurring mistakes"
+        ],
+        output: [
+          "Make a personal mistake list: grammar patterns, vocabulary gaps, structure issues",
+          "Mỗi mistake: write 3 correct example sentences"
+        ],
+        resources: []
+      },
+      {
+        n: 60, title: "Month 2 Final: Full interview simulation",
+        tag: "output",
+        input: [
+          "Chuẩn bị như thể đây là real interview ngày mai"
+        ],
+        output: [
+          "Record full 60-phút mock: Intro (5) + System Design (25) + Behavioral (20) + Q&A (10)",
+          "Score yourself. So sánh với Day 28 và Day 1. Viết Month 3 goals."
+        ],
+        prompt: "Conduct a full senior software engineer interview simulation. I want you to be a tough but fair interviewer from a top tech company. Full format: intro, system design (design a recommendation engine like Netflix), three behavioral questions (leadership, failure, conflict), and a Q&A at the end. Give me an overall assessment and hiring recommendation at the end.",
+        resources: []
+      }
+    ]
+  }
+];
+
+const MONTH3_DAYS = [
+  {
+    week: "Week 9 — Real Pressure Begins",
+    days: [
+      {
+        n: 61, title: "Company research: English deep dive",
+        tag: "pressure",
+        input: [
+          "Research 1 company bạn muốn apply: đọc engineering blog, Glassdoor, LinkedIn",
+          "Chú ý: culture language, how they describe problems, what they value in engineers"
+        ],
+        output: [
+          "Record 5 phút: 'Why do you want to work here?' — specific, không generic",
+          "Dùng phrases từ company's own language/values"
+        ],
+        resources: ["Company engineering blogs", "Glassdoor interview reviews", "Blind app"]
+      },
+      {
+        n: 62, title: "Mock with real pressure: Timer on",
+        tag: "pressure",
+        input: [
+          "Setup: timer visible, no notes, record everything"
+        ],
+        output: [
+          "45-phút timed mock interview — khi timer hết, dừng ngay dù đang nói",
+          "Mục tiêu: time management, biết allocate bao nhiêu cho từng section"
+        ],
+        prompt: "You're a tough interviewer at a top tech company. I have exactly 45 minutes. Give me a system design question (design a distributed key-value store), then 2 behavioral questions. Watch the time strictly — tell me when I'm spending too long on one area.",
+        resources: []
+      },
+      {
+        n: 63, title: "Handling curveball questions",
+        tag: "pressure",
+        input: [
+          "Prepare: list 10 'gotcha' questions bạn chưa chuẩn bị trước"
+        ],
+        output: [
+          "AI throw curveballs — bạn phải handle gracefully",
+          "Luyện: 'I haven't dealt with this specifically, but here's how I'd approach it...'"
+        ],
+        prompt: "Throw curveball interview questions at me — questions I probably haven't prepared for. Examples: 'How would you architect a system on Mars with 20-minute latency?', 'What would you do if your tech lead was consistently wrong?', 'How do you stay current with technology?' Mix technical and behavioral curveballs.",
+        resources: ["Nhóm Handling Unknowns trong Sentence Structures"]
+      },
+      {
+        n: 64, title: "Salary negotiation: Language & strategy",
+        tag: "output",
+        input: [
+          "Đọc: 'How to negotiate salary' — Levels.fyi guides hoặc Ramit Sethi blog",
+          "Chú ý: specific phrases, anchoring, và counteroffer language"
+        ],
+        output: [
+          "Record role-play: recruiter offers package, bạn counter",
+          "Practice: không nói số trước, anchoring high, expressing enthusiasm while negotiating"
+        ],
+        prompt: "Play a recruiter from a tech company. Offer me a compensation package and I'll negotiate. Be realistic — push back on my counter offers, say things like 'this is our best offer', and see how I handle it. Base salary: $85,000, no equity.",
+        resources: ["Levels.fyi compensation data", "Nhóm Negotiation trong Sentence Structures"]
+      },
+      {
+        n: 65, title: "Onsite simulation: Back to back",
+        tag: "pressure",
+        input: [
+          "Simulate onsite: 3 rounds back to back với short breaks"
+        ],
+        output: [
+          "3 × 30-phút sessions: System Design + Behavioral + Technical coding explanation",
+          "Note: năng lượng, clarity thay đổi thế nào sau mỗi round?"
+        ],
+        prompt: "This is round 1 of 3 in an onsite interview. System design question: Design a scalable image hosting service like Imgur. I'll do back-to-back interviews after this.",
+        resources: []
+      },
+      {
+        n: 66, title: "Post-interview follow-up writing",
+        tag: "output",
+        input: [
+          "Đọc: examples của thank-you emails sau interview"
+        ],
+        output: [
+          "Viết 3 thank-you email templates: cho different interview types",
+          "Record: giải thích strategy của bạn cho follow-up communications"
+        ],
+        resources: ["Nhóm Follow-up Writing trong Sentence Structures"]
+      },
+      {
+        n: 67, title: "Review Week 9 + Energy management",
+        tag: "review",
+        input: [
+          "Nghe lại 3-round onsite recording từ Day 65"
+        ],
+        output: [
+          "Đánh giá: energy level thay đổi thế nào? Clarity có drop sau round 2 không?",
+          "Strategy: techniques để maintain energy trong multi-round interview"
+        ],
+        resources: []
+      }
+    ]
+  },
+  {
+    week: "Week 10 — Specialization & Edge Cases",
+    days: [
+      {
+        n: 68, title: "System Design: Distributed systems language",
+        tag: "pressure",
+        input: [
+          "Đọc/xem: concepts về consistency, availability, partition tolerance",
+          "Focus: cách verbalize CAP theorem trade-offs trong interview"
+        ],
+        output: [
+          "Record: giải thích CAP theorem và khi nào chọn CP vs AP system (8 phút)",
+          "Không dùng notes — test recall và verbalization"
+        ],
+        prompt: "Ask me increasingly difficult questions about distributed systems: CAP theorem, eventual consistency, consensus algorithms (Raft, Paxos), and distributed transactions. Push back on vague answers and ask me to give concrete examples.",
+        resources: ["DDIA (Designing Data-Intensive Applications) — key chapters"]
+      },
+      {
+        n: 69, title: "Security & reliability: Articulating non-functional requirements",
+        tag: "output",
+        input: [
+          "Study: cách engineers nói về SLAs, SLOs, error rates, security requirements"
+        ],
+        output: [
+          "Record: design a secure payment API — cover security, reliability, observability (10 phút)",
+          "Bắt buộc include: SLA targets, failure scenarios, monitoring strategy"
+        ],
+        prompt: "I'll design a payment API. As the interviewer, focus your questions on security (authentication, authorization, encryption), reliability (SLAs, failure modes), and observability (logging, monitoring, alerting). Push me on specifics.",
+        resources: []
+      },
+      {
+        n: 70, title: "Mock with feedback: Detailed debrief",
+        tag: "pressure",
+        input: [
+          "Cố gắng có 1 real person làm interviewer hôm nay"
+        ],
+        output: [
+          "30-phút mock + 15-phút debrief về language và communication specifically",
+          "Ask specifically: 'Were there moments my explanation was confusing?' và 'Did I sound confident?'"
+        ],
+        resources: ["Pramp.com", "LinkedIn connections"]
+      },
+      {
+        n: 71, title: "Workplace: Managing up & stakeholder communication",
+        tag: "output",
+        input: [
+          "Scenario: cần explain technical constraints cho non-technical VP"
+        ],
+        output: [
+          "Record 8 phút: explaining why a feature will take 3x longer than estimated",
+          "Dùng: business impact language, risk framing, không technical jargon"
+        ],
+        prompt: "You're a VP who wants a feature delivered in 2 weeks. I'm the tech lead explaining why it needs 6 weeks. Push back, be skeptical, ask 'why can't we just...?' questions. Make me justify my estimate in business terms, not technical terms.",
+        resources: []
+      },
+      {
+        n: 72, title: "Culture fit: Values & philosophy questions",
+        tag: "pressure",
+        input: [
+          "Research: company culture của 2–3 companies bạn target"
+        ],
+        output: [
+          "Record answers to: 'What's your engineering philosophy?', 'How do you handle tech debt?', 'How do you approach learning?'",
+          "Answers nên specific, có story, không generic"
+        ],
+        prompt: "Ask me philosophical engineering questions: 'What's your approach to technical debt?', 'How do you decide when good enough is good enough?', 'What do you think makes a great engineering team?', 'How do you stay motivated when working on boring tasks?' Push for specifics.",
+        resources: []
+      },
+      {
+        n: 73, title: "Pronunciation & articulation: Final push",
+        tag: "input",
+        input: [
+          "Identify: 5–10 technical words bạn vẫn uncertain về pronunciation",
+          "Tra cứu: YouGlish.com — nghe native speakers dùng từ đó trong context"
+        ],
+        output: [
+          "Record: sentence cho mỗi word trong context technical",
+          "Mục tiêu: confident, không hesitate khi nói technical terms"
+        ],
+        resources: ["YouGlish.com", "Forvo.com pronunciation dictionary"]
+      },
+      {
+        n: 74, title: "Review Week 10 + Final gaps",
+        tag: "review",
+        input: [
+          "Nhìn lại tất cả personal mistake lists từ trước"
+        ],
+        output: [
+          "Final list: top 5 weaknesses còn lại",
+          "Plan: 1 specific exercise để address mỗi weakness trong 2 tuần còn lại"
+        ],
+        resources: []
+      }
+    ]
+  },
+  {
+    week: "Week 11 — Polish & Peak Performance",
+    days: [
+      {
+        n: 75, title: "Full dress rehearsal: Company-specific",
+        tag: "pressure",
+        input: [
+          "Research: specific format của company bạn target nhất"
+        ],
+        output: [
+          "Simulate exact interview format: duration, question types, format",
+          "Dress properly, sit properly, camera on — treat như real interview"
+        ],
+        resources: []
+      },
+      {
+        n: 76, title: "Storytelling: Making technical work compelling",
+        tag: "output",
+        input: [
+          "Model storytelling hôm nay: nghe lại <strong>Jim Rohn</strong> VÀ <strong>Simon Sinek</strong> — 1 đoạn mỗi người (10 phút)",
+          "So sánh: Rohn dùng giọng trầm + pause dài + repetition để tạo trọng lượng; Sinek dùng tension mở đầu + structure rõ ràng hơn",
+          "Chọn kỹ thuật của 1 trong 2 người để áp dụng có chủ đích vào hôm nay"
+        ],
+        output: [
+          "Revise your best 3 STAR stories: add specific numbers, emotions, và turning points",
+          "Record — chủ đích chèn 1-2 pause kịch tính trước điểm quan trọng nhất mỗi story",
+          "Check: có compelling narrative arc không? Pause có tự nhiên hay bị gượng?"
+        ],
+        prompt: "Listen to my top 3 behavioral stories and rate each on: Specificity (are there real numbers and details?), Narrative arc (is there tension and resolution?), Relevance (does it answer the question?), Confidence, and Delivery (did pauses feel natural and add weight, or did they feel forced?). Give me a score out of 10 for each.",
+        resources: ["Jim Rohn YouTube", "Simon Sinek YouTube"]
+      },
+      {
+        n: 77, title: "Mock marathon: 4 hours simulated onsite",
+        tag: "pressure",
+        input: [
+          "Đây là biggest mock của toàn bộ 90 ngày — treat seriously"
+        ],
+        output: [
+          "4 rounds × 45 phút: System Design + Behavioral + Technical + Culture Fit",
+          "Break 10 phút giữa mỗi round",
+          "Record tất cả — debrief sau"
+        ],
+        prompt: "This is the start of a 4-round mock onsite interview. Round 1 (System Design): Design a distributed task queue like Amazon SQS. I'll tell you when we move to Round 2.",
+        resources: []
+      },
+      {
+        n: 78, title: "Debrief Day 77",
+        tag: "review",
+        input: [
+          "Nghe lại tất cả recordings từ Day 77"
+        ],
+        output: [
+          "Detailed debrief: Strength / Weakness / Pattern across 4 rounds",
+          "Identify: có điều gì bạn làm tốt nhất ở round nào? Tại sao?"
+        ],
+        resources: []
+      },
+      {
+        n: 79, title: "Refinement: Your weakest area",
+        tag: "pressure",
+        input: [
+          "Dựa trên debrief Day 78 — identify absolute weakest area"
+        ],
+        output: [
+          "3 giờ: intensive focused practice trên weakest area duy nhất",
+          "Không divide attention — 1 area, deep practice"
+        ],
+        resources: []
+      },
+      {
+        n: 80, title: "Authentic voice: Sound like yourself",
+        tag: "output",
+        input: [
+          "Lắng nghe: recordings từ Day 1 vs Day 77 — bạn có còn sound như mình không?"
+        ],
+        output: [
+          "Record casual conversation về 1 topic bạn passionate (tech hoặc non-tech)",
+          "Mục tiêu: fluent AND authentic — không robotic, không over-formal"
+        ],
+        prompt: "Have a casual conversation with me about a tech topic I'm passionate about. Ask follow-up questions like a curious colleague, not an interviewer. I want to practice being natural and authentic, not 'interview mode.'",
+        resources: []
+      },
+      {
+        n: 81, title: "Review Week 11 + Final 9-day plan",
+        tag: "review",
+        input: [
+          "Reflect: bạn đang ở đâu so với goals ban đầu?"
+        ],
+        output: [
+          "Write specific plan cho 9 ngày cuối: priorities, mock schedule, focus areas",
+          "Set realistic expectations cho performance trong real interviews"
+        ],
+        resources: []
+      }
+    ]
+  },
+  {
+    week: "Week 12 — Final Sprint",
+    days: [
+      {
+        n: 82, title: "Final system design: Novel problem",
+        tag: "pressure",
+        input: [
+          "No preparation — surprise problem"
+        ],
+        output: [
+          "Record 20-phút system design: problem bạn chưa chuẩn bị trước",
+          "Test: framework có giúp bạn navigate unknown territory không?"
+        ],
+        prompt: "Give me a system design problem I've likely never seen before. Make it unusual: something like 'Design a real-time collaborative code editor like VSCode Live Share' or 'Design a system for distributing software updates to 100M devices.' Don't tell me which you'll ask beforehand.",
+        resources: []
+      },
+      {
+        n: 83, title: "Behavioral final: Most difficult questions",
+        tag: "pressure",
+        input: [
+          "Prepare: revisit all STAR stories — polish them one final time",
+          "Nhắc lại kỹ thuật từ Jim Rohn / Simon Sinek: pause có chủ đích, kết bài có trọng lượng — áp dụng tự nhiên, không gượng"
+        ],
+        output: [
+          "Record answers to 5 hardest behavioral questions",
+          "Hardest ones: 'Tell me about a time you disagreed with your manager and were wrong', 'Describe your biggest professional failure'"
+        ],
+        prompt: "Ask me the 5 most difficult behavioral interview questions you can think of. Don't soften them. After each answer, probe with at least 2 follow-up questions. Be rigorous about specificity. Also note if my delivery had genuine emotional weight or felt flat.",
+        resources: []
+      },
+      {
+        n: 84, title: "Workplace English: Final synthesis",
+        tag: "output",
+        input: [
+          "Review: all workplace Sentence Structures nhóm (Email, Slack, Meetings, Presentations)"
+        ],
+        output: [
+          "Record: bạn leading a fictional team meeting — present update, take questions, give direction (15 phút)",
+          "Mục tiêu: sound like a natural team leader, not someone reading from script"
+        ],
+        prompt: "Play three different team members in a meeting I'm leading. Be realistic — have concerns, ask questions, push back on decisions, get distracted. I need to practice managing a real meeting, not an ideal one.",
+        resources: []
+      },
+      {
+        n: 85, title: "Light day: Review sentence structures",
+        tag: "review",
+        input: [
+          "Review tất cả 100 Sentence Structures — quick pass"
+        ],
+        output: [
+          "Identify: top 20 structures bạn dùng tự nhiên nhất — đây là your core toolkit",
+          "Identify: top 10 structures bạn cần consciously remember"
+        ],
+        resources: []
+      },
+      {
+        n: 86, title: "Mock: Different format — phone screen",
+        tag: "pressure",
+        input: [
+          "Setup: phone only, no video — harder than video interview"
+        ],
+        output: [
+          "30-phút phone screen simulation: thiếu visual cues, phải rely entirely vào voice và words",
+          "Chú ý: pacing, clarity, confidence qua voice alone"
+        ],
+        prompt: "Conduct a phone screen interview with me (no video context). This should feel like a real phone call. Start with: 'Hi, this is Sarah from [company]. Can you hear me OK? Great. So tell me a little about your background.' Keep it realistic and conversational.",
+        resources: []
+      },
+      {
+        n: 87, title: "Final full mock: Best performance",
+        tag: "pressure",
+        input: [
+          "Đây là mock cuối — làm tốt nhất có thể"
+        ],
+        output: [
+          "Record 60-phút: toàn bộ format đầy đủ",
+          "So sánh với Day 1, Day 30, Day 60"
+        ],
+        prompt: "Conduct the most complete and realistic senior software engineer interview you can. Full format: intro, system design (design choice yours), behavioral questions, technical depth questions, and Q&A. Give me detailed feedback at the end as if you were submitting a real interview evaluation.",
+        resources: []
+      },
+      {
+        n: 88, title: "Progress celebration: Day 1 vs Day 87",
+        tag: "review",
+        input: [
+          "Nghe: Day 1 recording và Day 87 recording back to back"
+        ],
+        output: [
+          "Write: honest assessment của progress — specific, not generic",
+          "Identify: what skills are now natural vs still effortful"
+        ],
+        resources: []
+      },
+      {
+        n: 89, title: "Personal English toolkit: Build your reference doc",
+        tag: "review",
+        input: [
+          "Compile: your favorite phrases, structures, và expressions từ 90 ngày"
+        ],
+        output: [
+          "Viết 1-page personal English reference: top 30 phrases YOU use best",
+          "This is your actual toolkit — personalized, not generic"
+        ],
+        resources: []
+      },
+      {
+        n: 90, title: "Day 90: Launch",
+        tag: "pressure",
+        input: [
+          "Đây là ngày cuối — và là ngày đầu tiên của phase tiếp theo"
+        ],
+        output: [
+          "Apply to 1 job you want (nếu chưa), schedule 1 real interview",
+          "Record: 2-phút reflection về 90 ngày — bằng tiếng Anh, không script",
+          "Không cần perfect — just speak"
+        ],
+        resources: []
+      }
+    ]
+  }
+];
+
+const SENTENCES = [
+  // 1. CLARIFYING
+  { cat: "Clarify", en: "Before I dive in, let me clarify a few things.", vi: "Trước khi bắt đầu, cho tôi làm rõ một vài điểm.", ex: "Before I dive in, let me clarify a few things — are we optimizing for latency or throughput?" },
+  { cat: "Clarify", en: "When you say [X], do you mean...?", vi: "Khi bạn nói [X], ý bạn là...?", ex: "When you say 'millions of users,' do you mean concurrent users or total registered users?" },
+  { cat: "Clarify", en: "What's the primary use case we're optimizing for?", vi: "Use case chính mà chúng ta tối ưu là gì?", ex: "What's the primary use case we're optimizing for — read-heavy or write-heavy?" },
+  { cat: "Clarify", en: "Can we assume [X] for this problem?", vi: "Chúng ta có thể giả định [X] cho bài toán này không?", ex: "Can we assume users are globally distributed for this problem?" },
+  { cat: "Clarify", en: "What scale are we designing for?", vi: "Chúng ta đang thiết kế cho quy mô nào?", ex: "What scale are we designing for — thousands or millions of requests per second?" },
+  { cat: "Clarify", en: "Are there any constraints I should be aware of upfront?", vi: "Có ràng buộc nào tôi nên biết từ đầu không?", ex: "Are there any constraints I should be aware of upfront — budget, team size, or timeline?" },
+  { cat: "Clarify", en: "Just to make sure I understand correctly...", vi: "Để tôi đảm bảo hiểu đúng...", ex: "Just to make sure I understand correctly — we need to support real-time updates, right?" },
+
+  // 2. HIGH-LEVEL
+  { cat: "High-level", en: "At a high level, the system consists of...", vi: "Ở mức tổng quan, hệ thống bao gồm...", ex: "At a high level, the system consists of an API gateway, application servers, and a database cluster." },
+  { cat: "High-level", en: "The core components here are...", vi: "Các thành phần cốt lõi ở đây là...", ex: "The core components here are the message broker, consumer groups, and dead-letter queue." },
+  { cat: "High-level", en: "Let me walk you through the overall architecture.", vi: "Để tôi trình bày kiến trúc tổng thể.", ex: "Let me walk you through the overall architecture before we dive into specifics." },
+  { cat: "High-level", en: "The basic flow is: [A] triggers [B], which then [C].", vi: "Luồng cơ bản là: [A] kích hoạt [B], sau đó [C].", ex: "The basic flow is: the client sends a request, which triggers the load balancer, which then routes to an available server." },
+  { cat: "High-level", en: "We can think of this as three layers...", vi: "Chúng ta có thể nghĩ về điều này theo ba tầng...", ex: "We can think of this as three layers: presentation, business logic, and data persistence." },
+  { cat: "High-level", en: "Starting with the happy path...", vi: "Bắt đầu với trường hợp lý tưởng...", ex: "Starting with the happy path — a user makes a request, the system responds within 200ms." },
+
+  // 3. TRADE-OFFS
+  { cat: "Trade-offs", en: "The trade-off here is between [X] and [Y].", vi: "Sự đánh đổi ở đây là giữa [X] và [Y].", ex: "The trade-off here is between consistency and availability in a distributed setup." },
+  { cat: "Trade-offs", en: "This approach works well when... but breaks down when...", vi: "Cách tiếp cận này hoạt động tốt khi... nhưng gặp vấn đề khi...", ex: "This works well when reads are frequent, but breaks down when we have write-heavy workloads." },
+  { cat: "Trade-offs", en: "The upside is [X], but the downside is [Y].", vi: "Ưu điểm là [X], nhưng nhược điểm là [Y].", ex: "The upside is simplicity, but the downside is it won't scale past a single machine." },
+  { cat: "Trade-offs", en: "We're essentially trading [X] for [Y] here.", vi: "Về cơ bản chúng ta đang đánh đổi [X] lấy [Y] ở đây.", ex: "We're essentially trading storage space for query speed here." },
+  { cat: "Trade-offs", en: "The question is whether [X] is worth the added complexity.", vi: "Câu hỏi là liệu [X] có đáng để thêm phức tạp không.", ex: "The question is whether sharding is worth the added complexity at our scale." },
+  { cat: "Trade-offs", en: "Given these constraints, I'd lean toward...", vi: "Với những ràng buộc này, tôi nghiêng về...", ex: "Given these constraints, I'd lean toward eventual consistency over strong consistency." },
+
+  // 4. DEEP DIVE
+  { cat: "Deep Dive", en: "Let me zoom in on [X] specifically.", vi: "Hãy để tôi tập trung vào [X] cụ thể.", ex: "Let me zoom in on the caching layer specifically, since that's where most latency savings come from." },
+  { cat: "Deep Dive", en: "The key insight here is...", vi: "Điểm mấu chốt ở đây là...", ex: "The key insight here is that most reads can be served from cache if we design the invalidation correctly." },
+  { cat: "Deep Dive", en: "Under the hood, what's happening is...", vi: "Bên dưới, điều xảy ra là...", ex: "Under the hood, what's happening is the database is doing a full table scan — that's why it's slow." },
+  { cat: "Deep Dive", en: "The bottleneck in this design is...", vi: "Điểm nghẽn cổ chai trong thiết kế này là...", ex: "The bottleneck in this design is the single write path to the primary database." },
+  { cat: "Deep Dive", en: "This is where it gets interesting...", vi: "Đây là chỗ trở nên thú vị...", ex: "This is where it gets interesting — when we have network partitions, we have to make a choice." },
+  { cat: "Deep Dive", en: "The reason I'm choosing [X] over [Y] is...", vi: "Lý do tôi chọn [X] thay vì [Y] là...", ex: "The reason I'm choosing Kafka over RabbitMQ here is message replay capability." },
+
+  // 5. SUMMARIZING
+  { cat: "Summarize", en: "To recap what I've described so far...", vi: "Để tóm tắt những gì tôi đã mô tả...", ex: "To recap what I've described so far: we have a distributed cache in front of our database." },
+  { cat: "Summarize", en: "So the main points are...", vi: "Vậy các điểm chính là...", ex: "So the main points are: stateless servers, distributed cache, and read replicas." },
+  { cat: "Summarize", en: "To bring it all together...", vi: "Để kết hợp tất cả lại...", ex: "To bring it all together — this architecture handles 100k RPS with sub-100ms latency." },
+  { cat: "Summarize", en: "The bottom line is...", vi: "Điểm mấu chốt là...", ex: "The bottom line is this solution is simple to operate and scales horizontally." },
+  { cat: "Summarize", en: "Does that make sense? Should I go deeper into any part?", vi: "Điều đó có hợp lý không? Tôi có nên đào sâu hơn vào phần nào không?", ex: "Does that make sense? Should I go deeper into the database sharding strategy?" },
+
+  // 6. TRANSITIONS
+  { cat: "Transition", en: "Now let's talk about...", vi: "Bây giờ hãy nói về...", ex: "Now let's talk about how we handle failures in this system." },
+  { cat: "Transition", en: "Moving on to the next component...", vi: "Chuyển sang thành phần tiếp theo...", ex: "Moving on to the next component — the message queue." },
+  { cat: "Transition", en: "Let me now shift focus to...", vi: "Hãy để tôi chuyển trọng tâm sang...", ex: "Let me now shift focus to how we handle data consistency." },
+  { cat: "Transition", en: "Building on what I just said...", vi: "Dựa trên những gì tôi vừa nói...", ex: "Building on what I just said about caching, let's look at cache invalidation strategies." },
+  { cat: "Transition", en: "Before I go further, I want to flag...", vi: "Trước khi tiếp tục, tôi muốn lưu ý...", ex: "Before I go further, I want to flag a potential issue with this approach." },
+
+  // 7. THINKING ALOUD
+  { cat: "Think Aloud", en: "Let me think through this for a moment...", vi: "Để tôi suy nghĩ về điều này một chút...", ex: "Let me think through this for a moment — what are the failure modes?" },
+  { cat: "Think Aloud", en: "So the question is really...", vi: "Vậy câu hỏi thực sự là...", ex: "So the question is really about latency tolerance in the worst case." },
+  { cat: "Think Aloud", en: "One way to look at this is...", vi: "Một cách nhìn vào điều này là...", ex: "One way to look at this is from the user's perspective — what do they actually experience?" },
+  { cat: "Think Aloud", en: "If I think about the edge cases...", vi: "Nếu tôi nghĩ về các edge case...", ex: "If I think about the edge cases — what happens when the cache is cold?" },
+  { cat: "Think Aloud", en: "Let me reason through this step by step.", vi: "Hãy để tôi lý giải từng bước.", ex: "Let me reason through this step by step, starting with the data model." },
+  { cat: "Think Aloud", en: "I'm thinking out loud here, but...", vi: "Tôi đang suy nghĩ to ở đây, nhưng...", ex: "I'm thinking out loud here, but a pub-sub model might work better than polling." },
+
+  // 8. BEHAVIORAL - STAR
+  { cat: "Behavioral", en: "The situation was...", vi: "Tình huống lúc đó là...", ex: "The situation was we had a production outage affecting 30% of users." },
+  { cat: "Behavioral", en: "My specific role was to...", vi: "Vai trò cụ thể của tôi là...", ex: "My specific role was to lead the incident response and coordinate across teams." },
+  { cat: "Behavioral", en: "The actions I took were...", vi: "Những hành động tôi thực hiện là...", ex: "The actions I took were: first stabilizing the system, then doing root cause analysis." },
+  { cat: "Behavioral", en: "As a result, we were able to...", vi: "Kết quả là chúng tôi có thể...", ex: "As a result, we reduced incident resolution time by 40% in the following quarter." },
+  { cat: "Behavioral", en: "Looking back, what I learned was...", vi: "Nhìn lại, điều tôi học được là...", ex: "Looking back, what I learned was the importance of runbooks for on-call engineers." },
+  { cat: "Behavioral", en: "I pushed back because...", vi: "Tôi phản đối vì...", ex: "I pushed back because shipping without tests would create long-term technical debt." },
+
+  // 9. WORKPLACE - MEETINGS
+  { cat: "Workplace", en: "Yesterday I worked on... Today I'll be focusing on... My blocker is...", vi: "Hôm qua tôi làm... Hôm nay tôi tập trung... Điểm chặn của tôi là...", ex: "Yesterday I worked on the auth service. Today I'll focus on integration tests. My blocker is the staging environment is down." },
+  { cat: "Workplace", en: "I'd like to raise a concern about...", vi: "Tôi muốn nêu một lo ngại về...", ex: "I'd like to raise a concern about the timeline — I don't think we've accounted for testing." },
+  { cat: "Workplace", en: "Can we take this offline?", vi: "Chúng ta có thể bàn thêm sau không?", ex: "This is getting complex — can we take this offline and schedule a deeper discussion?" },
+  { cat: "Workplace", en: "I think we're aligned on [X], but diverge on [Y].", vi: "Tôi nghĩ chúng ta đồng ý về [X], nhưng khác biệt về [Y].", ex: "I think we're aligned on the architecture, but diverge on the rollout strategy." },
+  { cat: "Workplace", en: "Let me make sure I have the action items.", vi: "Để tôi đảm bảo tôi có các action items.", ex: "Before we close — let me make sure I have the action items right." },
+  { cat: "Workplace", en: "I'll send a follow-up with the details.", vi: "Tôi sẽ gửi follow-up với chi tiết.", ex: "Great discussion — I'll send a follow-up with the details and decisions we made." },
+
+  // 10. DISAGREEING PROFESSIONALLY
+  { cat: "Disagree", en: "I see your point, but I'm not sure I agree because...", vi: "Tôi hiểu quan điểm của bạn, nhưng tôi không chắc đồng ý vì...", ex: "I see your point, but I'm not sure I agree because the data doesn't support that assumption." },
+  { cat: "Disagree", en: "Have we considered the alternative where...?", vi: "Chúng ta có xem xét phương án thay thế không?", ex: "Have we considered the alternative where we use event sourcing instead?" },
+  { cat: "Disagree", en: "I'd push back on that slightly — my concern is...", vi: "Tôi phản đối nhẹ điều đó — lo ngại của tôi là...", ex: "I'd push back on that slightly — my concern is this doesn't account for peak traffic." },
+  { cat: "Disagree", en: "What's the evidence behind that assumption?", vi: "Bằng chứng nào đằng sau giả định đó?", ex: "That's interesting — what's the evidence behind that assumption about user behavior?" },
+  { cat: "Disagree", en: "I respect your call here, but I want to log my concern that...", vi: "Tôi tôn trọng quyết định của bạn, nhưng muốn ghi lại lo ngại rằng...", ex: "I respect your call here, but I want to log my concern that skipping tests is risky." },
+
+  // 11. HANDLING UNKNOWNS
+  { cat: "Handle Unknown", en: "I haven't worked with that specifically, but here's how I'd approach it...", vi: "Tôi chưa làm việc với điều đó cụ thể, nhưng đây là cách tôi tiếp cận...", ex: "I haven't implemented Raft specifically, but here's how I'd approach learning it." },
+  { cat: "Handle Unknown", en: "That's outside my direct experience, but the principles I'd apply are...", vi: "Điều đó nằm ngoài kinh nghiệm trực tiếp của tôi, nhưng các nguyên tắc tôi áp dụng là...", ex: "Kubernetes operators are outside my direct experience, but the principles I'd apply are event-driven reconciliation loops." },
+  { cat: "Handle Unknown", en: "I'd want to research that more before committing to an answer.", vi: "Tôi muốn nghiên cứu thêm trước khi đưa ra câu trả lời.", ex: "The specifics of CRDT implementation — I'd want to research that more before committing to an answer." },
+  { cat: "Handle Unknown", en: "My instinct is [X], but I'd validate by...", vi: "Bản năng của tôi là [X], nhưng tôi sẽ xác nhận bằng cách...", ex: "My instinct is Redis would work here, but I'd validate by benchmarking against our actual load patterns." },
+  { cat: "Handle Unknown", en: "Let me reason from first principles here...", vi: "Hãy để tôi lý giải từ các nguyên tắc cơ bản...", ex: "I've never dealt with this edge case, so let me reason from first principles here." },
+
+  // 12. PRESENTING & PROPOSING
+  { cat: "Present", en: "What I'd like to propose is...", vi: "Điều tôi muốn đề xuất là...", ex: "What I'd like to propose is migrating our batch jobs to an event-driven architecture." },
+  { cat: "Present", en: "The problem we're trying to solve is...", vi: "Vấn đề chúng ta đang cố giải quyết là...", ex: "The problem we're trying to solve is P99 latency spikes under load." },
+  { cat: "Present", en: "Let me walk you through the three options I considered.", vi: "Để tôi trình bày ba lựa chọn tôi đã cân nhắc.", ex: "Let me walk you through the three options I considered before landing on this approach." },
+  { cat: "Present", en: "The impact of doing nothing is...", vi: "Tác động của việc không làm gì là...", ex: "The impact of doing nothing is we'll hit our storage limit in 6 months." },
+  { cat: "Present", en: "I'm asking for [X] in order to [Y].", vi: "Tôi đang yêu cầu [X] để [Y].", ex: "I'm asking for two extra sprints in order to properly test the migration." },
+
+  // 13. FEEDBACK DELIVERY
+  { cat: "Feedback", en: "One thing I noticed that might be worth addressing is...", vi: "Một điều tôi nhận thấy có thể đáng giải quyết là...", ex: "One thing I noticed that might be worth addressing is the lack of input validation." },
+  { cat: "Feedback", en: "This is well-structured, and a small enhancement would be...", vi: "Đây được cấu trúc tốt, và một cải tiến nhỏ sẽ là...", ex: "This is well-structured, and a small enhancement would be adding error handling here." },
+  { cat: "Feedback", en: "I'd suggest considering [X] because [reason].", vi: "Tôi đề xuất xem xét [X] vì [lý do].", ex: "I'd suggest considering a retry mechanism here because network calls can fail intermittently." },
+  { cat: "Feedback", en: "Have you thought about what happens when [edge case]?", vi: "Bạn đã nghĩ về điều gì xảy ra khi [edge case]?", ex: "Have you thought about what happens when the external API times out?" },
+  { cat: "Feedback", en: "Overall I think this is solid — my main feedback is...", vi: "Nhìn chung tôi nghĩ điều này ổn — phản hồi chính của tôi là...", ex: "Overall I think this is solid — my main feedback is the database queries could be optimized." },
+
+  // 14. NEGOTIATION
+  { cat: "Negotiate", en: "Based on my research, the market rate for this role is...", vi: "Dựa trên nghiên cứu của tôi, mức thị trường cho vị trí này là...", ex: "Based on my research, the market rate for this role in this market is in the range of..." },
+  { cat: "Negotiate", en: "I'm very excited about this opportunity, and I was hoping for something closer to...", vi: "Tôi rất hào hứng với cơ hội này, và tôi hy vọng điều gì đó gần hơn với...", ex: "I'm very excited about this opportunity, and I was hoping for something closer to my target range." },
+  { cat: "Negotiate", en: "Is there flexibility on [X]?", vi: "Có linh hoạt về [X] không?", ex: "Is there flexibility on the equity component or signing bonus?" },
+  { cat: "Negotiate", en: "What I value most in a package is...", vi: "Điều tôi coi trọng nhất trong một gói là...", ex: "What I value most in a package is equity upside and flexibility to work remotely." },
+  { cat: "Negotiate", en: "Can I have a few days to consider the full offer?", vi: "Tôi có thể có vài ngày để cân nhắc toàn bộ offer không?", ex: "I'm very interested — can I have a few days to consider the full offer carefully?" },
+
+  // 15. QUESTIONS FOR INTERVIEWER
+  { cat: "Ask Interviewer", en: "What does the engineering culture look like day-to-day?", vi: "Văn hóa kỹ thuật hàng ngày trông như thế nào?", ex: "What does the engineering culture look like day-to-day — meetings-heavy or deep-work-focused?" },
+  { cat: "Ask Interviewer", en: "What are the biggest technical challenges the team is facing right now?", vi: "Thách thức kỹ thuật lớn nhất mà team đang đối mặt là gì?", ex: "What are the biggest technical challenges the team is facing right now?" },
+  { cat: "Ask Interviewer", en: "How does the team approach technical debt?", vi: "Team tiếp cận nợ kỹ thuật như thế nào?", ex: "How does the team decide when to pay down technical debt vs ship new features?" },
+  { cat: "Ask Interviewer", en: "What does success look like in the first 90 days?", vi: "Thành công trông như thế nào trong 90 ngày đầu?", ex: "What does success look like for someone in this role in the first 90 days?" },
+  { cat: "Ask Interviewer", en: "How do you see this role evolving over the next year?", vi: "Bạn thấy vai trò này phát triển như thế nào trong năm tới?", ex: "How do you see this role evolving as the company grows over the next year?" },
+
+  // 16. EXPLAINING COMPLEX THINGS
+  { cat: "Explain", en: "Think of it like...", vi: "Hãy nghĩ về nó như...", ex: "Think of it like a traffic cop at an intersection — that's what a load balancer does." },
+  { cat: "Explain", en: "The analogy I'd use is...", vi: "Phép so sánh tôi dùng là...", ex: "The analogy I'd use is: a cache is like a sticky note on your monitor — fast to read, but might be outdated." },
+  { cat: "Explain", en: "Let me break this down into parts.", vi: "Hãy để tôi chia điều này thành các phần.", ex: "This is complex, so let me break this down into three parts." },
+  { cat: "Explain", en: "The key thing to understand is...", vi: "Điều quan trọng cần hiểu là...", ex: "The key thing to understand is that these two operations are not atomic by default." },
+  { cat: "Explain", en: "Without getting too deep into the weeds...", vi: "Không đào quá sâu vào chi tiết...", ex: "Without getting too deep into the weeds, the gist is that we use a hash ring." },
+
+  // 17. HANDLING INTERRUPTIONS
+  { cat: "Interruption", en: "Let me just finish this thought, then I'll address that.", vi: "Để tôi hoàn thành ý này, rồi tôi sẽ giải quyết điều đó.", ex: "Let me just finish this thought about the write path, then I'll address that question." },
+  { cat: "Interruption", en: "Great question — I was going to get there. To answer that first...", vi: "Câu hỏi hay — tôi định đến đó. Để trả lời trước...", ex: "Great question — I was going to get there. To answer that first: yes, we need idempotency." },
+  { cat: "Interruption", en: "You're right to point that out — let me address it now.", vi: "Bạn chỉ ra đúng — hãy để tôi giải quyết ngay.", ex: "You're right to point that out — let me address the failure scenario now." },
+  { cat: "Interruption", en: "I'll come back to that, but first let me complete the high-level picture.", vi: "Tôi sẽ quay lại điều đó, nhưng trước tiên hãy để tôi hoàn thiện bức tranh tổng quát.", ex: "I'll come back to that specific edge case, but first let me complete the high-level picture." },
+
+  // 18. DELIVERING BAD NEWS
+  { cat: "Bad News", en: "I want to be upfront about something...", vi: "Tôi muốn thẳng thắn về điều gì đó...", ex: "I want to be upfront about something — this feature is going to take longer than estimated." },
+  { cat: "Bad News", en: "We're seeing an issue with [X], and here's what we know so far...", vi: "Chúng tôi đang gặp vấn đề với [X], và đây là những gì chúng tôi biết cho đến nay...", ex: "We're seeing an issue with the payment service, and here's what we know so far." },
+  { cat: "Bad News", en: "The impact is [X], and we're working to [Y].", vi: "Tác động là [X], và chúng tôi đang làm [Y].", ex: "The impact is about 5% of users can't check out, and we're working to roll back." },
+  { cat: "Bad News", en: "Here's what happened, what we did, and how we'll prevent it.", vi: "Đây là những gì đã xảy ra, những gì chúng tôi đã làm, và cách chúng tôi sẽ ngăn chặn.", ex: "Here's a post-mortem: what happened, what we did to fix it, and how we'll prevent recurrence." },
+
+  // 19. WORKPLACE WRITING
+  { cat: "Writing", en: "Per our discussion, I'm following up on...", vi: "Theo cuộc thảo luận của chúng ta, tôi đang theo dõi về...", ex: "Per our discussion in today's meeting, I'm following up on the API migration timeline." },
+  { cat: "Writing", en: "Here's a quick update on...", vi: "Đây là cập nhật nhanh về...", ex: "Here's a quick update on the database migration — we're on track for Friday." },
+  { cat: "Writing", en: "I wanted to flag this early because...", vi: "Tôi muốn gắn cờ điều này sớm vì...", ex: "I wanted to flag this early because the dependency on Team X might delay us." },
+  { cat: "Writing", en: "Please let me know if you have questions or concerns.", vi: "Hãy cho tôi biết nếu bạn có câu hỏi hoặc lo ngại.", ex: "That's the summary — please let me know if you have questions or concerns." },
+
+  // 20. CONFIDENCE & OPENINGS
+  { cat: "Confidence", en: "I'm excited to talk about this — it's an area I've thought a lot about.", vi: "Tôi rất hào hứng để nói về điều này — đây là lĩnh vực tôi đã suy nghĩ nhiều.", ex: "I'm excited to talk about distributed systems — it's an area I've thought a lot about." },
+  { cat: "Confidence", en: "Based on my experience with...", vi: "Dựa trên kinh nghiệm của tôi với...", ex: "Based on my experience with high-traffic systems, I'd approach this differently." },
+  { cat: "Confidence", en: "I don't know the exact answer, but here's my reasoning...", vi: "Tôi không biết câu trả lời chính xác, nhưng đây là lý luận của tôi...", ex: "I don't know the exact number, but here's my reasoning for the estimate." },
+  { cat: "Confidence", en: "Let me structure my answer by first covering [X], then [Y].", vi: "Hãy để tôi cấu trúc câu trả lời của tôi bằng cách đầu tiên đề cập đến [X], sau đó [Y].", ex: "Let me structure my answer by first covering the data model, then the API design." },
+  { cat: "Confidence", en: "That's a great question — here's how I think about it.", vi: "Đó là câu hỏi hay — đây là cách tôi nghĩ về nó.", ex: "That's a great question — here's how I think about the consistency vs availability trade-off." }
+];
+
+const RESOURCES = [
+  {
+    category: "🗣️ Shadowing Models — luân phiên theo tuần",
+    items: [
+      { name: "ByteByteGo (Alex Xu)", desc: "Voice-over chậm nhất, rõ nhất. Bắt đầu từ đây nếu mới shadowing lần đầu. [Technical · Dễ]", phase: "Tuần 1", url: "https://www.youtube.com/@ByteByteGo" },
+      { name: "Hussein Nasser", desc: "Pace vừa, giải thích backend/networking/database chi tiết. Không native nhưng rất articulate. [Technical · Vừa]", phase: "Tuần lẻ", url: "https://www.youtube.com/@hnasr" },
+      { name: "Gergely Orosz — Pragmatic Engineer", desc: "Structure cực tốt, pace vừa, có podcast riêng. Tốt nhất cho workplace + technical mix. [Technical · Vừa]", phase: "Tuần lẻ", url: "https://newsletter.pragmaticengineer.com/podcast" },
+      { name: "The Changelog (Jerod Santo)", desc: "Conversational, có transcript đầy đủ trên web. Tốt để học natural workplace tone. [Conversational · Vừa]", phase: "Tuần chẵn", url: "https://changelog.com/podcast" },
+      { name: "Lex Fridman Podcast", desc: "Pace chậm nhất trong nhóm conversational, pause dài, dễ shadowing dù episode dài 2-4h — chỉ cần nghe 1 đoạn 20-30 phút. [Conversational · Dễ]", phase: "Tuần chẵn", url: "https://lexfridman.com/podcast" },
+      { name: "Acquired Podcast", desc: "American accent rất chuẩn, clear, storytelling + technical reasoning tốt. Dùng khi đã quen với 4 model trên. [Conversational · Khó hơn]", phase: "Tuần 9+", url: "https://www.acquired.fm" }
+    ]
+  },
+  {
+    category: "🎭 Storytelling Models — chỉ dùng cho STAR stories & behavioral",
+    items: [
+      { name: "Jim Rohn", desc: "Giọng trầm, không bao giờ hét, dùng pause dài trước điểm quan trọng để tạo trọng lượng. KHÔNG dùng kiểu nói này cho technical explanation — chỉ áp dụng vào storytelling và phần mở bài.", phase: "Day 12, 35, 76, 83", url: "https://www.youtube.com/results?search_query=jim+rohn+seminar" },
+      { name: "Simon Sinek", desc: "Pause kịch tính giống Rohn nhưng business-relevant hơn — mở đầu bằng tension, kết bài có insight rõ ràng. Tốt nhất cho leadership & ownership stories.", phase: "Day 24, 76, 83", url: "https://www.youtube.com/@simonsinek" }
+    ]
+  },
+  {
+    category: "🎧 Listening — System Design",
+    items: [
+      { name: "ByteByteGo YouTube", desc: "Animated system design concepts. Best for visual learners. Free.", phase: "Month 1–3", url: "https://www.youtube.com/@ByteByteGo" },
+      { name: "NeetCode System Design", desc: "Clear explanations with practice problems. Great for interview prep.", phase: "Month 1–2", url: "https://www.youtube.com/@NeetCode" },
+      { name: "Gaurav Sen YouTube", desc: "Deep technical walkthroughs of popular system designs. Free.", phase: "Month 1–2", url: "https://www.youtube.com/@gkcs" },
+      { name: "interviewing.io YouTube", desc: "Real mock interviews — watch actual candidates. Essential for modeling.", phase: "Month 1", url: "https://www.youtube.com/@interviewingio" }
+    ]
+  },
+  {
+    category: "🎙️ Podcasts",
+    items: [
+      { name: "Software Engineering Daily", desc: "30–60 min technical interviews. Has transcripts on website.", phase: "Month 1–3", url: "https://softwareengineeringdaily.com" },
+      { name: "Changelog Podcast", desc: "Developer-focused conversations. Transcript available on site.", phase: "Month 1–2", url: "https://changelog.com/podcast" },
+      { name: "Soft Skills Engineering", desc: "Engineering career conversations. Great for workplace language.", phase: "Month 2", url: "https://softskills.audio" },
+      { name: "Manager Tools", desc: "Management & communication best practices. Professional English.", phase: "Month 2–3", url: "https://www.manager-tools.com" }
+    ]
+  },
+  {
+    category: "📚 Reading — Technical",
+    items: [
+      { name: "ByteByteGo Blog (free)", desc: "Newsletter with system design topics. Read weekly.", phase: "Month 1–3", url: "https://blog.bytebytego.com" },
+      { name: "System Design Primer (GitHub)", desc: "Free, comprehensive. Donne Martin's guide. Must read.", phase: "Month 1", url: "https://github.com/donnemartin/system-design-primer" },
+      { name: "Martin Fowler Blog", desc: "Architecture patterns and software design. Excellent writing style.", phase: "Month 2–3", url: "https://martinfowler.com" },
+      { name: "High Scalability Blog", desc: "Real architecture case studies from top companies.", phase: "Month 2–3", url: "http://highscalability.com" }
+    ]
+  },
+  {
+    category: "🤖 Practice Tools",
+    items: [
+      { name: "Claude / ChatGPT", desc: "AI mock interviewer. Use prompts from daily tasks. Free.", phase: "Month 1–3", url: "https://claude.ai" },
+      { name: "Pramp.com", desc: "Free peer-to-peer mock interviews. Real people, real pressure.", phase: "Month 2–3", url: "https://www.pramp.com" },
+      { name: "interviewing.io", desc: "Anonymous technical interviews. Free practice available.", phase: "Month 3", url: "https://interviewing.io" },
+      { name: "YouGlish.com", desc: "Hear native speakers pronounce any word in context. Free.", phase: "Month 1–3", url: "https://youglish.com" }
+    ]
+  },
+  {
+    category: "✍️ Writing & Communication",
+    items: [
+      { name: "Hemingway App", desc: "Paste your writing — it grades clarity and suggests improvements.", phase: "Month 1–3", url: "https://hemingwayapp.com" },
+      { name: "Paul Graham Essays", desc: "Clear writing on startups and thinking. Model your writing style.", phase: "Month 1", url: "https://paulgraham.com/articles.html" },
+      { name: "Conventional Comments", desc: "Standard format for code review comments. Use this daily.", phase: "Month 2–3", url: "https://conventionalcomments.org" },
+      { name: "ADR GitHub (adr.github.io)", desc: "Architecture Decision Record templates. Practice technical writing.", phase: "Month 2", url: "https://adr.github.io" }
+    ]
+  },
+  {
+    category: "🎯 Interview Research",
+    items: [
+      { name: "Levels.fyi", desc: "Compensation data, interview guides by company. Essential for prep.", phase: "Month 3", url: "https://www.levels.fyi" },
+      { name: "Glassdoor Interview Reviews", desc: "Real interview questions by company. Research before applying.", phase: "Month 3", url: "https://www.glassdoor.com" },
+      { name: "Blind App", desc: "Anonymous tech employee community. Real salary & culture info.", phase: "Month 3", url: "https://www.teamblind.com" },
+      { name: "Amazon Leadership Principles", desc: "Behavioral framework used widely. Study even for non-Amazon.", phase: "Month 2–3", url: "https://www.amazon.jobs/content/en/our-workplace/leadership-principles" }
+    ]
+  }
+];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+
+function getState() {
+  try { return JSON.parse(localStorage.getItem('eng90_v2') || '{}'); }
+  catch { return {}; }
+}
+function setState(s) { localStorage.setItem('eng90_v2', JSON.stringify(s)); }
+function isDone(n) { return !!getState()[`d${n}`]; }
+function toggleDay(n) {
+  const s = getState(); s[`d${n}`] = !s[`d${n}`]; setState(s); updateProgress();
+}
+function resetProgress() {
+  if (confirm('Reset all progress? This cannot be undone.')) {
+    localStorage.removeItem('eng90_v2'); updateProgress();
+    document.querySelectorAll('.day-card.done').forEach(c => c.classList.remove('done'));
+  }
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+
+function renderDay(day, monthColor) {
+  const done = isDone(day.n);
+  const tagClass = { input: 'tag-input', output: 'tag-output', pressure: 'tag-pressure', review: 'tag-review' }[day.tag];
+  const tagLabel = { input: 'Input', output: 'Output', pressure: 'Pressure', review: 'Review' }[day.tag];
+
+  let inputHtml = day.input ? `
+    <div class="task-block">
+      <div class="task-block-label">📥 Input (20–30 min)</div>
+      ${day.input.map(t => `<div class="task-item"><span class="task-bullet">›</span><span>${t}</span></div>`).join('')}
+    </div>` : '';
+
+  let outputHtml = day.output ? `
+    <div class="task-block">
+      <div class="task-block-label">🎙️ Output / Practice (25–35 min)</div>
+      ${day.output.map(t => `<div class="task-item"><span class="task-bullet">›</span><span>${t}</span></div>`).join('')}
+    </div>` : '';
+
+  let promptHtml = day.prompt ? `
+    <div class="task-block">
+      <div class="task-block-label">🤖 AI Practice Prompt</div>
+      <button class="copy-btn" onclick="copyPrompt(this, ${day.n})">Copy</button>
+      <div class="prompt-box" id="prompt-${day.n}">${day.prompt}</div>
+    </div>` : '';
+
+  let resourceHtml = day.resources && day.resources.length ? `
+    <div class="task-block">
+      <div class="task-block-label">🔗 Resources</div>
+      <div>${day.resources.map(r => `<span class="resource-chip">📌 ${r}</span>`).join('')}</div>
+    </div>` : '';
+
+  return `
+    <div class="day-card${done ? ' done' : ''}" id="daycard-${day.n}">
+      <div class="day-header" onclick="toggleExpand(${day.n}, this)">
+        <div class="day-checkbox" onclick="event.stopPropagation(); markDone(${day.n})" title="Mark complete">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <polyline points="2,6 5,9 10,3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="day-num">Day ${day.n}</span>
+        <span class="day-title">${day.title}</span>
+        <span class="day-tag ${tagClass}">${tagLabel}</span>
+        <span class="day-expand">▾</span>
+      </div>
+      <div class="day-body">
+        ${inputHtml}${outputHtml}${promptHtml}${resourceHtml}
+      </div>
+    </div>`;
+}
+
+function renderMonth(containerId, monthData) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  let html = '';
+  monthData.forEach(week => {
+    html += `<div class="week-header"><span class="week-label">${week.week}</span><div class="week-line"></div></div>`;
+    week.days.forEach(d => { html += renderDay(d); });
+  });
+  el.innerHTML = html;
+}
+
+function renderSentences() {
+  const cats = [...new Set(SENTENCES.map(s => s.cat))];
+  const filtersEl = document.getElementById('sentence-filters');
+  filtersEl.innerHTML = `<button class="filter-btn active" onclick="filterSentences('all', this)">All (${SENTENCES.length})</button>` +
+    cats.map(c => {
+      const count = SENTENCES.filter(s => s.cat === c).length;
+      return `<button class="filter-btn" onclick="filterSentences('${c}', this)">${c} (${count})</button>`;
+    }).join('');
+  renderSentenceGrid('all');
+}
+
+function renderSentenceGrid(cat) {
+  const filtered = cat === 'all' ? SENTENCES : SENTENCES.filter(s => s.cat === cat);
+  const catColors = {
+    'Clarify': '#6c8fff', 'High-level': '#a78bfa', 'Trade-offs': '#f5a623',
+    'Deep Dive': '#2dd4bf', 'Summarize': '#3ecf8e', 'Transition': '#e05252',
+    'Think Aloud': '#f5a623', 'Behavioral': '#a78bfa', 'Workplace': '#6c8fff',
+    'Disagree': '#e05252', 'Handle Unknown': '#2dd4bf', 'Present': '#3ecf8e',
+    'Feedback': '#6c8fff', 'Negotiate': '#f5a623', 'Ask Interviewer': '#a78bfa',
+    'Explain': '#2dd4bf', 'Interruption': '#e05252', 'Bad News': '#f59e0b',
+    'Writing': '#6c8fff', 'Confidence': '#3ecf8e'
+  };
+  document.getElementById('sentence-grid').innerHTML = filtered.map((s, i) => `
+    <div class="sentence-card">
+      <div class="sentence-num">#${SENTENCES.indexOf(s) + 1}</div>
+      <div class="sentence-en">${s.en}</div>
+      <div class="sentence-vi">${s.vi}</div>
+      <div class="sentence-example">${s.ex}</div>
+      <span class="sentence-tag" style="background:${catColors[s.cat]}22;color:${catColors[s.cat]}">${s.cat}</span>
+    </div>`).join('');
+}
+
+function filterSentences(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSentenceGrid(cat);
+}
+
+function renderResources() {
+  const el = document.getElementById('resources-content');
+  el.innerHTML = RESOURCES.map(sec => `
+    <div class="resource-section">
+      <div class="resource-section-title">${sec.category}</div>
+      <div class="resource-grid">
+        ${sec.items.map(r => `
+          <a class="resource-card" href="${r.url}" target="_blank">
+            <div class="resource-card-top">
+              <div style="font-size:22px">${sec.category.split(' ')[0]}</div>
+              <div class="resource-card-name">${r.name}</div>
+            </div>
+            <div class="resource-card-desc">${r.desc}</div>
+            <div class="resource-card-phase" style="color:var(--text3)">${r.phase}</div>
+          </a>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function renderStreak() {
+  const bar = document.getElementById('streak-bar');
+  if (!bar) return;
+  let html = '';
+  for (let i = 1; i <= 90; i++) {
+    const done = isDone(i) ? ' done' : '';
+    html += `<div class="streak-day${done}" title="Day ${i}"></div>`;
+  }
+  bar.innerHTML = html;
+}
+
+// ─── INTERACTIONS ─────────────────────────────────────────────────────────────
+
+function toggleExpand(n, headerEl) {
+  const card = headerEl.closest('.day-card');
+  card.classList.toggle('open');
+}
+
+function markDone(n) {
+  toggleDay(n);
+  const card = document.getElementById(`daycard-${n}`);
+  if (card) card.classList.toggle('done', isDone(n));
+  renderStreak();
+}
+
+function copyPrompt(btn, n) {
+  const el = document.getElementById(`prompt-${n}`);
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+function updateProgress() {
+  let total = 0;
+  let m1 = 0, m2 = 0, m3 = 0;
+
+  MONTH1_DAYS.forEach(w => w.days.forEach(d => { if (isDone(d.n)) { total++; m1++; } }));
+  MONTH2_DAYS.forEach(w => w.days.forEach(d => { if (isDone(d.n)) { total++; m2++; } }));
+  MONTH3_DAYS.forEach(w => w.days.forEach(d => { if (isDone(d.n)) { total++; m3++; } }));
+
+  const pct = Math.round(total / 90 * 100);
+  const circ = 169.6;
+  const offset = circ - (circ * pct / 100);
+
+  const ring = document.getElementById('ring-progress');
+  if (ring) ring.style.strokeDashoffset = offset;
+
+  const pctEl = document.getElementById('ring-pct-text');
+  if (pctEl) pctEl.textContent = pct + '%';
+
+  const doneEl = document.getElementById('ring-done-text');
+  if (doneEl) doneEl.textContent = total + '/90';
+
+  const statDone = document.getElementById('stat-done');
+  if (statDone) statDone.textContent = total;
+
+  const statLeft = document.getElementById('stat-left');
+  if (statLeft) statLeft.textContent = (90 - total) + ' remaining';
+
+  const m1Days = MONTH1_DAYS.reduce((a, w) => a + w.days.length, 0);
+  const m2Days = MONTH2_DAYS.reduce((a, w) => a + w.days.length, 0);
+  const m3Days = MONTH3_DAYS.reduce((a, w) => a + w.days.length, 0);
+
+  const nm1 = document.getElementById('nav-m1');
+  const nm2 = document.getElementById('nav-m2');
+  const nm3 = document.getElementById('nav-m3');
+  if (nm1) nm1.textContent = `${m1}/${m1Days}`;
+  if (nm2) nm2.textContent = `${m2}/${m2Days}`;
+  if (nm3) nm3.textContent = `${m3}/${m3Days}`;
+
+  renderStreak();
+}
+
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const tab = document.getElementById(`tab-${id}`);
+  if (tab) tab.classList.add('active');
+  const btns = document.querySelectorAll('.nav-item');
+  btns.forEach(b => { if (b.getAttribute('onclick') && b.getAttribute('onclick').includes(id)) b.classList.add('active'); });
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+
+renderMonth('days-month1', MONTH1_DAYS);
+renderMonth('days-month2', MONTH2_DAYS);
+renderMonth('days-month3', MONTH3_DAYS);
+renderSentences();
+renderResources();
+updateProgress();
+</script>
+</body>
+</html>
