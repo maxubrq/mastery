@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rust 90 — Strong Middle Roadmap</title>
+<style>
+:root{
+  --bg:#16140f; --bg-soft:#1d1a14; --panel:#211d16; --panel-2:#272219;
+  --line:#3a3327; --line-soft:#2a261d;
+  --text:#ece5d6; --text-dim:#a89e8a; --text-faint:#6e6555;
+  --rust:#d4682e; --rust-soft:#3d2a1c; --rust-glow:#e8853f;
+  --p1:#7f9a72; --p1-soft:#23291f;
+  --p2:#5b8fa8; --p2-soft:#1c252a;
+  --p3:#c9774a; --p3-soft:#2b211a;
+  --p4:#b8678f; --p4-soft:#2a2026;
+  --done:#7f9a72; --font-serif:Georgia,'Iowan Old Style','Palatino Linotype',serif;
+  --font-mono:'SF Mono',Consolas,'Liberation Mono',Menlo,monospace;
+  --font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:var(--font-sans); font-size:15px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.app{max-width:920px;margin:0 auto;padding:0 20px 80px;}
+
+/* ---------- Header ---------- */
+.header{padding:36px 0 24px;border-bottom:1px solid var(--line);}
+.eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rust-glow);margin:0 0 10px;}
+.h1{font-family:var(--font-serif);font-size:32px;font-weight:400;margin:0 0 8px;color:var(--text);}
+.h1 em{color:var(--rust-glow);font-style:normal;}
+.subhead{color:var(--text-dim);font-size:14px;margin:0;max-width:560px;}
+
+/* ---------- Stats bar ---------- */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:24px 0;border-radius:4px;overflow:hidden;}
+.stat{background:var(--panel);padding:16px 14px;}
+.stat-num{font-family:var(--font-serif);font-size:26px;color:var(--text);line-height:1;}
+.stat-label{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.06em;margin-top:6px;}
+
+/* ---------- Phase progress ---------- */
+.phasebar{display:flex;gap:3px;margin:20px 0 28px;}
+.phaseseg{flex:1;height:6px;border-radius:2px;background:var(--line-soft);position:relative;overflow:hidden;}
+.phaseseg-fill{height:100%;border-radius:2px;transition:width .4s ease;}
+.phase-labels{display:flex;gap:3px;margin-top:6px;}
+.phase-labels span{flex:1;font-size:10.5px;color:var(--text-faint);font-family:var(--font-mono);text-align:left;}
+
+/* ---------- Tabs ---------- */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:24px;}
+.tab{background:none;border:none;color:var(--text-dim);font-family:var(--font-sans);font-size:13.5px;padding:10px 14px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--rust-glow);border-bottom-color:var(--rust);}
+
+/* ---------- Filters (today view) ---------- */
+.filters{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.filter-btn{background:var(--panel);border:1px solid var(--line);color:var(--text-dim);font-size:12px;padding:6px 12px;border-radius:14px;cursor:pointer;font-family:var(--font-mono);}
+.filter-btn:hover{border-color:var(--text-faint);}
+.filter-btn.active{background:var(--rust-soft);border-color:var(--rust);color:var(--rust-glow);}
+
+/* ---------- Day card ---------- */
+.daylist{display:flex;flex-direction:column;gap:10px;}
+.daycard{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px 18px;position:relative;}
+.daycard.done{opacity:0.55;}
+.daycard.milestone{border-color:var(--rust);background:linear-gradient(180deg,var(--rust-soft),var(--panel) 40%);}
+.daycard.today{border-color:var(--rust-glow);box-shadow:0 0 0 1px var(--rust-glow) inset;}
+
+.daycard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.daycard-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.daynum{font-family:var(--font-mono);font-size:12px;color:var(--text-faint);min-width:46px;}
+.daytype{font-family:var(--font-mono);font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;padding:2px 8px;border-radius:10px;}
+.daytype.concept{background:var(--p2-soft);color:var(--p2);}
+.daytype.build{background:var(--p1-soft);color:var(--p1);}
+.daytype.lab{background:var(--p3-soft);color:var(--p3);}
+.daytype.light{background:var(--line-soft);color:var(--text-faint);}
+.dayeffort{font-size:11px;color:var(--text-faint);font-family:var(--font-mono);}
+.daytitle{font-family:var(--font-serif);font-size:18px;color:var(--text);margin:10px 0 4px;}
+.daycard.done .daytitle{text-decoration:line-through;text-decoration-color:var(--text-faint);}
+
+.checkbtn{appearance:none;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--bg);}
+.checkbtn.checked{background:var(--done);border-color:var(--done);}
+.checkbtn svg{width:13px;height:13px;display:none;}
+.checkbtn.checked svg{display:block;}
+
+.tasklist{margin:12px 0 0;padding:0;list-style:none;}
+.taskitem{display:flex;align-items:flex-start;gap:9px;padding:5px 0;font-size:13.5px;color:var(--text-dim);}
+.taskitem input[type=checkbox]{margin-top:3px;width:14px;height:14px;accent-color:var(--rust);flex-shrink:0;cursor:pointer;}
+.taskitem.checked label{color:var(--text-faint);text-decoration:line-through;}
+.taskitem label{cursor:pointer;}
+
+.daynotes{margin-top:10px;font-size:13px;color:var(--p3);font-style:italic;border-left:2px solid var(--p3-soft);padding-left:10px;}
+.dayres{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;}
+.dayres a{font-size:12px;color:var(--p2);text-decoration:none;border:1px solid var(--p2-soft);padding:3px 9px;border-radius:10px;}
+.dayres a:hover{border-color:var(--p2);}
+
+.notefield{width:100%;margin-top:12px;background:var(--bg-soft);border:1px solid var(--line-soft);border-radius:4px;color:var(--text-dim);font-size:13px;font-family:var(--font-sans);padding:8px 10px;resize:vertical;min-height:36px;}
+.notefield::placeholder{color:var(--text-faint);}
+
+.milestone-tag{font-family:var(--font-mono);font-size:10.5px;color:var(--rust-glow);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;}
+
+/* ---------- Milestone view ---------- */
+.mscard{background:var(--panel);border:1px solid var(--rust);border-radius:6px;padding:22px 24px;margin-bottom:18px;background:linear-gradient(180deg,var(--rust-soft),var(--panel) 55%);}
+.mscard-day{font-family:var(--font-mono);font-size:11px;color:var(--rust-glow);text-transform:uppercase;letter-spacing:0.08em;}
+.mscard-title{font-family:var(--font-serif);font-size:21px;margin:6px 0 14px;}
+.mscriteria{list-style:none;margin:0;padding:0;}
+.mscriteria li{display:flex;gap:9px;align-items:flex-start;padding:6px 0;font-size:14px;color:var(--text-dim);}
+.mscriteria input{margin-top:3px;width:14px;height:14px;accent-color:var(--rust);cursor:pointer;}
+.mscriteria li.checked label{color:var(--text-faint);text-decoration:line-through;}
+
+/* ---------- Resources view ---------- */
+.rescat{margin-bottom:26px;}
+.rescat h3{font-family:var(--font-serif);font-size:16px;color:var(--rust-glow);margin:0 0 10px;font-weight:400;}
+.reslist{list-style:none;margin:0;padding:0;}
+.reslist li{padding:7px 0;border-bottom:1px solid var(--line-soft);font-size:13.5px;}
+.reslist a{color:var(--p2);text-decoration:none;}
+.reslist a:hover{text-decoration:underline;}
+.reslist .restag{color:var(--text-faint);font-size:11.5px;font-family:var(--font-mono);margin-left:8px;}
+
+/* ---------- Footer controls ---------- */
+.controls{display:flex;gap:10px;margin-top:36px;padding-top:20px;border-top:1px solid var(--line);}
+.ctrlbtn{background:var(--panel);border:1px solid var(--line);color:var(--text-dim);font-size:12.5px;padding:8px 14px;border-radius:5px;cursor:pointer;font-family:var(--font-sans);}
+.ctrlbtn:hover{border-color:var(--text-faint);color:var(--text);}
+.ctrlbtn.danger:hover{border-color:#a85d5d;color:#d98c8c;}
+input[type=file]{display:none;}
+
+.emptystate{text-align:center;padding:60px 20px;color:var(--text-faint);}
+.emptystate .ti{font-size:32px;margin-bottom:12px;display:block;}
+
+@media (max-width:640px){
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .h1{font-size:26px;}
+  .phase-labels span{font-size:9px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="header">
+    <p class="eyebrow">Track cá nhân &middot; 90 ngày &middot; Production-grade</p>
+    <h1 class="h1">Rust <em>Strong Middle</em> Roadmap</h1>
+    <p class="subhead">Từ ownership reflexes đến distributed KV store với Raft thật. Capstone xuyên suốt, không tutorial rời rạc.</p>
+  </div>
+
+  <div class="stats" id="statsBar"></div>
+  <div class="phasebar" id="phaseBar"></div>
+  <div class="phase-labels" id="phaseLabels"></div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="today">Hôm nay</button>
+    <button class="tab" data-tab="all">Toàn bộ 90 ngày</button>
+    <button class="tab" data-tab="milestones">Milestones</button>
+    <button class="tab" data-tab="resources">Resources</button>
+  </div>
+
+  <div id="viewToday"></div>
+  <div id="viewAll" style="display:none;"></div>
+  <div id="viewMilestones" style="display:none;"></div>
+  <div id="viewResources" style="display:none;"></div>
+
+  <div class="controls">
+    <button class="ctrlbtn" id="exportBtn">Xuất dữ liệu (JSON)</button>
+    <button class="ctrlbtn" id="importBtn">Nhập dữ liệu</button>
+    <input type="file" id="importFile" accept=".json">
+    <button class="ctrlbtn danger" id="resetBtn">Reset tiến trình</button>
+  </div>
+
+</div>
+
+<script>
+const PHASES = [{"id":1,"name":"Ownership Reflexes","range":[1,18],"color":"purple","goal":"Borrow checker stops being confusing — becomes just slower."},{"id":2,"name":"Idiomatic Rust & Traits","range":[19,40],"color":"teal","goal":"Write Rust that looks like Rust, not translated Go."},{"id":3,"name":"Concurrency & Async","range":[41,65],"color":"coral","goal":"The hardest phase. Ties directly into distributed systems track."},{"id":4,"name":"Production Depth & Capstone","range":[66,90],"color":"pink","goal":"Raft consensus, observability, performance. The proof-of-work."}];
+const MILESTONES = [{"day":18,"title":"Milestone 1 — KV store v0.1","phase":1,"criteria":["Compiles clean, passes all tests","Zero .clone() calls used just to dodge the borrow checker","Can explain every lifetime annotation in the code out loud","Get/set/delete works via CLI on in-memory HashMap"]},{"day":40,"title":"Milestone 2 — KV store v0.2","phase":2,"criteria":["Durable: survives process restart via WAL","StorageEngine trait with 2 working implementations","Test coverage on all core read/write paths","Can defend every Box<dyn Trait> vs generic choice in the code"]},{"day":65,"title":"Milestone 3 — KV store v0.3","phase":3,"criteria":["Async TCP server handling concurrent clients","Basic leader-follower replication works over the network","Survives a concurrent load test with zero data races","Send/Sync bounds understood, not just satisfied by accident"]},{"day":90,"title":"Capstone — Distributed KV store with Raft","phase":4,"criteria":["Leader election works across a simulated multi-node cluster","Log replication (AppendEntries) implemented and correct","Survives node crash + restart without losing committed entries","Has structured logging and at least one benchmark with real numbers","README + architecture doc exist, written for a stranger to read"]}];
+const DAYS = [{"d":1,"phase":1,"type":"concept","effort":"light","title":"Setup + cargo + first program","tasks":["Install rustup, cargo, rust-analyzer in your editor","Run `cargo new kv-store --bin`, commit empty skeleton to git","Read \"Getting Started\" + \"Programming a Guessing Game\" in the Rust Book","Write a throwaway program: read a number, print its factorial"],"resources":[["The Rust Book ch.1-2","https://doc.rust-lang.org/book/ch01-00-getting-started.html"]],"notes":"This is the seed repo for the entire 90 days. Don't skip the git commit."},{"d":2,"phase":1,"type":"concept","effort":"deep","title":"Stack vs heap, move semantics","tasks":["Read Rust Book ch.4.1 (Ownership)","Write 5 tiny snippets that intentionally fail to move/borrow correctly — read every compiler error fully before fixing","Compare mentally to Go: GC walks a graph at runtime; Rust proves ownership at compile time. Write 3 sentences in your own words on this difference"],"resources":[["The Rust Book ch.4.1","https://doc.rust-lang.org/book/ch04-01-what-is-ownership.html"]],"notes":"The compiler errors ARE the lesson. Do not look up fixes until you've tried to reason about each one yourself for 5 min."},{"d":3,"phase":1,"type":"lab","effort":"deep","title":"Ownership lab — break it on purpose","tasks":["Exercise: write a function that takes a String, modifies it, and tries to use the original after — explain why it fails","Exercise: fix it 3 different ways (clone, borrow, return ownership) — list the tradeoff of each","Do Rustlings exercises: move_semantics1 through move_semantics6"],"resources":[["Rustlings","https://github.com/rust-lang/rustlings"]],"notes":"Goal today: you can predict a move/borrow error before the compiler tells you."},{"d":4,"phase":1,"type":"concept","effort":"deep","title":"References and borrowing","tasks":["Read Rust Book ch.4.2 (References and Borrowing)","Write out the 3 borrowing rules from memory, then check against the book","Write a function with 2 simultaneous immutable borrows + 1 that tries a mutable borrow alongside — watch it fail, understand why"],"resources":[["The Rust Book ch.4.2","https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html"]]},{"d":5,"phase":1,"type":"build","effort":"deep","title":"KV store skeleton — first real borrow decisions","tasks":["In kv-store, define a `Store` struct wrapping a HashMap<String,String>","Write get(&self), set(&mut self,...), delete(&mut self,...) methods","Hit a real borrow checker conflict (e.g. iterating while mutating) — solve it without clone() first if possible"],"resources":[["The Rust Book ch.8.3 (HashMap)","https://doc.rust-lang.org/book/ch08-03-hash-maps.html"]],"notes":"First time the project teaches you something the exercises couldn't."},{"d":6,"phase":1,"type":"lab","effort":"light","title":"Slices + string vs &str","tasks":["Read Rust Book ch.4.3 (Slices)","Write 5 functions that take &str instead of String and explain why each should","Rustlings: slices1-3, strings1-4"],"resources":[["Rust Book ch.4.3","https://doc.rust-lang.org/book/ch04-03-slices.html"]]},{"d":7,"phase":1,"type":"concept","effort":"deep","title":"Structs + methods","tasks":["Read Rust Book ch.5 (Structs)","Add an impl block to Store with a `len()` and `is_empty()` method","Practice: derive Debug, PartialEq on a small struct and explain what each derive actually generates"],"resources":[["The Rust Book ch.5","https://doc.rust-lang.org/book/ch05-00-structs.html"]]},{"d":8,"phase":1,"type":"concept","effort":"deep","title":"Enums + pattern matching","tasks":["Read Rust Book ch.6 (Enums and Pattern Matching)","Define an enum Command { Get(String), Set(String,String), Delete(String) }","Write a match that handles all variants, then comment out one arm and read the exhaustiveness error"],"resources":[["The Rust Book ch.6","https://doc.rust-lang.org/book/ch06-00-enums.html"]],"notes":"Compare to TS union types — the mapping is close but match's exhaustiveness check is stricter than anything you've had in TS."},{"d":9,"phase":1,"type":"build","effort":"deep","title":"CLI parsing with Command enum","tasks":["Wire stdin input into the Command enum via parsing","Connect Command variants to Store methods — get/set/delete work end-to-end from a REPL loop","Handle malformed input without panicking (return a Result, don't unwrap blindly)"],"resources":[],"notes":"By end of today the KV store is usable interactively, even if fragile."},{"d":10,"phase":1,"type":"concept","effort":"deep","title":"Option and Result properly","tasks":["Read Rust Book ch.9 (Error Handling) fully","Replace any unwrap() in your CLI loop with proper match or ? handling","Write your own function returning Result<T, String> and propagate it with ?"],"resources":[["The Rust Book ch.9","https://doc.rust-lang.org/book/ch09-00-error-handling.html"]],"notes":"Go's `if err != nil` becomes `?` — this should feel familiar, just more enforced."},{"d":11,"phase":1,"type":"lab","effort":"light","title":"Option/Result lab","tasks":["Rustlings: options1-3, errors1-6","Write 3 functions chaining .map(), .and_then(), .unwrap_or() on Option<T> without any if-let"],"resources":[["Rustlings","https://github.com/rust-lang/rustlings"]]},{"d":12,"phase":1,"type":"concept","effort":"deep","title":"Lifetimes — explicit syntax","tasks":["Read Rust Book ch.10.3 (Lifetimes)","Write a function signature that needs an explicit lifetime annotation, then explain in your own words why the compiler can't infer it","Write a struct that holds a &str reference and add the lifetime parameter it requires"],"resources":[["The Rust Book ch.10.3","https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html"]],"notes":"This is usually the single hardest concept in the book. Budget extra time if it doesn't click in one sitting — that's normal, not a signal you're behind."},{"d":13,"phase":1,"type":"lab","effort":"deep","title":"Lifetimes lab + lifetime elision","tasks":["Rustlings: lifetimes1-3","Read about lifetime elision rules — figure out why most functions don't need explicit lifetimes","Find 3 examples in the standard library docs (e.g. str methods) using explicit lifetimes and explain each"],"resources":[["Lifetime elision — Rust reference","https://doc.rust-lang.org/reference/lifetime-elision.html"]]},{"d":14,"phase":1,"type":"concept","effort":"light","title":"Vec deep dive + iterators intro","tasks":["Read Rust Book ch.8.1 (Vectors) and ch.13.1-13.2 (Iterators intro)","Rewrite a for-loop in your CLI as an iterator chain (.iter().filter().map())","Note 3 places where Rust iterators feel like JS array methods, and 1 place they don't (laziness)"],"resources":[["The Rust Book ch.13","https://doc.rust-lang.org/book/ch13-00-functional-features.html"]]},{"d":15,"phase":1,"type":"build","effort":"deep","title":"Iterators applied to the KV store","tasks":["Add a `keys()` and `values()` method to Store returning iterators, not Vecs, where possible","Add a simple `scan(prefix: &str)` method using iterator chains","Benchmark mentally: where would collecting early cost you vs staying lazy"],"resources":[]},{"d":16,"phase":1,"type":"concept","effort":"deep","title":"Real error types (thiserror)","tasks":["Add thiserror crate, define a StoreError enum replacing the String errors from day 10","Update all Result<T, String> in the codebase to Result<T, StoreError>","Read why anyhow vs thiserror exist for different use cases (library vs application errors)"],"resources":[["thiserror docs","https://docs.rs/thiserror/latest/thiserror/"],["anyhow docs","https://docs.rs/anyhow/latest/anyhow/"]]},{"d":17,"phase":1,"type":"build","effort":"deep","title":"KV store v0.1 — cleanup pass","tasks":["Re-read the entire codebase top to bottom, list every clone() and justify or remove each one","Add doc comments (///) to every public function","Write 5 unit tests covering get/set/delete/scan happy paths"],"resources":[]},{"d":18,"phase":1,"type":"lab","effort":"deep","title":"MILESTONE 1 — review and lock in","tasks":["Run through Milestone 1 criteria checklist (see milestones tab)","Write a 1-paragraph retro: what borrow checker error confused you most this phase, and why it makes sense now","Tag the commit v0.1 in git"],"resources":[],"isMilestone":18},{"d":19,"phase":2,"type":"concept","effort":"deep","title":"Traits — the basics","tasks":["Read Rust Book ch.10.2 (Traits)","Define a trait Greet with a default method, implement it for 2 different structs","Compare explicitly to a TS interface: what a Rust trait can do that a TS interface can't (default methods, blanket impls)"],"resources":[["The Rust Book ch.10.2","https://doc.rust-lang.org/book/ch10-02-traits.html"]]},{"d":20,"phase":2,"type":"concept","effort":"deep","title":"Trait objects vs generics","tasks":["Read about dyn Trait vs impl Trait vs generic <T: Trait>","Write the same function 3 ways: generic, impl Trait param, Box<dyn Trait> param — compare compiled behavior conceptually (monomorphization vs dynamic dispatch)","Write down your own rule of thumb for when you'd reach for each — this directly answers a question you asked Claude before"],"resources":[["Rust Book ch.17.2 (Trait objects)","https://doc.rust-lang.org/book/ch17-02-trait-objects.html"]],"notes":"This is one of the most practically important days in the whole roadmap for writing idiomatic Rust."},{"d":21,"phase":2,"type":"lab","effort":"light","title":"Trait lab","tasks":["Rustlings: traits1-5","Implement a trait for a built-in type (e.g. implement a custom trait for Vec<i32>) to see orphan rule limits in practice"],"resources":[["Rustlings","https://github.com/rust-lang/rustlings"]]},{"d":22,"phase":2,"type":"concept","effort":"deep","title":"Generics + trait bounds","tasks":["Read Rust Book ch.10.1 (Generic Data Types)","Write a generic function with a trait bound using both syntax forms: <T: Trait> and where clause","Refactor one KV store function to be generic over key/value types instead of hardcoded String"],"resources":[["The Rust Book ch.10.1","https://doc.rust-lang.org/book/ch10-01-syntax.html"]]},{"d":23,"phase":2,"type":"concept","effort":"deep","title":"Associated types","tasks":["Read about associated types using the Iterator trait as the canonical example","Write a tiny custom iterator (implement Iterator for a struct) with an associated Item type","Explain in your own words why Iterator uses an associated type instead of a generic parameter"],"resources":[["Rust Book ch.19.3 (Advanced traits)","https://doc.rust-lang.org/book/ch19-03-advanced-traits.html"]]},{"d":24,"phase":2,"type":"lab","effort":"deep","title":"Generics + traits lab","tasks":["Rustlings: generics1-3","Write a generic Cache<K,V> wrapper struct with insert/get, bounded by Eq + Hash on K"],"resources":[]},{"d":25,"phase":2,"type":"concept","effort":"light","title":"Module system","tasks":["Read Rust Book ch.7 (Packages, Crates, Modules)","Split kv-store into modules: store, error, cli, command — one file each","Get pub/pub(crate)/private visibility right on every item"],"resources":[["The Rust Book ch.7","https://doc.rust-lang.org/book/ch07-00-managing-growing-projects-with-packages-crates-and-modules.html"]]},{"d":26,"phase":2,"type":"build","effort":"deep","title":"Restructure KV store as a real crate","tasks":["Separate into lib.rs + bin/main.rs so the store logic is testable as a library","Re-run all tests after the restructure, fix any visibility breaks","Add a workspace Cargo.toml if it feels natural (optional, only if comfortable)"],"resources":[]},{"d":27,"phase":2,"type":"lab","effort":"light","title":"Module lab","tasks":["Read about re-exports (pub use) and write a clean public API surface for your lib.rs","Sketch (on paper or in README) the module dependency graph of your own crate"],"resources":[]},{"d":28,"phase":2,"type":"concept","effort":"deep","title":"Smart pointers — Box, Rc","tasks":["Read Rust Book ch.15.1 (Box) and ch.15.4 (Rc)","Write a small linked-list-like structure using Box<T> to see why it's needed (recursive types)","Write a small example with Rc<T> showing shared ownership + reference counting, print the count at each step"],"resources":[["The Rust Book ch.15","https://doc.rust-lang.org/book/ch15-00-smart-pointers.html"]]},{"d":29,"phase":2,"type":"concept","effort":"deep","title":"RefCell, Cell, interior mutability","tasks":["Read Rust Book ch.15.5 (RefCell)","Write an example that would fail to compile with a plain struct field but works with RefCell<T> — explain the runtime-vs-compile-time borrow check tradeoff","Write down 3 real signs that reaching for Rc<RefCell<T>> is a design smell vs a legitimate choice"],"resources":[["The Rust Book ch.15.5","https://doc.rust-lang.org/book/ch15-05-interior-mutability.html"]],"notes":"You named this exact concern when we first talked about Rust mastery. Today is the direct answer."},{"d":30,"phase":2,"type":"lab","effort":"deep","title":"Smart pointers lab","tasks":["Rustlings: box1, rc1, arc1 (if present), cell type exercises","Refactor: find anywhere in your KV store you'd be tempted to use Rc<RefCell<>> and decide deliberately whether it belongs"],"resources":[]},{"d":31,"phase":2,"type":"concept","effort":"deep","title":"File I/O + serde basics","tasks":["Read std::fs and std::io basics — File, BufReader, BufWriter","Add serde + serde_json, derive Serialize/Deserialize on a small struct, round-trip it to a file","Decide on a simple on-disk format for KV store entries (line-delimited JSON is fine)"],"resources":[["serde docs","https://serde.rs/"]]},{"d":32,"phase":2,"type":"build","effort":"deep","title":"Write-ahead log (WAL) — part 1","tasks":["Design: every Set/Delete appends an entry to an append-only log file before applying in-memory","Implement append-only writer using BufWriter, fsync on write (std::fs::File::sync_all)","Write a test: kill the process mid-way (simulate), confirm log file has the entries written so far"],"resources":[],"notes":"This is the first real systems concept tying directly into your distributed systems track (durability)."},{"d":33,"phase":2,"type":"build","effort":"deep","title":"WAL — part 2: replay on startup","tasks":["On Store::new(), read the WAL file from the start and replay all entries into the HashMap","Test: write 5 entries, restart the process (in test, drop and recreate Store), confirm state recovered","Handle a truncated/corrupt last line gracefully instead of panicking"],"resources":[],"notes":"KV store now survives a restart. This is real durability, not toy code."},{"d":34,"phase":2,"type":"concept","effort":"light","title":"Testing in Rust — unit + integration","tasks":["Read Rust Book ch.11 (Testing)","Add a tests/ directory with an integration test that drives the CLI end-to-end","Add #[should_panic] and Result-returning test examples to see both styles"],"resources":[["The Rust Book ch.11","https://doc.rust-lang.org/book/ch11-00-testing.html"]]},{"d":35,"phase":2,"type":"lab","effort":"deep","title":"Property-based testing with proptest","tasks":["Add proptest crate","Write one property test: for any sequence of set/get operations, the final state matches a reference HashMap model","Run it, intentionally break the store logic, confirm proptest finds the failing case and shrinks it"],"resources":[["proptest book","https://altsysrq.github.io/proptest-book/intro.html"]],"notes":"This is a genuinely senior-level testing technique most engineers never use. Worth the extra time today."},{"d":36,"phase":2,"type":"build","effort":"light","title":"Test coverage cleanup","tasks":["List every public function in the crate, confirm each has at least one test","Fix any test gaps found","Run `cargo test` and `cargo clippy` — fix every clippy warning, understand why each one fired"],"resources":[]},{"d":37,"phase":2,"type":"concept","effort":"deep","title":"Designing the StorageEngine trait","tasks":["Define trait StorageEngine { fn get(&self,&str)->Option<String>; fn set(...); fn delete(...); }","Decide: should methods take &mut self or use interior mutability — justify your choice in a comment","Sketch (don't yet implement) 2 backends this trait will support: in-memory, file-backed"],"resources":[]},{"d":38,"phase":2,"type":"build","effort":"deep","title":"Implement StorageEngine — in-memory backend","tasks":["Implement StorageEngine for your existing HashMap-based Store","Make Store generic over any StorageEngine, or have CLI hold Box<dyn StorageEngine>, your deliberate choice from day 20","Re-run all existing tests against the trait-based interface"],"resources":[]},{"d":39,"phase":2,"type":"build","effort":"deep","title":"Implement StorageEngine — file-backed backend","tasks":["Implement a second StorageEngine backed directly by the WAL + an on-disk index (can be simple, e.g. read full file on get for now)","Write a test that swaps backends and confirms identical behavior through the trait interface","Note where performance differs between the two — no optimization yet, just observation"],"resources":[]},{"d":40,"phase":2,"type":"lab","effort":"deep","title":"MILESTONE 2 — review and lock in","tasks":["Run through Milestone 2 criteria checklist","Write a 1-paragraph retro: which trait design decision are you least sure about, and why","Tag the commit v0.2 in git"],"resources":[],"isMilestone":40},{"d":41,"phase":3,"type":"concept","effort":"deep","title":"Fearless concurrency — the model","tasks":["Read Rust Book ch.16.1 (Threads)","Read about Send and Sync from first principles — what each marker trait actually promises","Write down, using your distributed systems vocabulary, why Send/Sync let the compiler catch data races that Go's race detector only catches at runtime"],"resources":[["The Rust Book ch.16","https://doc.rust-lang.org/book/ch16-00-concurrency.html"]],"notes":"This is where your distributed systems track theory and Rust converge directly."},{"d":42,"phase":3,"type":"lab","effort":"deep","title":"Threads lab","tasks":["Write a program spawning 4 threads incrementing a shared counter without synchronization — observe (or reason about) the race","Fix it with Mutex<i32>, then with Arc<Mutex<i32>> across actual thread boundaries","Rustlings: threads1-3"],"resources":[["Rustlings","https://github.com/rust-lang/rustlings"]]},{"d":43,"phase":3,"type":"concept","effort":"light","title":"Channels (mpsc)","tasks":["Read Rust Book ch.16.2 (Message Passing)","Write a producer/consumer example using std::sync::mpsc","Compare to channels you've used conceptually in Go — note differences in ownership semantics (sending moves the value)"],"resources":[["The Rust Book ch.16.2","https://doc.rust-lang.org/book/ch16-02-message-passing.html"]]},{"d":44,"phase":3,"type":"build","effort":"deep","title":"Thread-safe Store wrapper","tasks":["Wrap your Store in Arc<Mutex<Store>> (or RwLock if reads should be concurrent)","Spawn multiple threads doing concurrent get/set against the same store, write a stress test","Decide and justify: Mutex or RwLock for this workload, in a comment"],"resources":[]},{"d":45,"phase":3,"type":"lab","effort":"deep","title":"Lock granularity experiment","tasks":["Benchmark current single-lock store under concurrent load (use std::time::Instant manually, no need for criterion yet)","Try sharding the HashMap into N locked buckets by key hash, re-benchmark","Write down the actual numbers — this is your first real concurrency performance data point"],"resources":[]},{"d":46,"phase":3,"type":"concept","effort":"light","title":"RwLock + when message passing beats locks","tasks":["Read about RwLock semantics specifically (reader starvation risk)","Read a short case for actor-style message passing over shared-state locking in some designs","Write 2 sentences on which model fits the KV store's access pattern better and why"],"resources":[]},{"d":47,"phase":3,"type":"concept","effort":"deep","title":"Async fundamentals — futures","tasks":["Read async-book ch.1-2 (Why Async, the Future trait)","Write a minimal hand-rolled Future implementation (even a trivial always-ready one) to see the trait shape","Explain in your own words: why is async different from spawning an OS thread"],"resources":[["async-book ch.1-2","https://rust-lang.github.io/async-book/01_getting_started/01_chapter.html"]],"notes":"Budget extra time here — this is the second hardest concept after lifetimes, and the book agrees it's subtle."},{"d":48,"phase":3,"type":"concept","effort":"deep","title":"Executors + Pin (just enough)","tasks":["Read async-book ch.2.2-2.3 (executors) at a conceptual level — you don't need to write your own executor","Read just enough about Pin to know why self-referential futures need it — goal is recognition, not mastery","Write down: what tokio actually gives you that bare async/await syntax doesn't"],"resources":[["async-book ch.2","https://rust-lang.github.io/async-book/02_execution/01_chapter.html"]]},{"d":49,"phase":3,"type":"lab","effort":"light","title":"First tokio program","tasks":["Add tokio with full features, write a #[tokio::main] hello-world async program","Spawn 2 async tasks with tokio::spawn that both sleep and print, observe interleaving","Read tokio.rs tutorial intro page"],"resources":[["tokio tutorial","https://tokio.rs/tokio/tutorial"]]},{"d":50,"phase":3,"type":"concept","effort":"deep","title":"Tokio runtime + tasks deeper","tasks":["Read tokio tutorial: Spawning, Shared State pages","Understand the blocking-in-async pitfall — write an example that blocks the runtime badly, then fix it with spawn_blocking","Note 3 common tokio mistakes from the tutorial's own warnings"],"resources":[["tokio tutorial — shared state","https://tokio.rs/tokio/tutorial/shared-state"]]},{"d":51,"phase":3,"type":"lab","effort":"deep","title":"Async channels + select","tasks":["Replace your std::sync::mpsc example with tokio::sync::mpsc","Try tokio::select! with two futures racing (e.g. a timeout vs a channel receive)","Write down when you'd reach for select! in a real server (timeouts, cancellation)"],"resources":[["tokio tutorial — channels","https://tokio.rs/tokio/tutorial/channels"]]},{"d":52,"phase":3,"type":"build","effort":"deep","title":"Design the network protocol","tasks":["Design a minimal text protocol for the KV store (e.g. \"SET key value\\n\", \"GET key\\n\", \"OK\\n\", \"ERR msg\\n\")","Write it down as a short spec in the README — this is the protocol the next several days implement","Decide: line-delimited text (simple, debuggable) vs a binary framing — justify your choice"],"resources":[]},{"d":53,"phase":3,"type":"build","effort":"deep","title":"TCP server — part 1: accept connections","tasks":["Use tokio::net::TcpListener to accept connections, spawn a task per connection","Echo raw bytes back first, just to prove the plumbing works","Test manually with `nc localhost <port>`"],"resources":[["tokio tutorial — I/O","https://tokio.rs/tokio/tutorial/io"]]},{"d":54,"phase":3,"type":"build","effort":"deep","title":"TCP server — part 2: wire the protocol","tasks":["Parse incoming lines per your day-52 protocol spec","Route parsed commands into the shared Arc<Mutex<Store>> (or RwLock) from day 44","Return proper OK/ERR responses over the socket"],"resources":[]},{"d":55,"phase":3,"type":"build","effort":"deep","title":"TCP server — part 3: hardening","tasks":["Handle malformed lines, half-closed connections, and slow/partial reads without panicking or hanging","Write an integration test that spins up the server and drives it with a real tokio TCP client","Manual test: open 3 concurrent `nc` sessions, confirm they don't interfere with each other incorrectly"],"resources":[],"notes":"KV store is now a real networked service, not a CLI toy."},{"d":56,"phase":3,"type":"lab","effort":"light","title":"Concurrent load test","tasks":["Write a small async client that fires N concurrent requests against the server","Measure throughput and look for any errors under load","If you find a race or panic — don't fix yet, just document it precisely"],"resources":[]},{"d":57,"phase":3,"type":"build","effort":"deep","title":"Fix races found, re-shard if needed","tasks":["Fix any issues found on day 56","Apply the day-45 sharding idea to the networked version if a single lock is now the bottleneck","Re-run the load test, compare before/after numbers"],"resources":[]},{"d":58,"phase":3,"type":"concept","effort":"light","title":"Intro to loom (race detection)","tasks":["Read loom's README to understand what it tests (exhaustive interleavings of concurrent code)","Try loom on one small isolated piece of your concurrent logic, even if it's a toy extraction","Note: loom is heavy — goal today is just understanding the tool exists and what it's for, not deep mastery"],"resources":[["loom","https://github.com/tokio-rs/loom"]]},{"d":59,"phase":3,"type":"concept","effort":"deep","title":"Replication theory recap","tasks":["Re-read Designing Data-Intensive Applications ch.5 (Replication) with implementation in mind this time, not just theory","Sketch leader-follower replication for the KV store: leader accepts writes, streams them to followers","Decide the simplest possible wire format for replication messages (reuse your protocol style from day 52)"],"resources":[["DDIA ch.5 — already in your library",""]]},{"d":60,"phase":3,"type":"build","effort":"deep","title":"Leader-follower replication — part 1","tasks":["Add a 'replica' mode to the server: connects to a leader, receives a stream of writes, applies them locally","On the leader side, after each successful write, push it to all connected replica connections","Test with one leader + one follower running as separate processes locally"],"resources":[]},{"d":61,"phase":3,"type":"build","effort":"deep","title":"Leader-follower replication — part 2","tasks":["Handle a follower that disconnects and reconnects — does it need a full resync or can it catch up from a position","Add a simple sequence number to writes so followers can detect gaps","Test: kill a follower mid-stream, restart it, confirm it catches up correctly"],"resources":[],"notes":"No consensus algorithm yet — this is intentionally primitive, preparing the wire format Raft will reuse in Phase 4."},{"d":62,"phase":3,"type":"lab","effort":"light","title":"Replication edge cases","tasks":["What happens if the leader crashes? (Don't fix it yet — Raft in Phase 4 will. Just document the failure mode precisely)","Write down, in your own words, why leader-follower without consensus can't survive leader failure safely — this motivates the entire next phase"],"resources":[]},{"d":63,"phase":3,"type":"build","effort":"deep","title":"KV store v0.3 — integration pass","tasks":["Run the full system: leader + 2 followers + concurrent client load","Fix any remaining bugs found","Add tracing (env_logger or basic println is fine for now) so you can see what's happening across processes"],"resources":[]},{"d":64,"phase":3,"type":"lab","effort":"deep","title":"Stabilization day","tasks":["Re-run the day-56 load test against the full replicated system","Read through the entire networking + replication code once more for clippy warnings and unwrap() calls that should be proper error handling","Fix what you find"],"resources":[]},{"d":65,"phase":3,"type":"lab","effort":"deep","title":"MILESTONE 3 — review and lock in","tasks":["Run through Milestone 3 criteria checklist","Write a 1-paragraph retro: what's the biggest correctness gap you know v0.3 still has (this becomes Phase 4's motivation)","Tag the commit v0.3 in git"],"resources":[],"isMilestone":65},{"d":66,"phase":4,"type":"concept","effort":"deep","title":"Raft theory → leader election mapping","tasks":["Re-read the Raft paper section 5.2 (Leader Election) specifically with code in mind","Map every state (Follower/Candidate/Leader) and RPC (RequestVote) to a Rust enum + struct you'll write tomorrow","Write the state transition diagram by hand (paper or text) before writing any code"],"resources":[["Raft paper","https://raft.github.io/raft.pdf"],["The Secret Lives of Data — visual Raft explainer","http://thesecretlivesofdata.com/raft/"]]},{"d":67,"phase":4,"type":"build","effort":"deep","title":"Leader election — state machine","tasks":["Implement the NodeState enum (Follower/Candidate/Leader) with term tracking","Implement randomized election timeout using tokio::time","Implement the RequestVote RPC (can reuse your TCP protocol style, or move to a simple framed binary format)"],"resources":[]},{"d":68,"phase":4,"type":"build","effort":"deep","title":"Leader election — multi-node test","tasks":["Run 3 node processes locally, confirm exactly one becomes leader","Kill the leader process, confirm a new election happens and a new leader emerges","Document the term numbers you see at each step to confirm they match Raft's guarantees"],"resources":[]},{"d":69,"phase":4,"type":"lab","effort":"light","title":"Election edge cases","tasks":["Test: 2 nodes start an election simultaneously (split vote) — confirm it resolves correctly on retry","Test: a stale node with an old term reconnects — confirm it steps down correctly","Write down any deviation from expected Raft behavior you observe"],"resources":[]},{"d":70,"phase":4,"type":"concept","effort":"deep","title":"Log replication theory → mapping","tasks":["Re-read Raft paper section 5.3 (Log Replication)","Map AppendEntries RPC fields to a Rust struct","Sketch how this replaces your Phase 3 primitive replication wire format"],"resources":[["Raft paper section 5.3","https://raft.github.io/raft.pdf"]]},{"d":71,"phase":4,"type":"build","effort":"deep","title":"AppendEntries — part 1","tasks":["Implement the log entry struct (term, index, command)","Implement leader sending AppendEntries to followers on each new write","Implement follower appending entries to its local log"],"resources":[]},{"d":72,"phase":4,"type":"build","effort":"deep","title":"AppendEntries — part 2: consistency check","tasks":["Implement the log matching property check (prevLogIndex/prevLogTerm)","Implement follower rejecting and leader retrying with an earlier index on mismatch","Test: introduce an artificial log divergence between 2 nodes, confirm it heals correctly"],"resources":[],"notes":"This is the trickiest correctness logic in the whole roadmap. Take the full day if needed."},{"d":73,"phase":4,"type":"lab","effort":"deep","title":"Log replication stress test","tasks":["Run leader + 2 followers, fire concurrent writes, confirm all logs converge identically","Kill and restart a follower mid-stream, confirm log catch-up works via AppendEntries (not your old Phase 3 mechanism)","Document any bug found and fix it before moving on"],"resources":[]},{"d":74,"phase":4,"type":"concept","effort":"light","title":"Commit index + applying to state machine","tasks":["Read Raft paper section on commit index and the apply loop","Implement: leader advances commit index once a majority of followers have replicated an entry","Implement: committed entries get applied to the actual KV store state (not just logged)"],"resources":[]},{"d":75,"phase":4,"type":"build","effort":"deep","title":"Wire commit + apply into the KV store","tasks":["Connect the Raft log's apply step to your Store's actual get/set/delete from Phase 1-2","Test: a write only becomes visible via GET once it's committed by majority, not just locally appended","Test with a 3-node cluster: write via leader, confirm it's readable on a follower after commit"],"resources":[],"notes":"This is the moment your KV store becomes genuinely distributed and consistent, not just replicated."},{"d":76,"phase":4,"type":"build","effort":"deep","title":"Crash + restart safety","tasks":["Reuse your Phase 2 WAL concept for the Raft log itself — persist log entries to disk","Test: kill a node, restart it, confirm it recovers its log and rejoins correctly without losing committed entries","This is the day Phase 2 and Phase 4 work directly merge"],"resources":[]},{"d":77,"phase":4,"type":"concept","effort":"light","title":"Membership changes + snapshotting (lighter touch)","tasks":["Read Raft paper section on cluster membership changes and log compaction/snapshotting — at a conceptual level only","Write 3 sentences on why an ever-growing log is a real production problem","Write 3 sentences on the shape of the snapshotting solution, without necessarily implementing it"],"resources":[["Raft paper — membership + compaction sections","https://raft.github.io/raft.pdf"]],"notes":"Explicitly lighter scope here, as planned — full membership changes are a known excluded-for-now area."},{"d":78,"phase":4,"type":"lab","effort":"light","title":"Optional: minimal snapshot","tasks":["If time allows: implement a trivial snapshot (dump full state to disk, truncate log before snapshot point)","If not: skip and document it explicitly as a known gap in your capstone README — this is a legitimate scoping decision, not a shortcut"],"resources":[]},{"d":79,"phase":4,"type":"lab","effort":"deep","title":"Full cluster correctness pass","tasks":["Run the full 3-node Raft-backed KV store end to end: writes, reads, leader crash, follower crash, restart","Write down every failure mode you've now handled vs every one you've explicitly scoped out","This list becomes the honesty section of your final README"],"resources":[]},{"d":80,"phase":4,"type":"concept","effort":"light","title":"Structured logging with tracing","tasks":["Add the tracing crate, replace println!/log debugging with proper spans and structured fields","Add a span around each Raft RPC and each client request with relevant context (term, node id, command)","Read why structured logging matters operationally vs plain text logs"],"resources":[["tracing docs","https://docs.rs/tracing/latest/tracing/"]]},{"d":81,"phase":4,"type":"build","effort":"deep","title":"Apply tracing across the system","tasks":["Instrument the leader election, log replication, and client-facing server code with tracing spans","Run the cluster and read the resulting trace output — confirm you can reconstruct what happened from logs alone","This is what 'production-grade' concretely means: someone else can debug this without you"],"resources":[]},{"d":82,"phase":4,"type":"lab","effort":"light","title":"Metrics (lightweight)","tasks":["Pick one or two meaningful metrics (e.g. write latency, current term, log length) and expose them simply (even just periodic structured log lines is fine — full Prometheus integration is optional)","Read briefly about what production Rust services typically expose and why"],"resources":[]},{"d":83,"phase":4,"type":"concept","effort":"light","title":"Profiling setup","tasks":["Install and set up `perf` (or `cargo flamegraph`) for your project","Read flamegraph basics — what a wide vs tall frame tells you","Generate one flamegraph of the KV store under your day-56-style load test"],"resources":[["cargo-flamegraph","https://github.com/flamegraph-rs/flamegraph"]]},{"d":84,"phase":4,"type":"lab","effort":"deep","title":"Find and fix one real bottleneck","tasks":["From the flamegraph, identify the single widest frame that's plausibly fixable","Form a hypothesis for why it's slow before changing anything","Fix it, re-profile, confirm with numbers — not vibes — that it improved"],"resources":[],"notes":"This is the single most senior-feeling exercise in the whole roadmap: data-driven optimization, not guessing."},{"d":85,"phase":4,"type":"lab","effort":"light","title":"Benchmark with criterion","tasks":["Add criterion, write a proper benchmark for the core get/set path","Compare before/after numbers from day 84's fix using criterion's actual statistical output, not manual timing","Save these numbers — they go in your final README"],"resources":[["criterion.rs","https://bheisler.github.io/criterion.rs/book/"]]},{"d":86,"phase":4,"type":"concept","effort":"light","title":"Unsafe Rust — reading, not writing","tasks":["Read Rust Book ch.19.1 (Unsafe Rust)","Find 2-3 real unsafe blocks in a crate you depend on (e.g. inside tokio or serde source) and read what invariant each one is upholding","Goal: never be intimidated by seeing `unsafe` in someone else's PR again — not to write unsafe code yourself"],"resources":[["The Rust Book ch.19.1","https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html"]]},{"d":87,"phase":4,"type":"concept","effort":"light","title":"Macros — just enough","tasks":["Read Rust Book ch.19.5 (Macros) at a conceptual level","Use `cargo expand` on one of your #[derive(...)] structs and read the generated code","Goal: know what a derive macro expands to, recognize declarative macro_rules! syntax when you see it"],"resources":[["The Rust Book ch.19.5","https://doc.rust-lang.org/book/ch19-06-macros.html"],["cargo-expand","https://github.com/dtolnay/cargo-expand"]]},{"d":88,"phase":4,"type":"lab","effort":"light","title":"Read a real Raft implementation (comparison only)","tasks":["Skim (don't copy) TiKV's raft-rs or async-raft source for the leader election + log replication modules","Write down 3 things they do differently from your implementation and why theirs might be more robust","This comparison only makes sense now that you've built your own first — note that explicitly"],"resources":[["raft-rs (TiKV)","https://github.com/tikv/raft-rs"],["async-raft","https://github.com/async-raft/async-raft"]]},{"d":89,"phase":4,"type":"build","effort":"deep","title":"Capstone polish — docs","tasks":["Write a README: what it does, architecture diagram (ASCII is fine), how to run a 3-node cluster locally","Write an ARCHITECTURE.md: design decisions made and why (StorageEngine trait, sharding, Raft scope cuts)","Explicitly list known limitations (snapshotting, membership changes, anything else scoped out)"],"resources":[]},{"d":90,"phase":4,"type":"lab","effort":"deep","title":"CAPSTONE — final demo + retro","tasks":["Record yourself (even just notes, doesn't need video) walking through a live demo: start cluster, write data, kill leader, show new leader elected, show data intact","Run through the full Capstone criteria checklist","Write the real retro: what transformed (not just what you learned), what's still shaky, what you'd want to harden if this had to run in real production"],"resources":[],"isMilestone":90}];
+
+const STORAGE_KEY = "rust90_progress_v1";
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return { days:{}, milestones:{} };
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+let state = loadState();
+
+function getDayState(d){
+  if(!state.days[d]) state.days[d] = { done:false, tasks:{}, note:"" };
+  return state.days[d];
+}
+function getMilestoneState(day){
+  if(!state.milestones[day]) state.milestones[day] = { criteria:{} };
+  return state.milestones[day];
+}
+
+function dayProgress(day){
+  const ds = state.days[day.d];
+  if(!ds) return 0;
+  const total = day.tasks.length;
+  if(total === 0) return ds.done ? 1 : 0;
+  const checked = day.tasks.filter((_,i)=>ds.tasks[i]).length;
+  return checked / total;
+}
+function isDayDone(day){
+  const ds = state.days[day.d];
+  return ds ? !!ds.done : false;
+}
+function findFirstUnfinishedDay(){
+  for(const day of DAYS){ if(!isDayDone(day)) return day; }
+  return null;
+}
+
+function phaseOf(id){ return PHASES.find(p=>p.id===id); }
+function phaseColorVar(id){
+  return {1:"--p1",2:"--p2",3:"--p3",4:"--p4"}[id];
+}
+
+function computeStats(){
+  const doneDays = DAYS.filter(isDayDone).length;
+  const totalTasks = DAYS.reduce((a,d)=>a+d.tasks.length,0);
+  const doneTasks = DAYS.reduce((a,d)=>{
+    const ds = state.days[d.d];
+    if(!ds) return a;
+    return a + d.tasks.filter((_,i)=>ds.tasks[i]).length;
+  },0);
+  const milestonesDone = MILESTONES.filter(m=>{
+    const ms = state.milestones[m.day];
+    if(!ms) return false;
+    return m.criteria.every((_,i)=>ms.criteria[i]);
+  }).length;
+  let streak = 0;
+  for(let i=DAYS.length-1;i>=0;i--){
+    if(isDayDone(DAYS[i])) streak++; else break;
+  }
+  return { doneDays, totalTasks, doneTasks, milestonesDone, streak };
+}
+
+function renderStats(){
+  const s = computeStats();
+  const pct = Math.round((s.doneDays/90)*100);
+  document.getElementById("statsBar").innerHTML = `
+    <div class="stat"><div class="stat-num">${s.doneDays}<span style="font-size:14px;color:var(--text-faint)">/90</span></div><div class="stat-label">Ngày hoàn thành</div></div>
+    <div class="stat"><div class="stat-num">${pct}%</div><div class="stat-label">Tổng tiến trình</div></div>
+    <div class="stat"><div class="stat-num">${s.milestonesDone}<span style="font-size:14px;color:var(--text-faint)">/4</span></div><div class="stat-label">Milestones</div></div>
+    <div class="stat"><div class="stat-num">${s.streak}</div><div class="stat-label">Streak liên tiếp</div></div>
+  `;
+}
+
+function renderPhaseBar(){
+  const bar = document.getElementById("phaseBar");
+  const labels = document.getElementById("phaseLabels");
+  bar.innerHTML = "";
+  labels.innerHTML = "";
+  PHASES.forEach(p=>{
+    const phaseDays = DAYS.filter(d=>d.phase===p.id);
+    const done = phaseDays.filter(isDayDone).length;
+    const pct = Math.round((done/phaseDays.length)*100);
+    const seg = document.createElement("div");
+    seg.className = "phaseseg";
+    seg.innerHTML = `<div class="phaseseg-fill" style="width:${pct}%;background:var(${phaseColorVar(p.id)})"></div>`;
+    seg.title = `${p.name}: ${done}/${phaseDays.length}`;
+    bar.appendChild(seg);
+    const lbl = document.createElement("span");
+    lbl.textContent = `P${p.id} ${pct}%`;
+    labels.appendChild(lbl);
+  });
+}
+
+function taskCheckboxHTML(day, idx, label){
+  const ds = getDayState(day.d);
+  const checked = !!ds.tasks[idx];
+  return `<li class="taskitem ${checked?'checked':''}">
+    <input type="checkbox" data-day="${day.d}" data-task="${idx}" ${checked?'checked':''}>
+    <label for="t-${day.d}-${idx}">${label}</label>
+  </li>`;
+}
+
+function renderResourceLinks(res){
+  if(!res || res.length===0) return "";
+  return `<div class="dayres">${res.map(r=>`<a href="${r[1]}" target="_blank" rel="noopener">${r[0]}</a>`).join("")}</div>`;
+}
+
+function dayCardHTML(day, opts={}){
+  const ds = getDayState(day.d);
+  const done = !!ds.done;
+  const milestone = !!day.isMilestone;
+  const isToday = opts.today;
+  const phase = phaseOf(day.phase);
+  return `
+  <div class="daycard ${done?'done':''} ${milestone?'milestone':''} ${isToday?'today':''}" data-daycard="${day.d}">
+    ${milestone?`<div class="milestone-tag"><i class="ti ti-flag" aria-hidden="true"></i> Milestone day</div>`:""}
+    <div class="daycard-top">
+      <div class="daycard-meta">
+        <span class="daynum">Ngày ${day.d}</span>
+        <span class="daytype ${day.type}">${day.type}</span>
+        <span class="dayeffort">${day.effort==='deep'?'~1.5-3h':'~30-45p'}</span>
+      </div>
+      <button class="checkbtn ${done?'checked':''}" data-toggle-day="${day.d}" aria-label="Đánh dấu hoàn thành ngày ${day.d}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+      </button>
+    </div>
+    <h3 class="daytitle">${day.title}</h3>
+    <ul class="tasklist">
+      ${day.tasks.map((t,i)=>taskCheckboxHTML(day,i,t)).join("")}
+    </ul>
+    ${day.notes?`<div class="daynotes">${day.notes}</div>`:""}
+    ${renderResourceLinks(day.resources)}
+    <textarea class="notefield" placeholder="Ghi chú cá nhân cho ngày này..." data-noteday="${day.d}">${ds.note||""}</textarea>
+  </div>`;
+}
+
+let currentFilter = "all";
+
+function renderToday(){
+  const container = document.getElementById("viewToday");
+  const next = findFirstUnfinishedDay();
+  if(!next){
+    container.innerHTML = `<div class="emptystate"><i class="ti ti-trophy" aria-hidden="true"></i>Đã hoàn thành tất cả 90 ngày. Capstone xong rồi.</div>`;
+    return;
+  }
+  const idx = DAYS.findIndex(d=>d.d===next.d);
+  const upcoming = DAYS.slice(idx, idx+3);
+  container.innerHTML = `
+    <div class="daylist">
+      ${upcoming.map((d,i)=>dayCardHTML(d,{today:i===0})).join("")}
+    </div>
+  `;
+  attachDayCardEvents(container);
+}
+
+function renderAll(){
+  const container = document.getElementById("viewAll");
+  let filtered = DAYS;
+  if(currentFilter !== "all"){
+    filtered = DAYS.filter(d => String(d.phase) === currentFilter);
+  }
+  container.innerHTML = `
+    <div class="filters">
+      <button class="filter-btn ${currentFilter==='all'?'active':''}" data-filter="all">Tất cả</button>
+      ${PHASES.map(p=>`<button class="filter-btn ${currentFilter===String(p.id)?'active':''}" data-filter="${p.id}">P${p.id} — ${p.name}</button>`).join("")}
+    </div>
+    <div class="daylist">
+      ${filtered.map(d=>dayCardHTML(d)).join("")}
+    </div>
+  `;
+  container.querySelectorAll(".filter-btn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      currentFilter = btn.dataset.filter;
+      renderAll();
+    });
+  });
+  attachDayCardEvents(container);
+}
+
+function renderMilestones(){
+  const container = document.getElementById("viewMilestones");
+  container.innerHTML = MILESTONES.map(m=>{
+    const ms = getMilestoneState(m.day);
+    const phase = phaseOf(m.phase);
+    return `
+    <div class="mscard">
+      <div class="mscard-day">Ngày ${m.day} &middot; ${phase.name}</div>
+      <div class="mscard-title">${m.title}</div>
+      <ul class="mscriteria">
+        ${m.criteria.map((c,i)=>{
+          const checked = !!ms.criteria[i];
+          return `<li class="${checked?'checked':''}">
+            <input type="checkbox" data-msday="${m.day}" data-mscrit="${i}" ${checked?'checked':''}>
+            <label>${c}</label>
+          </li>`;
+        }).join("")}
+      </ul>
+    </div>`;
+  }).join("");
+
+  container.querySelectorAll("input[data-msday]").forEach(cb=>{
+    cb.addEventListener("change", ()=>{
+      const day = cb.dataset.msday;
+      const idx = cb.dataset.mscrit;
+      const ms = getMilestoneState(day);
+      ms.criteria[idx] = cb.checked;
+      saveState();
+      renderMilestones();
+      renderStats();
+    });
+  });
+}
+
+const RESOURCES = [
+  { cat: "Sách chính", items: [
+    ["The Rust Programming Language (free online)", "https://doc.rust-lang.org/book/", "core"],
+    ["Rust for Rustaceans — Jon Gjengset", "https://rust-for-rustaceans.com/", "phase 2-3"],
+    ["Zero to Production in Rust — Luca Palmieri", "https://www.zero2prod.com/", "phase 3-4"],
+    ["Designing Data-Intensive Applications", "", "đã có sẵn, dùng cho Raft theory"],
+  ]},
+  { cat: "Video / khóa học", items: [
+    ["Jon Gjengset — Crust of Rust series", "https://www.youtube.com/c/JonGjengset", "concurrency/async"],
+    ["tokio.rs tutorial", "https://tokio.rs/tokio/tutorial", "phase 3"],
+  ]},
+  { cat: "Tham khảo lý thuyết distributed systems", items: [
+    ["Raft paper", "https://raft.github.io/raft.pdf", "phase 4 — capstone spine"],
+    ["The Secret Lives of Data — Raft minh họa", "http://thesecretlivesofdata.com/raft/", "phase 4"],
+    ["async-book", "https://rust-lang.github.io/async-book/", "phase 3"],
+  ]},
+  { cat: "Thực hành / công cụ", items: [
+    ["Rustlings", "https://github.com/rust-lang/rustlings", "exercise theo từng concept"],
+    ["Rust by Example", "https://doc.rust-lang.org/rust-by-example/", "tra cứu syntax nhanh"],
+    ["proptest book", "https://altsysrq.github.io/proptest-book/intro.html", "phase 2"],
+    ["loom", "https://github.com/tokio-rs/loom", "phase 3"],
+    ["cargo-flamegraph", "https://github.com/flamegraph-rs/flamegraph", "phase 4"],
+    ["criterion.rs", "https://bheisler.github.io/criterion.rs/book/", "phase 4"],
+    ["cargo-expand", "https://github.com/dtolnay/cargo-expand", "phase 4"],
+  ]},
+  { cat: "Đọc để so sánh (sau khi tự build xong)", items: [
+    ["raft-rs (TiKV)", "https://github.com/tikv/raft-rs", "chỉ đọc, không copy — sau ngày 87"],
+    ["async-raft", "https://github.com/async-raft/async-raft", "chỉ đọc, không copy — sau ngày 87"],
+  ]},
+];
+
+function renderResources(){
+  const container = document.getElementById("viewResources");
+  container.innerHTML = RESOURCES.map(group=>`
+    <div class="rescat">
+      <h3>${group.cat}</h3>
+      <ul class="reslist">
+        ${group.items.map(([name,url,tag])=>`
+          <li>${url?`<a href="${url}" target="_blank" rel="noopener">${name}</a>`:name}<span class="restag">${tag}</span></li>
+        `).join("")}
+      </ul>
+    </div>
+  `).join("");
+}
+
+function attachDayCardEvents(container){
+  container.querySelectorAll("[data-toggle-day]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const day = btn.dataset.toggleDay;
+      const ds = getDayState(day);
+      ds.done = !ds.done;
+      if(ds.done){
+        const dayObj = DAYS.find(d=>String(d.d)===String(day));
+        dayObj.tasks.forEach((_,i)=>{ ds.tasks[i] = true; });
+      }
+      saveState();
+      renderAllViews();
+    });
+  });
+  container.querySelectorAll("input[type=checkbox][data-day]").forEach(cb=>{
+    cb.addEventListener("change", ()=>{
+      const day = cb.dataset.day;
+      const idx = cb.dataset.task;
+      const ds = getDayState(day);
+      ds.tasks[idx] = cb.checked;
+      const dayObj = DAYS.find(d=>String(d.d)===String(day));
+      const allChecked = dayObj.tasks.every((_,i)=>ds.tasks[i]);
+      if(allChecked && !ds.done){ ds.done = true; }
+      if(!allChecked && ds.done){ ds.done = false; }
+      saveState();
+      renderAllViews();
+    });
+  });
+  container.querySelectorAll(".notefield").forEach(ta=>{
+    ta.addEventListener("input", ()=>{
+      const day = ta.dataset.noteday;
+      const ds = getDayState(day);
+      ds.note = ta.value;
+      saveState();
+    });
+  });
+}
+
+function renderAllViews(){
+  renderStats();
+  renderPhaseBar();
+  const activeTab = document.querySelector(".tab.active").dataset.tab;
+  if(activeTab === "today") renderToday();
+  if(activeTab === "all") renderAll();
+  if(activeTab === "milestones") renderMilestones();
+}
+
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.addEventListener("click", ()=>{
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    document.getElementById("viewToday").style.display = "none";
+    document.getElementById("viewAll").style.display = "none";
+    document.getElementById("viewMilestones").style.display = "none";
+    document.getElementById("viewResources").style.display = "none";
+    const view = document.getElementById("view" + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1));
+    view.style.display = "block";
+    if(tab.dataset.tab==="today") renderToday();
+    if(tab.dataset.tab==="all") renderAll();
+    if(tab.dataset.tab==="milestones") renderMilestones();
+    if(tab.dataset.tab==="resources") renderResources();
+  });
+});
+
+document.getElementById("exportBtn").addEventListener("click", ()=>{
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "rust90-progress-" + new Date().toISOString().slice(0,10) + ".json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById("importBtn").addEventListener("click", ()=>{
+  document.getElementById("importFile").click();
+});
+document.getElementById("importFile").addEventListener("change", (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const parsed = JSON.parse(reader.result);
+      state = parsed;
+      saveState();
+      renderAllViews();
+      alert("Đã nhập tiến trình thành công.");
+    }catch(err){
+      alert("File không hợp lệ.");
+    }
+  };
+  reader.readAsText(file);
+});
+
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+  if(confirm("Reset toàn bộ tiến trình? Hành động này không thể hoàn tác. Nên xuất dữ liệu trước nếu chưa chắc.")){
+    state = { days:{}, milestones:{} };
+    saveState();
+    renderAllViews();
+  }
+});
+
+// init
+renderStats();
+renderPhaseBar();
+renderToday();
+</script>
+</body>
+</html>
